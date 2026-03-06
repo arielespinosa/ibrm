@@ -49,7 +49,14 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`} >
-        <Navbar />
+        <Navbar 
+          attr={{
+            currentPageName: pathname,
+            transparent: transparent,
+            isMobileMenuOpen: isMobileMenuOpen,
+            setIsMobileMenuOpen: setIsMobileMenuOpen
+          }}
+        />
         {children}
       </body>
     </html>

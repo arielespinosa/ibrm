@@ -4,27 +4,33 @@ import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X } from 'lucide-react';
 
+
+interface NavbarProps {
+    currentPageName: string;
+    transparent: boolean;
+    isMobileMenuOpen: boolean, 
+    setIsMobileMenuOpen: (open: boolean) => void;
+}
+
 const navLinks = [
-  { name: 'Inicio', page: 'Home' },
-  { name: 'Nosotros', page: 'Nosotros' },
-  { name: 'Creencias', page: 'Creencias' },
-  { name: 'Sermones', page: 'Sermones' },
-  { name: 'Estudios', page: 'Estudios' },
-  { name: 'Reuniones', page: 'Reuniones' },
-  { name: 'Blog', page: 'Blog' },
-  { name: 'Donaciones', page: 'Donaciones' },
+  { name: 'Inicio', page: '/' },
+  { name: 'Nosotros', page: '/meet-us' },
+  { name: 'Creencias', page: '/beliefs' },
+  { name: 'Sermones', page: '/sermons' },
+  { name: 'Estudios', page: '/studies' },
+  { name: 'Reuniones', page: '/services' },
+  { name: 'Blog', page: '/blog' },
+  { name: 'Donaciones', page: '/donations' },
 ];
 
-export default function Navbar({transparent=false}) {
-    const currentPageName = "Home"; // This would typically come from your routing logic
-    const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+export default function Navbar({attr}: {attr: NavbarProps}) {
 
     return (
         <motion.header
         initial={{ y: -80 }}
         animate={{ y: 0 }}
         transition={{ duration: 0.6, ease: 'easeOut' }}
-        className={`fixed top-0 inset-x-0 z-50 transition-all duration-500 ${transparent ? 'bg-transparent' : 'bg-black/80 backdrop-blur-xl'}`}
+        className={`fixed top-0 inset-x-0 z-50 transition-all duration-500 ${attr.transparent ? 'bg-transparent' : 'bg-black/80 backdrop-blur-xl'}`}
       >
             <div className="max-w-7xl mx-auto px-6 lg:px-8 flex items-center justify-between h-16">
             {/* Logo */}
@@ -43,15 +49,15 @@ export default function Navbar({transparent=false}) {
 
             {/* Desktop Nav */}
             <nav className="hidden lg:flex items-center gap-8">
-                {navLinks.map((link) => (
-                <a href="#"
+                {navLinks.map((link, key) => (
+                <a key={key} href={link.page}
                     className={`text-sm tracking-wide transition-colors duration-200 relative group ${
-                    currentPageName === link.page ? 'text-[#c9a55a]' : 'text-white/60 hover:text-white'
+                    attr.currentPageName === link.page ? 'text-[#c9a55a]' : 'text-white/60 hover:text-white'
                     }`}
                 >
                     {link.name}
                     <span className={`absolute -bottom-0.5 left-0 h-px bg-[#c9a55a] transition-all duration-300 ${
-                    currentPageName === link.page ? 'w-full' : 'w-0 group-hover:w-full'
+                    attr.currentPageName === link.page ? 'w-full' : 'w-0 group-hover:w-full'
                     }`} />
                 </a>
                 ))}
@@ -72,16 +78,16 @@ export default function Navbar({transparent=false}) {
 
             {/* Mobile toggle */}
             <button
-                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                onClick={() => attr.setIsMobileMenuOpen(!attr.isMobileMenuOpen)}
                 className="lg:hidden text-white p-1"
             >
-                {isMobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+                {attr.isMobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
             </button>
             </div>
 
             {/* Mobile Menu */}
             <AnimatePresence>
-            {isMobileMenuOpen && (
+            {attr.isMobileMenuOpen && (
                 <motion.div
                 initial={{ opacity: 0, height: 0 }}
                 animate={{ opacity: 1, height: 'auto' }}

@@ -4,7 +4,9 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   Play, ChevronDown, ArrowRight, MapPin, Clock,
-  BookOpen, Shield, Flame, Star, Users
+  BookOpen, Shield, Flame, Star, Users,
+  Rainbow,
+  Crown
 } from 'lucide-react';
 import SisterChurchesSection from '../components/home/SisterChurchesSection';
 
@@ -64,10 +66,10 @@ const REAL_SERMONS = [
 
 const BELIEFS = [
   { title: 'Sola Scriptura', sub: 'Solo la Escritura', icon: BookOpen },
-  { title: 'Solus Christus', sub: 'Solo Cristo', icon: Star },
+  { title: 'Solus Christus', sub: 'Solo Cristo', icon: Crown },
   { title: 'Sola Gratia', sub: 'Solo por Gracia', icon: Flame },
   { title: 'Sola Fide', sub: 'Solo por Fe', icon: Shield },
-  { title: 'Soli Deo Gloria', sub: 'Solo a Dios la Gloria', icon: Users },
+  { title: 'Soli Deo Gloria', sub: 'Solo a Dios la Gloria', icon: Rainbow },
 ];
 
 const SCHEDULE = [
