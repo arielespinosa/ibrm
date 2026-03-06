@@ -1,0 +1,43 @@
+{
+  "name": "Sermon",
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string",
+      "description": "T\u00edtulo del serm\u00f3n"
+    },
+    "preacher": {
+      "type": "string",
+      "description": "Nombre del predicador"
+    },
+    "date": {
+      "type": "string",
+      "format": "date",
+      "description": "Fecha del serm\u00f3n"
+    },
+    "description": {
+      "type": "string",
+      "description": "Breve descripci\u00f3n del serm\u00f3n"
+    },
+    "scripture": {
+      "type": "string",
+      "description": "Pasaje b\u00edblico principal"
+    },
+    "video_url": {
+      "type": "string",
+      "description": "URL del video de YouTube"
+    },
+    "audio_url": {
+      "type": "string",
+      "description": "URL del audio"
+    },
+    "thumbnail_url": {
+      "type": "string",
+      "description": "URL de la imagen de portada"
+    }
+  },
+  "required": [
+    "title",
+    "date"
+  ]
+}

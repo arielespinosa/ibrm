@@ -1,0 +1,37 @@
+{
+  "name": "Study",
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string",
+      "description": "T\u00edtulo del estudio"
+    },
+    "description": {
+      "type": "string",
+      "description": "Descripci\u00f3n del estudio"
+    },
+    "book": {
+      "type": "string",
+      "description": "Libro de la Biblia o tema"
+    },
+    "lessons_count": {
+      "type": "number",
+      "description": "N\u00famero de lecciones"
+    },
+    "document_url": {
+      "type": "string",
+      "description": "URL del documento PDF"
+    },
+    "image_url": {
+      "type": "string",
+      "description": "Imagen del estudio"
+    },
+    "featured": {
+      "type": "boolean",
+      "default": false
+    }
+  },
+  "required": [
+    "title"
+  ]
+}
