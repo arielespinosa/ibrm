@@ -9,6 +9,7 @@ import {
   Crown
 } from 'lucide-react';
 import SisterChurchesSection from '../components/home/SisterChurchesSection';
+import { fetchSermonsData } from '../api/sermon-fetcher';
 
 const navLinks = [
   { name: 'Inicio', page: 'Home' },
@@ -126,9 +127,20 @@ function SermonCard({ sermon, index }) {
 
 export default function Home() {
   const [heroLoaded, setHeroLoaded] = useState(false);
+  const [sermons, setSermons] = useState([]);
 
   useEffect(() => {
+    async function loadSermons() {
+      const data = await fetchSermonsData();
+      console.log('📊 Datos recibidos en el cliente:', data);
+      setSermons(data);
+    }
+    loadSermons();
+  }, []);
+  
+  useEffect(() => {
     setTimeout(() => setHeroLoaded(true), 100);
+    
   }, []);
 
   return (
@@ -234,6 +246,7 @@ export default function Home() {
           </motion.div>
         </motion.div>
       </section>
+
 
       {/* ─── TICKER ─── */}
       <div className="bg-[#c9a55a] py-3 overflow-hidden">
