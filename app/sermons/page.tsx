@@ -22,7 +22,7 @@ const SERIES = ['Todos', 'Filipenses', 'Mateo 6', 'Especial'];
 export default function Sermones() {
   const [search, setSearch] = useState('');
   const [activeSeries, setActiveSeries] = useState('Todos');
-  const [playingId, setPlayingId] = useState(null);
+  const [playingId, setPlayingId] = useState<string | null>(null);
 
    const filtered = ALL_SERMONS.filter(s => {
       const matchSeries = activeSeries === 'Todos' || s.series === activeSeries;

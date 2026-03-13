@@ -79,7 +79,7 @@ const SCHEDULE = [
   { day: 'SÁB', label: 'Último Sábado del Mes', title: 'Reuniones de Hombres y Mujeres', time: 'Por confirmar' },
 ];
 
-function SermonCard({ sermon, index }) {
+function SermonCard({ sermon, index }: { sermon: any, index: any }) {
   const [imgSrc, setImgSrc] = useState(`https://img.youtube.com/vi/${sermon.id}/maxresdefault.jpg`);
 
   const handleClick = () => {
@@ -87,41 +87,46 @@ function SermonCard({ sermon, index }) {
   };
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 24 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      transition={{ duration: 0.5, delay: index * 0.08 }}
-      className="group flex flex-col cursor-pointer"
-      onClick={handleClick}
+    <a
+      href={`https://www.youtube.com/watch?v=${sermon.id}`}
+      target="_blank"
+      rel="noopener noreferrer"
     >
-      <div className="relative overflow-hidden aspect-video bg-zinc-900">
-        <img
-          src={imgSrc}
-          alt={sermon.title}
-          className="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500"
-          onError={() => setImgSrc(`https://img.youtube.com/vi/${sermon.id}/hqdefault.jpg`)}
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
-        <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-          <div className="w-14 h-14 rounded-full bg-[#c9a55a] flex items-center justify-center shadow-lg shadow-amber-500/30">
-            <Play className="w-6 h-6 text-black fill-black ml-0.5" />
+      <motion.div
+        initial={{ opacity: 0, y: 24 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.5, delay: index * 0.08 }}
+        className="group flex flex-col cursor-pointer"
+      >
+        <div className="relative overflow-hidden aspect-video bg-zinc-900">
+          <img
+            src={imgSrc}
+            alt={sermon.title}
+            className="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500"
+            onError={() => setImgSrc(`https://img.youtube.com/vi/${sermon.id}/hqdefault.jpg`)}
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
+          <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+            <div className="w-14 h-14 rounded-full bg-[#c9a55a] flex items-center justify-center shadow-lg shadow-amber-500/30">
+              <Play className="w-6 h-6 text-black fill-black ml-0.5" />
+            </div>
           </div>
+          <span className="absolute bottom-2 right-2 bg-black/80 text-white text-xs px-2 py-0.5">
+            {sermon.duration}
+          </span>
+          <span className="absolute top-2 left-2 bg-[#c9a55a] text-black text-xs font-medium px-2 py-0.5">
+            {sermon.scripture}
+          </span>
         </div>
-        <span className="absolute bottom-2 right-2 bg-black/80 text-white text-xs px-2 py-0.5">
-          {sermon.duration}
-        </span>
-        <span className="absolute top-2 left-2 bg-[#c9a55a] text-black text-xs font-medium px-2 py-0.5">
-          {sermon.scripture}
-        </span>
-      </div>
-      <div className="pt-3 flex-1">
-        <h3 className="text-white text-sm font-medium leading-snug group-hover:text-[#c9a55a] transition-colors line-clamp-2">
-          {sermon.title}
-        </h3>
-        <p className="text-white/40 text-xs mt-1">{sermon.daysAgo}</p>
-      </div>
-    </motion.div>
+        <div className="pt-3 flex-1">
+          <h3 className="text-white text-sm font-medium leading-snug group-hover:text-[#c9a55a] transition-colors line-clamp-2">
+            {sermon.title}
+          </h3>
+          <p className="text-white/40 text-xs mt-1">{sermon.daysAgo}</p>
+        </div>
+      </motion.div>
+    </a>
   );
 }
 
@@ -290,7 +295,7 @@ export default function Home() {
         </div>
 
         <motion.div
-          onClick={() => window.open(`https://www.youtube.com/watch?v=${REAL_SERMONS[0].id}`, '_blank', 'noopener,noreferrer')}
+          onClick={() => window.open(`https://www.youtube.com/watch?v=${REAL_SERMONS[0].id}`, '_blank', 'noopener,noreferrer' )}
           initial={{ opacity: 0, y: 24 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
@@ -300,7 +305,7 @@ export default function Home() {
             src={`https://img.youtube.com/vi/${REAL_SERMONS[0].id}/maxresdefault.jpg`}
             alt={REAL_SERMONS[0].title}
             className="w-full h-full object-cover opacity-70 group-hover:opacity-90 group-hover:scale-105 transition-all duration-700"
-            onError={(e) => { e.target.src = `https://img.youtube.com/vi/${REAL_SERMONS[0].id}/hqdefault.jpg`; }}
+            /* onError={(e) => { e.target.src = `https://img.youtube.com/vi/${REAL_SERMONS[0].id}/hqdefault.jpg`; }} */
           />
           <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/40 to-transparent" />
           <div className="absolute inset-0 flex items-end p-8 md:p-12">

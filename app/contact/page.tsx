@@ -18,7 +18,7 @@ export default function Contacto() {
   });
   const [submitted, setSubmitted] = useState(false);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: any) => {
     e.preventDefault();
     setSubmitted(true);
     setTimeout(() => setSubmitted(false), 4000);
@@ -118,14 +118,15 @@ export default function Contacto() {
 
               {/* Social Links */}
               <div className="flex gap-4">
-                <Button
-                  variant="outline"
-                  className="border-red-500 text-red-600 hover:bg-red-50 rounded-none"
-                  onClick={() => window.open('https://www.youtube.com/@Iglesia-ibrm', '_blank')}
+                <a
+                  href="https://www.youtube.com/@Iglesia-ibrm"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center px-4 py-2 border border-red-500 text-red-600 hover:bg-red-50 rounded-none"
                 >
                   <Youtube className="w-4 h-4 mr-2" />
                   YouTube
-                </Button>
+                </a>
               </div>
 
               {/* Map */}
@@ -135,7 +136,7 @@ export default function Contacto() {
                   width="100%"
                   height="100%"
                   style={{ border: 0 }}
-                  allowFullScreen=""
+                  allowFullScreen={true}
                   loading="lazy"
                   referrerPolicy="no-referrer-when-downgrade"
                   title="Ubicación de la iglesia"

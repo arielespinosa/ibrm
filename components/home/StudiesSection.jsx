@@ -100,15 +100,16 @@ export default function StudiesSection({ studies = [] }) {
                     {study.lessons_count} lecciones
                   </span>
                   {study.document_url && (
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      className="text-amber-600 hover:text-amber-700 p-0"
-                      onClick={() => window.open(study.document_url, '_blank')}
-                    >
-                      <Download className="w-4 h-4 mr-1" />
-                      Descargar
-                    </Button>
+                    <a href={study.document_url} target="_blank" rel="noopener noreferrer">
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        className="text-amber-600 hover:text-amber-700 p-0"
+                      >
+                        <Download className="w-4 h-4 mr-1" />
+                        Descargar
+                      </Button>
+                    </a>
                   )}
                 </div>
               </div>
