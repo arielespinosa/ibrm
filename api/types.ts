@@ -9,7 +9,7 @@ export interface Tag {
 export interface Person {
     id: number;
     name: string;
-    photo_url: string;
+    avatar: string;
     bio?: string;
     is_pastor?: boolean;
     is_ibrm_member?: boolean;
@@ -24,8 +24,11 @@ export interface Sermon {
   scripture: string;
   duration: string;
   speaker: Person;
+  speaker_id?: number;
+  youtube_video_id: string;
   video_url: string;
   thumbnail_url: string;
+  tags?: Tag[];
 }
 
 export interface SermonSerie {
@@ -51,9 +54,7 @@ export interface ChurchServices {
   time: string; 
 }
 
-
 /* ESTUDIOS */
-
 export interface BibleStudy {
   id: number;
   title: string;

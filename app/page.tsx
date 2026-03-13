@@ -139,8 +139,7 @@ export default function Home() {
   }, []);
   
   useEffect(() => {
-    setTimeout(() => setHeroLoaded(true), 100);
-    
+    setTimeout(() => setHeroLoaded(true), 100);    
   }, []);
 
   return (

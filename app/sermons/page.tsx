@@ -1,8 +1,10 @@
 "use client"
 
-import { useState } from 'react';
+import { use, useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { Play, ExternalLink, Search, Youtube } from 'lucide-react';
+import { fetchData } from '@/api/data-fetcher';
+import { Sermon } from '@/api/types';
 
 const ALL_SERMONS = [
   { id: 'HSrJZ_kSLI4', title: 'La encrucijada de vivir en dos deseos', scripture: 'Filipenses 1:21-26', duration: '1:02:20', date: '2026-02-26', series: 'Filipenses' },
@@ -22,12 +24,39 @@ export default function Sermones() {
   const [activeSeries, setActiveSeries] = useState('Todos');
   const [playingId, setPlayingId] = useState(null);
 
-  const filtered = ALL_SERMONS.filter(s => {
-    const matchSeries = activeSeries === 'Todos' || s.series === activeSeries;
-    const matchSearch = s.title.toLowerCase().includes(search.toLowerCase()) ||
-      s.scripture.toLowerCase().includes(search.toLowerCase());
-    return matchSeries && matchSearch;
-  });
+  const [filtered, setFiltered] = useState<Sermon[]>([]);
+  const [sermons, setSermons] = useState<Sermon[]>([]);
+  
+  useEffect(() => {
+    async function loadSermons() {
+      const relations = {
+        speaker: {
+          table: "ibrm_person",
+          fields: ["id", "name", "avatar"]
+        },
+        tags: {
+          table: "ibrm_tag",
+          through: "ibrm_sermon_tags",
+          fields: ["id", "name"],
+          flatten: true
+        }
+      }
+      const data = await fetchData('ibrm_sermon', relations);
+      setSermons(data);
+      console.log('📊 Datos recibidos en el cliente:', data);
+    }
+    loadSermons();
+  }, []);
+
+  /*   useEffect(() => {
+    const filteredSermons = ALL_SERMONS.filter(s => {
+      const matchSeries = activeSeries === 'Todos' || s.series === activeSeries;
+      const matchSearch = s.title.toLowerCase().includes(search.toLowerCase()) ||
+        s.scripture.toLowerCase().includes(search.toLowerCase());
+      return matchSeries && matchSearch;
+    });
+    setFiltered(filteredSermons);
+  }, [sermons]); */
 
   return (
     <div className="min-h-screen bg-[#0a0a0a] text-white pt-16">
