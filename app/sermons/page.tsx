@@ -48,7 +48,7 @@ export default function Sermones() {
     loadSermons();
   }, []);
 
-  /*   useEffect(() => {
+/*   useEffect(() => {
     const filteredSermons = ALL_SERMONS.filter(s => {
       const matchSeries = activeSeries === 'Todos' || s.series === activeSeries;
       const matchSearch = s.title.toLowerCase().includes(search.toLowerCase()) ||
