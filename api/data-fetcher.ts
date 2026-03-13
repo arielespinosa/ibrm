@@ -26,12 +26,20 @@ function buildQuery(relations: any) {
   return relationQueries;
 }
 
-export async function fetchData(table: string, relations: any) {
+export async function fetchData(table: string, relations?: any) {
   try {
-    const cookieStore = cookies()
-    const supabase = await createClient(cookieStore)
+    let select = "*";
+    const cookieStore = cookies();
+    const supabase = await createClient(cookieStore);
 
-    let select = "*"
+    if(!relations){
+      const { data, error } = await supabase.from(table).select(select);
+      if (error) {
+        console.error("❌ Error en la query:", error)
+        return []
+      }
+      return data;
+    }
 
     const relationQueries = buildQuery(relations);
 

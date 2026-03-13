@@ -16,6 +16,13 @@ export interface Person {
     is_ibrm_pastor?: boolean;
 }
 
+export interface SermonSerie {
+  id: number;
+  title: string;
+  speakers?: Person[];
+  thumbnail_url?: string;
+}
+
 export interface Sermon {
   id: number;
   title: string;
@@ -29,14 +36,10 @@ export interface Sermon {
   video_url: string;
   thumbnail_url: string;
   tags?: Tag[];
+  serie: SermonSerie;
 }
 
-export interface SermonSerie {
-  id: number;
-  title: string;
-  speakers: Person[];
-  thumbnail_url: string;
-}
+
 
 export interface SisterChurch {
   id: number;

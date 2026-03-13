@@ -2,68 +2,48 @@
 
 import { use, useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
-import { Play, ExternalLink, Search, Youtube } from 'lucide-react';
+import { Play, ExternalLink, Search, Youtube, Info, User } from 'lucide-react';
 import { fetchData } from '@/api/data-fetcher';
-import { Sermon } from '@/api/types';
+import { Sermon, SermonSerie } from '@/api/types';
+import { fetchSermons, fetchSermonSeries } from '@/api/objects-fetcher';
+import { HoverCard, HoverCardContent, HoverCardTrigger } from '@/components/ui/hover-card';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { supabaseObjectsBaseUrl } from '@/lib/utils';
 
-const ALL_SERMONS = [
-  { id: 'HSrJZ_kSLI4', title: 'La encrucijada de vivir en dos deseos', scripture: 'Filipenses 1:21-26', duration: '1:02:20', date: '2026-02-26', series: 'Filipenses' },
-  { id: 'zPj3HyyuYj4', title: 'Cuando el cielo se cierra hasta que confiesas', scripture: 'Mateo 6:12a', duration: '1:07:06', date: '2026-02-19', series: 'Mateo 6' },
-  { id: '_W1nGnRako8', title: 'Dependencia o Ilusión', scripture: 'Mateo 6:11', duration: '47:07', date: '2026-02-12', series: 'Mateo 6' },
-  { id: '0jMfpJb5DFY', title: 'Entre la vida y la muerte', scripture: 'Filipenses 1:19-21', duration: '1:05:02', date: '2026-02-05', series: 'Filipenses' },
-  { id: '8a5VC_ZVkqs', title: 'Cuando orar significa morir', scripture: 'Mateo 6:10b', duration: '49:22', date: '2026-01-29', series: 'Mateo 6' },
-  { id: 'ReHL0Gmh65Y', title: 'Cristo es Anunciado', scripture: 'Filipenses 1:15-19', duration: '1:07:11', date: '2026-01-22', series: 'Filipenses' },
-  { id: 'km78_NI1i1g', title: 'Sed Santos Porque Yo Soy Santo', scripture: '1 Pedro 1:16', duration: '58:30', date: '2025-12-01', series: 'Especial' },
-  { id: '3veIN9rMefs', title: 'Redimidos por Su Sangre', scripture: 'Apocalipsis 5', duration: '1:01:00', date: '2025-11-15', series: 'Especial' },
-];
-
-const SERIES = ['Todos', 'Filipenses', 'Mateo 6', 'Especial'];
 
 export default function Sermones() {
   const [search, setSearch] = useState('');
   const [activeSeries, setActiveSeries] = useState('Todos');
-  const [playingId, setPlayingId] = useState<string | null>(null);
-
-   const filtered = ALL_SERMONS.filter(s => {
-      const matchSeries = activeSeries === 'Todos' || s.series === activeSeries;
-      const matchSearch = s.title.toLowerCase().includes(search.toLowerCase()) ||
-        s.scripture.toLowerCase().includes(search.toLowerCase());
-      return matchSeries && matchSearch;
-    });
-
-  //const [filtered, setFiltered] = useState<Sermon[]>([]);
-  //const [sermons, setSermons] = useState<Sermon[]>([]);
+  const [sermonSeries, setSermonSeries] = useState<SermonSerie[]>([]);
+  const [playingId, setPlayingId] = useState<number | null>(null);
+  const [filteredSermons, setFilteredSermons] = useState<Sermon[]>([]);
+  const [sermons, setSermons] = useState<Sermon[]>([]);
   
-  /*   useEffect(() => {
+  useEffect(() => {
     async function loadSermons() {
-      const relations = {
-        speaker: {
-          table: "ibrm_person",
-          fields: ["id", "name", "avatar"]
-        },
-        tags: {
-          table: "ibrm_tag",
-          through: "ibrm_sermon_tags",
-          fields: ["id", "name"],
-          flatten: true
-        }
-      }
-      const data = await fetchData('ibrm_sermon', relations);
+      const data = await fetchSermons();
       setSermons(data);
-      console.log('📊 Datos recibidos en el cliente:', data);
+      setFilteredSermons(data);
     }
+    async function loadSermoSeries() {
+      const data = await fetchSermonSeries();
+      console.log(data[0]);
+      setSermonSeries(data);
+    }
+    loadSermoSeries();
     loadSermons();
+    //setSupabaseObjectsBaseUrl(process.env.SUPABASE_OBJECTS_BASE_URL);
   }, []);
- */
-/*   useEffect(() => {
-    const filteredSermons = ALL_SERMONS.filter(s => {
-      const matchSeries = activeSeries === 'Todos' || s.series === activeSeries;
-      const matchSearch = s.title.toLowerCase().includes(search.toLowerCase()) ||
-        s.scripture.toLowerCase().includes(search.toLowerCase());
+
+  useEffect(() => {
+    const filtered = sermons.filter(sermon => {
+      const matchSeries = activeSeries === 'Todos' || sermon.serie.title === activeSeries;
+      const matchSearch = sermon.title.toLowerCase().includes(search.toLowerCase()) ||
+        sermon.scripture.toLowerCase().includes(search.toLowerCase());
       return matchSeries && matchSearch;
     });
-    setFiltered(filteredSermons);
-  }, [sermons]); */
+    setFilteredSermons(filtered);
+  }, [activeSeries]);
 
   return (
     <div className="min-h-screen bg-[#0a0a0a] text-white pt-16">
@@ -91,17 +71,28 @@ export default function Sermones() {
         <div className="max-w-7xl mx-auto py-4 flex flex-col md:flex-row gap-4 items-start md:items-center justify-between">
           {/* Series tabs */}
           <div className="flex gap-1">
-            {SERIES.map(s => (
-              <button
-                key={s}
-                onClick={() => setActiveSeries(s)}
+            <button
+                key={0}
+                onClick={() => setActiveSeries("Todos")}
                 className={`px-4 py-1.5 text-xs tracking-wide transition-all duration-200 ${
-                  activeSeries === s
+                  activeSeries === "Todos"
                     ? 'bg-[#c9a55a] text-black font-semibold'
                     : 'text-white/40 hover:text-white border border-white/10 hover:border-white/30'
                 }`}
               >
-                {s}
+                Todos
+              </button>
+            {sermonSeries.map(serie => (
+              <button
+                key={serie.id}
+                onClick={() => setActiveSeries(serie.title)}
+                className={`px-4 py-1.5 text-xs tracking-wide transition-all duration-200 ${
+                  activeSeries === serie.title
+                    ? 'bg-[#c9a55a] text-black font-semibold'
+                    : 'text-white/40 hover:text-white border border-white/10 hover:border-white/30'
+                }`}
+              >
+                {serie.title}
               </button>
             ))}
           </div>
@@ -147,7 +138,7 @@ export default function Sermones() {
         )}
 
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-          {filtered.map((sermon, i) => (
+          {filteredSermons.map((sermon, i) => (
             <motion.div
               key={sermon.id}
               initial={{ opacity: 0, y: 16 }}
@@ -161,7 +152,7 @@ export default function Sermones() {
                 onClick={() => setPlayingId(sermon.id)}
               >
                 <img
-                  src={`https://img.youtube.com/vi/${sermon.id}/hqdefault.jpg`}
+                  src={`https://img.youtube.com/vi/${sermon.youtube_video_id}/hqdefault.jpg`}
                   alt={sermon.title}
                   className="w-full h-full object-cover opacity-70 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500"
                 />
@@ -177,7 +168,7 @@ export default function Sermones() {
                   {sermon.duration}
                 </span>
                 <span className="absolute top-2 left-2 bg-[#c9a55a] text-black text-[10px] font-bold px-2 py-0.5">
-                  {sermon.series}
+                  {sermon.serie.title}
                 </span>
               </div>
 
@@ -190,8 +181,25 @@ export default function Sermones() {
                   </h3>
                   <p className="text-white/30 text-xs mt-1">{sermon.scripture}</p>
                 </div>
+                <div className='flex justify-between items-start gap-2'>
+                  <HoverCard>
+                    <HoverCardTrigger> 
+                      <User className="text-white/20 hover:text-[#c9a55a] transition-colors flex-shrink-0 mt-0.5 w-3.5 h-3.5" />
+                    </HoverCardTrigger>
+                    <HoverCardContent side="top" align="end" className="border border-white/10 text-white bg-[#0A0A0A]">
+                      <div className="flex items-center gap-3">
+                        <Avatar className="w-10 h-10">
+                          <AvatarImage src={`${supabaseObjectsBaseUrl}${sermon.speaker.avatar}`} alt={sermon.speaker.name} />
+                          <AvatarFallback>{sermon.speaker.name}</AvatarFallback>
+                        </Avatar>
+                        <span className="text-white/80 text-sm font-medium">{sermon.speaker.name}</span>
+                      </div>
+                    </HoverCardContent>
+                  </HoverCard>
+
+               
                 <a
-                  href={`https://www.youtube.com/watch?v=${sermon.id}`}
+                  href={`https://www.youtube.com/watch?v=${sermon.youtube_video_id}`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-white/20 hover:text-[#c9a55a] transition-colors flex-shrink-0 mt-0.5"
@@ -199,12 +207,13 @@ export default function Sermones() {
                 >
                   <ExternalLink className="w-3.5 h-3.5" />
                 </a>
+                </div>
               </div>
             </motion.div>
           ))}
         </div>
 
-        {filtered.length === 0 && (
+        {sermons.length === 0 && (
           <div className="text-center py-20 text-white/20">
             No se encontraron sermones
           </div>
