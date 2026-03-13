@@ -1,3 +1,5 @@
+"use client"
+
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { MapPin, Clock, Mail, Phone, Send, CheckCircle, Youtube } from 'lucide-react';
