@@ -8,8 +8,6 @@ type RelationConfig = {
   fields?: string[]
 }
 
-type Relations = Record<string, RelationConfig>
-
 function buildQuery(relations: any) {
   const relationQueries = Object.entries(relations).map(
     ([alias, config]: any) => {
@@ -30,8 +28,8 @@ function buildQuery(relations: any) {
 
 export async function fetchData(table: string, relations: any) {
   try {
-    const cookieStore = await cookies()
-    const supabase = createClient(cookieStore)
+    const cookieStore = cookies()
+    const supabase = await createClient(cookieStore)
 
     let select = "*"
 
@@ -41,9 +39,7 @@ export async function fetchData(table: string, relations: any) {
       select += "," + relationQueries.join(",")
     }
 
-    const { data, error } = await supabase
-      .from(table)
-      .select(select)
+    const { data, error } = await supabase.from(table).select(select)
 
     if (error) {
       console.error("❌ Error en la query:", error)

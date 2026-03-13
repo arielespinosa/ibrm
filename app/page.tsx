@@ -9,7 +9,7 @@ import {
   Crown
 } from 'lucide-react';
 import SisterChurchesSection from '../components/home/SisterChurchesSection';
-import { fetchSermonsData } from '../api/sermon-fetcher';
+//import { fetchSermonsData } from '../api/sermon-fetcher';
 
 const navLinks = [
   { name: 'Inicio', page: 'Home' },
@@ -129,14 +129,14 @@ export default function Home() {
   const [heroLoaded, setHeroLoaded] = useState(false);
   const [sermons, setSermons] = useState([]);
 
-  useEffect(() => {
+/*   useEffect(() => {
     async function loadSermons() {
       const data = await fetchSermonsData();
       console.log('📊 Datos recibidos en el cliente:', data);
       setSermons(data);
     }
     loadSermons();
-  }, []);
+  }, []); */
   
   useEffect(() => {
     setTimeout(() => setHeroLoaded(true), 100);    

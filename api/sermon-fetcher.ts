@@ -3,7 +3,7 @@
 import { cookies } from 'next/headers';
 import { createClient } from '@/lib/supabase/server';
 
-export async function fetchSermonsData() {
+/* export async function fetchSermonsData() {
   try {    
     const cookieStore = await cookies();
     const supabase = createClient(cookieStore);
@@ -36,3 +36,4 @@ export async function fetchSermonSeriesData() {
     return [];
   }
 }
+ */
