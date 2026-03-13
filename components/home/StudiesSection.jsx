@@ -4,7 +4,6 @@ import { useRef } from 'react';
 import { BookOpen, Download, ArrowRight, FileText } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
-import { createPageUrl } from '@/utils';
 
 export default function StudiesSection({ studies = [] }) {
   const ref = useRef(null);
@@ -124,7 +123,7 @@ export default function StudiesSection({ studies = [] }) {
           transition={{ duration: 0.6, delay: 0.6 }}
           className="text-center mt-12"
         >
-          <Link to={createPageUrl('Estudios')}>
+          <a href="/studies">
             <Button
               variant="outline"
               size="lg"
@@ -133,7 +132,7 @@ export default function StudiesSection({ studies = [] }) {
               Ver todos los estudios
               <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
             </Button>
-          </Link>
+          </a>
         </motion.div>
       </div>
     </section>

@@ -96,15 +96,15 @@ export default function Navbar({attr}: {attr: NavbarProps}) {
                 >
                 <div className="px-6 py-6 space-y-4">
                     {navLinks.map((link) => (
-                    <Link
+                    <a
                         key={link.page}
-                        to={createPageUrl(link.page)}
+                        href={link.page}
                         className={`block text-sm py-2 transition-colors ${
-                        currentPageName === link.page ? 'text-[#c9a55a]' : 'text-white/60'
+                        attr.currentPageName === link.page ? 'text-[#c9a55a]' : 'text-white/60'
                         }`}
                     >
                         {link.name}
-                    </Link>
+                    </a>
                     ))}
                     <a
                     href="https://www.youtube.com/@Iglesia-ibrm/streams"

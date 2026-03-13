@@ -24,10 +24,17 @@ export default function Sermones() {
   const [activeSeries, setActiveSeries] = useState('Todos');
   const [playingId, setPlayingId] = useState(null);
 
-  const [filtered, setFiltered] = useState<Sermon[]>([]);
-  const [sermons, setSermons] = useState<Sermon[]>([]);
+   const filtered = ALL_SERMONS.filter(s => {
+      const matchSeries = activeSeries === 'Todos' || s.series === activeSeries;
+      const matchSearch = s.title.toLowerCase().includes(search.toLowerCase()) ||
+        s.scripture.toLowerCase().includes(search.toLowerCase());
+      return matchSeries && matchSearch;
+    });
+
+  //const [filtered, setFiltered] = useState<Sermon[]>([]);
+  //const [sermons, setSermons] = useState<Sermon[]>([]);
   
-  useEffect(() => {
+  /*   useEffect(() => {
     async function loadSermons() {
       const relations = {
         speaker: {
@@ -47,7 +54,7 @@ export default function Sermones() {
     }
     loadSermons();
   }, []);
-
+ */
 /*   useEffect(() => {
     const filteredSermons = ALL_SERMONS.filter(s => {
       const matchSeries = activeSeries === 'Todos' || s.series === activeSeries;

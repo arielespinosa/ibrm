@@ -1,7 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
-import { createPageUrl } from '@/utils';
-import { Youtube, Facebook, Mail } from 'lucide-react';
+import { Youtube, Mail } from 'lucide-react';
 
 export default function Footer() {
   return (
@@ -46,29 +44,29 @@ export default function Footer() {
             <h4 className="font-medium text-white mb-4">Navegación</h4>
             <ul className="space-y-2">
               <li>
-                <Link to={createPageUrl('Home')} className="text-gray-400 hover:text-amber-400 transition-colors">
+                <a href="/" className="text-gray-400 hover:text-amber-400 transition-colors">
                   Inicio
-                </Link>
+                </a>
               </li>
               <li>
-                <Link to={createPageUrl('Sermones')} className="text-gray-400 hover:text-amber-400 transition-colors">
+                <a href="/sermons" className="text-gray-400 hover:text-amber-400 transition-colors">
                   Sermones
-                </Link>
+                </a>
               </li>
               <li>
-                <Link to={createPageUrl('Estudios')} className="text-gray-400 hover:text-amber-400 transition-colors">
+                <a href="/studies" className="text-gray-400 hover:text-amber-400 transition-colors">
                   Estudios
-                </Link>
+                </a>
               </li>
               <li>
-                <Link to={createPageUrl('Blog')} className="text-gray-400 hover:text-amber-400 transition-colors">
+                <a href="/blog" className="text-gray-400 hover:text-amber-400 transition-colors">
                   Blog
-                </Link>
+                </a>
               </li>
               <li>
-                <Link to={createPageUrl('Nosotros')} className="text-gray-400 hover:text-amber-400 transition-colors">
+                <a href="/mmet-us" className="text-gray-400 hover:text-amber-400 transition-colors">
                   Nosotros
-                </Link>
+                </a>
               </li>
             </ul>
           </div>

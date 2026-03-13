@@ -4,7 +4,6 @@ import { useRef } from 'react';
 import { ArrowRight, Calendar, User } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
-import { createPageUrl } from '@/utils';
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
 
@@ -72,7 +71,7 @@ export default function BlogSection({ posts = [] }) {
             </h2>
             <div className="w-16 h-0.5 bg-amber-500 mt-6" />
           </div>
-          <Link to={createPageUrl('Blog')}>
+          <a href="/blog">
             <Button
               variant="ghost"
               className="mt-6 md:mt-0 text-amber-600 hover:text-amber-700 hover:bg-amber-50 group"
@@ -80,7 +79,7 @@ export default function BlogSection({ posts = [] }) {
               Ver todos los artículos
               <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
             </Button>
-          </Link>
+          </a>
         </motion.div>
 
         {/* Blog Grid */}
@@ -92,7 +91,7 @@ export default function BlogSection({ posts = [] }) {
             transition={{ duration: 0.6, delay: 0.2 }}
             className="lg:col-span-2 group cursor-pointer"
           >
-            <Link to={createPageUrl('Blog')}>
+            <a href="/blog">
               <div className="relative h-80 lg:h-full overflow-hidden">
                 <img
                   src={postsToShow[0]?.featured_image || "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&q=80"}
@@ -119,7 +118,7 @@ export default function BlogSection({ posts = [] }) {
                   </div>
                 </div>
               </div>
-            </Link>
+            </a>
           </motion.div>
 
           {/* Side Posts */}
@@ -132,7 +131,7 @@ export default function BlogSection({ posts = [] }) {
                 transition={{ duration: 0.6, delay: 0.4 + index * 0.1 }}
                 className="group cursor-pointer"
               >
-                <Link to={createPageUrl('Blog')}>
+                <a href="/blog">
                   <div className="flex gap-4">
                     <div className="w-24 h-24 flex-shrink-0 overflow-hidden">
                       <img
@@ -153,7 +152,7 @@ export default function BlogSection({ posts = [] }) {
                       </p>
                     </div>
                   </div>
-                </Link>
+                </a>
               </motion.div>
             ))}
           </div>

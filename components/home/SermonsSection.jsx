@@ -4,7 +4,6 @@ import { useRef } from 'react';
 import { Play, Calendar, User, ArrowRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
-import { createPageUrl } from '@/utils';
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
 
@@ -63,7 +62,7 @@ export default function SermonsSection({ sermons = [] }) {
             </h2>
             <div className="w-16 h-0.5 bg-amber-500 mt-6" />
           </div>
-          <Link to={createPageUrl('Sermones')}>
+          <a href="/sermons">
             <Button
               variant="ghost"
               className="mt-6 md:mt-0 text-amber-600 hover:text-amber-700 hover:bg-amber-50 group"
@@ -71,7 +70,7 @@ export default function SermonsSection({ sermons = [] }) {
               Ver todos los sermones
               <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
             </Button>
-          </Link>
+          </a>
         </motion.div>
 
         {/* Sermons Grid */}
