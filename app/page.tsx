@@ -9,6 +9,9 @@ import {
   Crown
 } from 'lucide-react';
 import SisterChurchesSection from '../components/home/SisterChurchesSection';
+import { Sermon } from '@/api/types';
+import { fetchSermons } from '@/api/objects-fetcher';
+import { Skeleton } from '@/components/ui/skeleton';
 //import { fetchSermonsData } from '../api/sermon-fetcher';
 
 const navLinks = [
@@ -23,14 +26,14 @@ const navLinks = [
 const REAL_SERMONS = [
   {
     id: 'HSrJZ_kSLI4',
-    title: 'La encrucijada de vivir en dos deseos',
+    title: 'La encrucijada de vivir en dos deseos ertertert',
     scripture: 'Filipenses 1:21-26',
     duration: '1:02:20',
     daysAgo: 'hace 3 días',
   },
   {
     id: 'zPj3HyyuYj4',
-    title: 'Cuando el cielo se cierra hasta que confiesas',
+    title: 'Cuando el cielo se cierra hasta que confiesas 123123123123',
     scripture: 'Mateo 6:12a',
     duration: '1:07:06',
     daysAgo: 'hace 10 días',
@@ -79,16 +82,16 @@ const SCHEDULE = [
   { day: 'SÁB', label: 'Último Sábado del Mes', title: 'Reuniones de Hombres y Mujeres', time: 'Por confirmar' },
 ];
 
-function SermonCard({ sermon, index }: { sermon: any, index: any }) {
-  const [imgSrc, setImgSrc] = useState(`https://img.youtube.com/vi/${sermon.id}/maxresdefault.jpg`);
+function SermonCard({ sermon, index }: { sermon: Sermon, index: number }) {
+  const [imgSrc, setImgSrc] = useState(`https://img.youtube.com/vi/${sermon.youtube_video_id}/maxresdefault.jpg`);
 
   const handleClick = () => {
-    window.open(`https://www.youtube.com/watch?v=${sermon.id}`, '_blank', 'noopener,noreferrer');
+    window.open(`https://www.youtube.com/watch?v=${sermon.youtube_video_id}`, '_blank', 'noopener,noreferrer');
   };
 
   return (
     <a
-      href={`https://www.youtube.com/watch?v=${sermon.id}`}
+      href={`https://www.youtube.com/watch?v=${sermon.youtube_video_id}`}
       target="_blank"
       rel="noopener noreferrer"
     >
@@ -104,7 +107,7 @@ function SermonCard({ sermon, index }: { sermon: any, index: any }) {
             src={imgSrc}
             alt={sermon.title}
             className="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500"
-            onError={() => setImgSrc(`https://img.youtube.com/vi/${sermon.id}/hqdefault.jpg`)}
+            onError={() => setImgSrc(`https://img.youtube.com/vi/${sermon.youtube_video_id}/hqdefault.jpg`)}
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
           <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
@@ -120,10 +123,10 @@ function SermonCard({ sermon, index }: { sermon: any, index: any }) {
           </span>
         </div>
         <div className="pt-3 flex-1">
-          <h3 className="text-white text-sm font-medium leading-snug group-hover:text-[#c9a55a] transition-colors line-clamp-2">
+          <h3 className="truncate w-55 text-white text-sm font-medium leading-snug group-hover:text-[#c9a55a] transition-colors line-clamp-2">
             {sermon.title}
           </h3>
-          <p className="text-white/40 text-xs mt-1">{sermon.daysAgo}</p>
+          <p className="text-white/40 text-xs mt-1">{sermon.date}</p>
         </div>
       </motion.div>
     </a>
@@ -132,22 +135,26 @@ function SermonCard({ sermon, index }: { sermon: any, index: any }) {
 
 export default function Home() {
   const [heroLoaded, setHeroLoaded] = useState(false);
-  const [sermons, setSermons] = useState([]);
+  const [lastSermons, setLastSermons] = useState<Sermon[]>([]);
   const videoBackgroundUrl = "/cross2.mp4" //"https://rgbmummrazuosxbcxkds.supabase.co/storage/v1/object/public/ibrm/resources/cross1.mp4"
 
-
-/*   useEffect(() => {
-    async function loadSermons() {
-      const data = await fetchSermonsData();
-      console.log('📊 Datos recibidos en el cliente:', data);
-      setSermons(data);
+  useEffect(() => {
+    async function loadLastSermons() {
+      const data = await fetchSermons({limit: 6});
+      console.log('📊 Datos recibidos en el cliente tyu:', data);
+      setLastSermons(data);
     }
-    loadSermons();
-  }, []); */
+    loadLastSermons();
+  }, []);
   
   useEffect(() => {
     setTimeout(() => setHeroLoaded(true), 100);    
   }, []);
+
+  if(lastSermons.length === 0)
+    return (
+      <Skeleton className="aspect-video w-full" />
+    )
 
   return (
     <div className="bg-[#0a0a0a] text-white">
@@ -292,7 +299,7 @@ export default function Home() {
         <div className="flex items-end justify-between mb-12">
           <div>
             <p className="text-[#c9a55a] text-xs tracking-[0.3em] uppercase mb-2">Predicaciones</p>
-            <h2 className="font-display text-4xl md:text-5xl text-white">Últimos<br />Sermones</h2>
+            <h2 className="font-display text-4xl md:text-5xl text-white">Últimos Sermones</h2>
           </div>
           <a
             href="https://www.youtube.com/@Iglesia-ibrm/videos"
@@ -306,15 +313,15 @@ export default function Home() {
         </div>
 
         <motion.div
-          onClick={() => window.open(`https://www.youtube.com/watch?v=${REAL_SERMONS[0].id}`, '_blank', 'noopener,noreferrer' )}
+          onClick={() => window.open(`https://www.youtube.com/watch?v=${lastSermons[0].id}`, '_blank', 'noopener,noreferrer' )}
           initial={{ opacity: 0, y: 24 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           className="group relative overflow-hidden mb-8 aspect-video md:aspect-[21/7] cursor-pointer"
         >
           <img
-            src={`https://img.youtube.com/vi/${REAL_SERMONS[0].id}/maxresdefault.jpg`}
-            alt={REAL_SERMONS[0].title}
+            src={`https://img.youtube.com/vi/${lastSermons[0].youtube_video_id}/maxresdefault.jpg`}
+            alt={lastSermons[0].title}
             className="w-full h-full object-cover opacity-70 group-hover:opacity-90 group-hover:scale-105 transition-all duration-700"
             /* onError={(e) => { e.target.src = `https://img.youtube.com/vi/${REAL_SERMONS[0].id}/hqdefault.jpg`; }} */
           />
@@ -322,12 +329,12 @@ export default function Home() {
           <div className="absolute inset-0 flex items-end p-8 md:p-12">
             <div>
               <span className="bg-[#c9a55a] text-black text-xs font-semibold px-3 py-1 mb-3 inline-block">
-                {REAL_SERMONS[0].scripture}
+                {lastSermons[0].scripture}
               </span>
               <h3 className="font-display text-2xl md:text-4xl text-white max-w-2xl leading-tight mb-2">
-                {REAL_SERMONS[0].title}
+                {lastSermons[0].title}
               </h3>
-              <p className="text-white/50 text-sm">{REAL_SERMONS[0].daysAgo} · {REAL_SERMONS[0].duration}</p>
+              <p className="text-white/50 text-sm">{lastSermons[0].date} · {lastSermons[0].duration}</p>
             </div>
             <div className="ml-auto">
               <div className="w-14 h-14 rounded-full border-2 border-[#c9a55a] flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
@@ -338,7 +345,7 @@ export default function Home() {
         </motion.div>
 
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
-          {REAL_SERMONS.slice(1).map((s, i) => (
+          {lastSermons.slice(1).map((s, i) => (
             <SermonCard key={s.id} sermon={s} index={i} />
           ))}
         </div>

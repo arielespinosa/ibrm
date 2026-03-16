@@ -4,7 +4,12 @@ import { fetchData } from './data-fetcher';
 
 const supabaseObjectsBaseUrl = process.env.SUPABASE_OBJECTS_BASE_URL;
 
-export async function fetchSermons() {
+interface FetchAttributes{
+  order?: string;
+  limit?: number;
+}
+
+export async function fetchSermons({order, limit}: FetchAttributes) {
   const relations = {
     speaker: {
       table: "ibrm_person",
@@ -21,7 +26,8 @@ export async function fetchSermons() {
       flatten: true
     }
   }
-  const data = await fetchData('ibrm_sermon', relations);   
+
+  const data = await fetchData('ibrm_sermon', relations, order, limit);   
   return data;
 }
 

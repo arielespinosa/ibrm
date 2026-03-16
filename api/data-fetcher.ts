@@ -26,14 +26,20 @@ function buildQuery(relations: any) {
   return relationQueries;
 }
 
-export async function fetchData(table: string, relations?: any) {
+export async function fetchData(table: string, relations?: any, order?: string, limit?: number) {
   try {
     let select = "*";
     const cookieStore = cookies();
     const supabase = await createClient(cookieStore);
+    let data, error;
 
     if(!relations){
-      const { data, error } = await supabase.from(table).select(select);
+      if (!limit) {
+        ({ data, error } = await supabase.from(table).select(select).order(order || "id"));
+      } else {
+        ({ data, error } = await supabase.from(table).select(select).order(order || "id").limit(limit));
+      }
+
       if (error) {
         console.error("❌ Error en la query:", error)
         return []
@@ -47,7 +53,11 @@ export async function fetchData(table: string, relations?: any) {
       select += "," + relationQueries.join(",")
     }
 
-    const { data, error } = await supabase.from(table).select(select)
+    if (!limit) {
+      ({ data, error } = await supabase.from(table).select(select).order(order || "id"));
+    } else {
+      ({ data, error } = await supabase.from(table).select(select).order(order || "id").limit(limit));
+    }
 
     if (error) {
       console.error("❌ Error en la query:", error)
