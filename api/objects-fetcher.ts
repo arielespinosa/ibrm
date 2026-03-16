@@ -29,3 +29,16 @@ export async function fetchSermonSeries() {
   const data = await fetchData('ibrm_sermonserie');
   return data;
 }
+
+export async function fetchSisterChurch() {
+  const relations = {
+    pastors: {
+      table: "ibrm_person",
+      through: "ibrm_sisterchurch_pastors",
+      fields: ["id", "name", "avatar"],
+      flatten: true
+    }
+  }
+  const data = await fetchData('ibrm_sisterchurch', relations);
+  return data;
+}

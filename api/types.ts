@@ -14,6 +14,7 @@ export interface Person {
     is_pastor?: boolean;
     is_ibrm_member?: boolean;
     is_ibrm_pastor?: boolean;
+    email?: string;
 }
 
 export interface SermonSerie {
@@ -44,11 +45,12 @@ export interface Sermon {
 export interface SisterChurch {
   id: number;
   name: string;
-  descripton: string;
+  description: string;
   location: string;
   website_url: string;
   logo_url: string;
-  pastor: Person;
+  cover_url: string;
+  pastors: Person[];
 }
 
 export interface ChurchServices {

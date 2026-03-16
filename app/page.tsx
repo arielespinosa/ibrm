@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   Play, ChevronDown, ArrowRight, MapPin, Clock,
@@ -133,6 +133,8 @@ function SermonCard({ sermon, index }: { sermon: any, index: any }) {
 export default function Home() {
   const [heroLoaded, setHeroLoaded] = useState(false);
   const [sermons, setSermons] = useState([]);
+  const videoBackgroundUrl = "/cross2.mp4" //"https://rgbmummrazuosxbcxkds.supabase.co/storage/v1/object/public/ibrm/resources/cross1.mp4"
+
 
 /*   useEffect(() => {
     async function loadSermons() {
@@ -156,13 +158,22 @@ export default function Home() {
           <video
             autoPlay
             muted
-            loop
             playsInline
+            loop
             className="absolute"
-            style={{ top: '50%', left: '50%', width: '177.78vh', height: '100vh', minWidth: '100%', minHeight: '56.25vw', transform: 'translate(-50%, -50%)', objectFit: 'cover', pointerEvents: 'none' }}
+            style={{
+              top: "50%",
+              left: "50%",
+              width: "177.78vh",
+              height: "100vh",
+              minWidth: "100%",
+              minHeight: "56.25vw",
+              transform: "translate(-50%, -50%)",
+              objectFit: "cover",
+              pointerEvents: "none"
+            }}
           >
-            <source src="https://pub-2ce5aff643ee49769760c09904a94c27.r2.dev/Project%201.webm" type="video/webm" />
-            <source src="https://pub-2ce5aff643ee49769760c09904a94c27.r2.dev/web_youtube_cross.mp4" type="video/mp4" />
+            <source src={videoBackgroundUrl} type="video/mp4" />
           </video>
           <div className="absolute inset-0" style={{ background: 'linear-gradient(135deg, rgba(10,10,10,0.92) 0%, rgba(10,10,10,0.65) 50%, rgba(10,10,10,0.4) 100%)' }} />
           <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] via-transparent to-transparent" />
