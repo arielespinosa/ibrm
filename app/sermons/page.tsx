@@ -15,7 +15,8 @@ export default function Sermones() {
   const [search, setSearch] = useState('');
   const [activeSeries, setActiveSeries] = useState('Todos');
   const [sermonSeries, setSermonSeries] = useState<SermonSerie[]>([]);
-  const [playingId, setPlayingId] = useState<number | null>(null);
+  const [playingId, setPlayingId] = useState<string | null>(null);
+  const [playingSermon, setPlayingSermon] = useState<Sermon | null>(null);
   const [filteredSermons, setFilteredSermons] = useState<Sermon[]>([]);
   const [sermons, setSermons] = useState<Sermon[]>([]);
   
@@ -44,6 +45,23 @@ export default function Sermones() {
     });
     setFilteredSermons(filtered);
   }, [activeSeries]);
+
+  useEffect(() => {
+    const filtered = sermons.filter(sermon => {
+      const matchSearch = sermon.title.toLowerCase().includes(search.toLowerCase()) ||
+        sermon.scripture.toLowerCase().includes(search.toLowerCase());
+      return matchSearch;
+    });
+    setFilteredSermons(filtered);
+  }, [search]);
+
+  useEffect(() => {
+    const filtered = sermons.filter(sermon => {
+      const match = sermon.youtube_video_id === playingId;
+      return match;
+    });
+    setPlayingSermon(filtered[0]);
+  }, [playingId]);
 
   return (
     <div className="min-h-screen bg-[#0a0a0a] text-white pt-16">
@@ -113,28 +131,51 @@ export default function Sermones() {
       {/* Content */}
       <div className="max-w-7xl mx-auto px-6 lg:px-8 py-12">
         {/* Featured / playing */}
-        {playingId && (
-          <motion.div
-            initial={{ opacity: 0, y: -16 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="mb-12"
-          >
-            <div className="aspect-video w-full max-w-4xl mx-auto bg-black">
-              <iframe
-                src={`https://www.youtube.com/embed/${playingId}?autoplay=1`}
-                title="Sermon"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-                className="w-full h-full"
-              />
+        {playingId && playingSermon && (
+ 
+            <div className="flex">
+              <div className="w-4/5">
+                <motion.div
+                  initial={{ opacity: 0, y: -16 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="mb-12"
+                >
+                  <div className="aspect-video w-full max-w-4xl bg-black">
+                    <iframe
+                      src={`https://www.youtube.com/embed/${playingId}?autoplay=1`}
+                      title="Sermon"
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                      allowFullScreen
+                      className="w-full h-full"
+                    />
+                  </div>
+                  <button
+                    onClick={() => setPlayingId(null)}
+                    className="mt-3 text-white/30 hover:text-white text-xs transition-colors"
+                  >
+                    ✕ Cerrar reproductor
+                  </button>
+                </motion.div>
+              </div>
+              <div className="w-1/5">
+                <p className="text-[#c9a55a] text-xs tracking-[0.3em] uppercase mb-3">DETALLES DEL SERMÓN</p>
+                <h2 className="font-display text-2xl md:text-xl text-white mb-6 leading-tight">{playingSermon.title}</h2>
+                <div className="w-12 h-px bg-[#c9a55a] mb-8" />
+                <p className="text-[#c9a55a] text-xs tracking-[0.3em] mb-3">{playingSermon.scripture}</p>
+                <p className="text-white/50 leading-relaxed mb-6">{playingSermon.description}</p>
+                <div className="flex items-center gap-3">
+                  <Avatar className="w-15 h-15">
+                    <AvatarImage src={`${supabaseObjectsBaseUrl}${playingSermon.speaker.avatar}`} alt={playingSermon.speaker.name} />
+                    <AvatarFallback>{playingSermon.speaker.name}</AvatarFallback>
+                  </Avatar>
+                  <div className="flex flex-col">
+                    <span className="text-white/80 text-sm font-medium">Pr. {playingSermon.speaker.name}</span>
+                    <span className="text-[#c9a55a]/60 text-xs tracking-wide">{playingSermon.speaker.email}</span>
+                  </div>
+                </div>
+              </div>
             </div>
-            <button
-              onClick={() => setPlayingId(null)}
-              className="mt-3 text-white/30 hover:text-white text-xs transition-colors"
-            >
-              ✕ Cerrar reproductor
-            </button>
-          </motion.div>
+      
         )}
 
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
@@ -149,7 +190,7 @@ export default function Sermones() {
               {/* Thumbnail */}
               <div
                 className="relative overflow-hidden aspect-video bg-zinc-900 cursor-pointer mb-3"
-                onClick={() => setPlayingId(sermon.id)}
+                onClick={() => setPlayingId(sermon.youtube_video_id)}
               >
                 <img
                   src={`https://img.youtube.com/vi/${sermon.youtube_video_id}/hqdefault.jpg`}
@@ -173,40 +214,40 @@ export default function Sermones() {
               </div>
 
               {/* Info */}
-              <div className="flex justify-between items-start gap-2">
+              <div className="flex justify-between items-start">
                 <div>
-                  <h3 className="text-white text-sm font-medium leading-snug line-clamp-2 group-hover:text-[#c9a55a] transition-colors cursor-pointer"
-                    onClick={() => setPlayingId(sermon.id)}>
+                  <h3 className="truncate w-75 text-white text-sm font-medium leading-snug line-clamp-2 group-hover:text-[#c9a55a] transition-colors cursor-pointer"
+                    onClick={() => setPlayingId(sermon.youtube_video_id)}>
                     {sermon.title}
                   </h3>
-                  <p className="text-white/30 text-xs mt-1">{sermon.scripture}</p>
-                </div>
-                <div className='flex justify-between items-start gap-2'>
-                  <HoverCard>
-                    <HoverCardTrigger> 
-                      <User className="text-white/20 hover:text-[#c9a55a] transition-colors flex-shrink-0 mt-0.5 w-3.5 h-3.5" />
-                    </HoverCardTrigger>
-                    <HoverCardContent side="top" align="end" className="border border-white/10 text-white bg-[#0A0A0A]">
-                      <div className="flex items-center gap-3">
-                        <Avatar className="w-10 h-10">
-                          <AvatarImage src={`${supabaseObjectsBaseUrl}${sermon.speaker.avatar}`} alt={sermon.speaker.name} />
-                          <AvatarFallback>{sermon.speaker.name}</AvatarFallback>
-                        </Avatar>
-                        <span className="text-white/80 text-sm font-medium">{sermon.speaker.name}</span>
-                      </div>
-                    </HoverCardContent>
-                  </HoverCard>
-
-               
-                <a
-                  href={`https://www.youtube.com/watch?v=${sermon.youtube_video_id}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-white/20 hover:text-[#c9a55a] transition-colors flex-shrink-0 mt-0.5"
-                  onClick={e => e.stopPropagation()}
-                >
-                  <ExternalLink className="w-3.5 h-3.5" />
-                </a>
+                  <div className='flex justify-between items-start gap-2'>
+                    <p className="text-white/30 text-xs mt-1">{sermon.scripture}</p>
+                    <div className='flex justify-between items-start gap-2'>
+                    <HoverCard>
+                      <HoverCardTrigger> 
+                        <User className="text-white/20 hover:text-[#c9a55a] transition-colors flex-shrink-0 mt-0.5 w-3.5 h-3.5" />
+                      </HoverCardTrigger>
+                      <HoverCardContent side="top" align="end" className="border border-white/10 text-white bg-[#0A0A0A]">
+                        <div className="flex items-center gap-3">
+                          <Avatar className="w-10 h-10">
+                            <AvatarImage src={`${supabaseObjectsBaseUrl}${sermon.speaker.avatar}`} alt={sermon.speaker.name} />
+                            <AvatarFallback>{sermon.speaker.name}</AvatarFallback>
+                          </Avatar>
+                          <span className="text-white/80 text-sm font-medium">{sermon.speaker.name}</span>
+                        </div>
+                      </HoverCardContent>
+                    </HoverCard>               
+                    <a
+                      href={`https://www.youtube.com/watch?v=${sermon.youtube_video_id}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-white/20 hover:text-[#c9a55a] transition-colors flex-shrink-0 mt-0.5"
+                      onClick={e => e.stopPropagation()}
+                    >
+                      <ExternalLink className="w-3.5 h-3.5" />
+                    </a>
+                    </div>
+                  </div>                  
                 </div>
               </div>
             </motion.div>

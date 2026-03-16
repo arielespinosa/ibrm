@@ -23,50 +23,6 @@ const navLinks = [
   { name: 'Blog', page: 'Blog' },
 ];
 
-const REAL_SERMONS = [
-  {
-    id: 'HSrJZ_kSLI4',
-    title: 'La encrucijada de vivir en dos deseos ertertert',
-    scripture: 'Filipenses 1:21-26',
-    duration: '1:02:20',
-    daysAgo: 'hace 3 días',
-  },
-  {
-    id: 'zPj3HyyuYj4',
-    title: 'Cuando el cielo se cierra hasta que confiesas 123123123123',
-    scripture: 'Mateo 6:12a',
-    duration: '1:07:06',
-    daysAgo: 'hace 10 días',
-  },
-  {
-    id: '_W1nGnRako8',
-    title: 'Dependencia o Ilusión',
-    scripture: 'Mateo 6:11',
-    duration: '47:07',
-    daysAgo: 'hace 2 semanas',
-  },
-  {
-    id: '0jMfpJb5DFY',
-    title: 'Entre la vida y la muerte',
-    scripture: 'Filipenses 1:19-21',
-    duration: '1:05:02',
-    daysAgo: 'hace 3 semanas',
-  },
-  {
-    id: '8a5VC_ZVkqs',
-    title: 'Cuando orar significa morir',
-    scripture: 'Mateo 6:10b',
-    duration: '49:22',
-    daysAgo: 'hace 1 mes',
-  },
-  {
-    id: 'ReHL0Gmh65Y',
-    title: 'Cristo es Anunciado',
-    scripture: 'Filipenses 1:15-19',
-    duration: '1:07:11',
-    daysAgo: 'hace 1 mes',
-  },
-];
 
 const BELIEFS = [
   { title: 'Sola Scriptura', sub: 'Solo la Escritura', icon: BookOpen },
@@ -313,7 +269,7 @@ export default function Home() {
         </div>
 
         <motion.div
-          onClick={() => window.open(`https://www.youtube.com/watch?v=${lastSermons[0].id}`, '_blank', 'noopener,noreferrer' )}
+          onClick={() => window.open(`https://www.youtube.com/watch?v=${lastSermons[0].youtube_video_id}`, '_blank', 'noopener,noreferrer' )}
           initial={{ opacity: 0, y: 24 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}

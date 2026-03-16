@@ -9,7 +9,7 @@ interface FetchAttributes{
   limit?: number;
 }
 
-export async function fetchSermons({order, limit}: FetchAttributes) {
+export async function fetchSermons({order, limit}: FetchAttributes = {}) {
   const relations = {
     speaker: {
       table: "ibrm_person",
