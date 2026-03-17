@@ -10,6 +10,7 @@ import { useParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { format } from "date-fns";
 import { es } from "date-fns/locale";
+import { MarkdownRenderer } from '@/components/custom/markdown';
 
 
 const ARTICLE = {
@@ -75,13 +76,16 @@ export default function StudyDetaillPage() {
 
   useEffect(() => {
     async function loadStudy() {
-      const data = await fetchStudy({pk:1});
+      const data = await fetchStudy({pk: id});
       setStudy(data[0]);
     }
     loadStudy();
+
   },[])
 
   useEffect(() => {
+    if(!study)
+      return
     const date = new Date(study.created);
     const formatted = format(date, "d 'de' MMMM yyyy, HH:mm", { locale: es });
     setStudyDate(formatted);
@@ -117,7 +121,7 @@ export default function StudyDetaillPage() {
         <div className="flex flex-wrap items-center gap-6 text-white/30 text-sm">
           <div className="flex items-center gap-2">
             <User className="w-4 h-4 text-[#c9a55a]" />
-            <span className="text-white/60">{study.author.name}</span>
+            <span>{study.author.name}</span>
           </div>
           <div className="flex items-center gap-2">
             <Calendar className="w-4 h-4 text-[#c9a55a]" />
@@ -138,40 +142,7 @@ export default function StudyDetaillPage() {
         className="max-w-7xl mx-auto py-12"
       >
         <div className="space-y-6">
-          {ARTICLE.content.map((block, i) => {
-            if (block.type === 'intro') {
-              return (
-                <p key={i} className="text-white/70 text-lg leading-relaxed font-medium border-l-2 border-[#c9a55a] pl-6 italic">
-                  {block.text}
-                </p>
-              );
-            }
-            if (block.type === 'heading') {
-              return (
-                <h2 key={i} className="font-display text-2xl text-white mt-10 mb-2">
-                  {block.text}
-                </h2>
-              );
-            }
-            if (block.type === 'paragraph') {
-              return (
-                <p key={i} className="text-white/50 text-base leading-relaxed">
-                  {block.text}
-                </p>
-              );
-            }
-            if (block.type === 'reflection') {
-              return (
-                <div key={i} className="mt-10 bg-white/3 border border-[#c9a55a]/20 p-8">
-                  <p className="text-[#c9a55a] text-xs tracking-[0.3em] uppercase mb-4">Reflexión Final</p>
-                  <p className="text-white/60 text-base leading-relaxed italic">
-                    {block.text}
-                  </p>
-                </div>
-              );
-            }
-            return null;
-          })}
+          <MarkdownRenderer content={study.content}/>
         </div>
         <div className="mt-16 pt-8 border-t border-white/5">
           <a href="/studies" className="inline-flex items-center gap-2 text-white/30 hover:text-[#c9a55a] text-sm transition-colors group">
