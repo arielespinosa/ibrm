@@ -26,64 +26,63 @@ function buildQuery(relations: any) {
   return relationQueries;
 }
 
-export async function fetchData(table: string, relations?: any, order?: string, limit?: number) {
+export async function fetchData(table: string, relations?: any, order?: string, limit?: number, exclude?:number[], pk?:number) {
   try {
     let select = "*";
     const cookieStore = cookies();
     const supabase = await createClient(cookieStore);
-    let data, error;
 
-    if(!relations){
-      if (!limit) {
-        ({ data, error } = await supabase.from(table).select(select).order(order || "id"));
-      } else {
-        ({ data, error } = await supabase.from(table).select(select).order(order || "id").limit(limit));
+    if (relations) {
+      const relationQueries = buildQuery(relations);
+      if (relationQueries.length) {
+        select += "," + relationQueries.join(",");
       }
-
-      if (error) {
-        console.error("❌ Error en la query:", error)
-        return []
-      }
-      return data;
     }
 
-    const relationQueries = buildQuery(relations);
+    let query = supabase.from(table).select(select).order(order || "id");
 
-    if (relationQueries.length) {
-      select += "," + relationQueries.join(",")
+    if (pk) {
+      query = query.eq('id', pk);
     }
 
-    if (!limit) {
-      ({ data, error } = await supabase.from(table).select(select).order(order || "id"));
-    } else {
-      ({ data, error } = await supabase.from(table).select(select).order(order || "id").limit(limit));
+    // 🚀 EXCLUIR IDS
+    if (exclude && exclude.length > 0) {
+      query = query.not('id', 'in', `(${exclude.join(",")})`);
     }
+
+    if (limit) {
+      query = query.limit(limit);
+    }
+
+    const { data, error } = await query;
 
     if (error) {
-      console.error("❌ Error en la query:", error)
-      return []
+      console.error("❌ Error en la query:", error);
+      return [];
     }
 
-    let result = data || []
+    let result = data || [];
 
     // Flatten many-to-many
-    result = result.map((row: any) => {
-      Object.entries(relations).forEach(([alias, config]: any) => {
-        if (config.flatten && config.through) {
-          const bridge = row[config.through]
-          if (Array.isArray(bridge)) {
-            row[alias] = bridge.map((item: any) => item[config.table])
+    if (relations) {
+      result = result.map((row: any) => {
+        Object.entries(relations).forEach(([alias, config]: any) => {
+          if (config.flatten && config.through) {
+            const bridge = row[config.through];
+            if (Array.isArray(bridge)) {
+              row[alias] = bridge.map((item: any) => item[config.table]);
+            }
+            delete row[config.through];
           }
-          delete row[config.through]
-        }
-      })
-      return row
-    })
+        });
+        return row;
+      });
+    }
 
-    return result
+    return result;
 
   } catch (error) {
-    console.error("❌ Error fetching data:", error)
-    return []
+    console.error("❌ Error fetching data:", error);
+    return [];
   }
 }

@@ -60,17 +60,24 @@ export interface ChurchServices {
 }
 
 /* ESTUDIOS */
-export interface BibleStudy {
-  id: number;
-  title: string;
-  description: string;
-  content: string;
-  leader: Person;
-}
-
 export interface BibleStudySerie {
   id: number;
+  created?: string;
+  title: string;
+  description?: string;
+  thumbnail?: string;
+  tags?: Tag[];
+}
+
+export interface BibleStudy {
+  id: number;
+  created: string;
+  serie?: BibleStudySerie;
+  serie_order?: number;
   title: string;
   description: string;
-  amount_of_sessions: number;
+  thumbnail: string;
+  content: string;
+  author: Person;
 }
+

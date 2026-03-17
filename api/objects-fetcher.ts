@@ -2,11 +2,11 @@
 
 import { fetchData } from './data-fetcher';
 
-const supabaseObjectsBaseUrl = process.env.SUPABASE_OBJECTS_BASE_URL;
-
 interface FetchAttributes{
   order?: string;
   limit?: number;
+  exclude?: number[];
+  pk?: number;
 }
 
 export async function fetchSermons({order, limit}: FetchAttributes = {}) {
@@ -26,17 +26,16 @@ export async function fetchSermons({order, limit}: FetchAttributes = {}) {
       flatten: true
     }
   }
-
   const data = await fetchData('ibrm_sermon', relations, order, limit);   
   return data;
 }
 
-export async function fetchSermonSeries() {
+export async function fetchSermonSeries({order, limit}: FetchAttributes = {}) {
   const data = await fetchData('ibrm_sermonserie');
   return data;
 }
 
-export async function fetchSisterChurch() {
+export async function fetchSisterChurch({order, limit}: FetchAttributes = {}) {
   const relations = {
     pastors: {
       table: "ibrm_person",
@@ -46,5 +45,33 @@ export async function fetchSisterChurch() {
     }
   }
   const data = await fetchData('ibrm_sisterchurch', relations);
+  return data;
+}
+
+export async function fetchStudySeries({order, limit, exclude}: FetchAttributes = {}) {
+  const relations = {
+    tags: {
+      table: "ibrm_tag",
+      through: "ibrm_biblestudyserie_tags",
+      fields: ["id", "name"],
+      flatten: true
+    }
+  }
+  const data = await fetchData('ibrm_biblestudyserie', relations, order, limit, exclude);
+  return data;
+}
+
+export async function fetchStudy({order, limit, exclude, pk}: FetchAttributes = {}) {
+  const relations = {
+    author: {
+      table: "ibrm_person",
+      fields: ["id", "name", "avatar"],
+    },
+    serie: {
+      table: "ibrm_biblestudyserie",
+      fields: ["id", "title"],
+    }
+  }
+  const data = await fetchData('ibrm_biblestudy', relations, order, limit, exclude, pk);
   return data;
 }
