@@ -30,7 +30,7 @@ export default function Navbar({attr}: {attr: NavbarProps}) {
         initial={{ y: -80 }}
         animate={{ y: 0 }}
         transition={{ duration: 0.6, ease: 'easeOut' }}
-        className={`fixed top-0 inset-x-0 z-50 transition-all duration-500 ${attr.transparent ? 'bg-transparent' : 'bg-black/80 backdrop-blur-xl'}`}
+        className={`fixed top-0 left-0 right-0 w-full max-w-full z-50 transition-all duration-500 ${attr.transparent ? 'bg-transparent' : 'bg-black/80 backdrop-blur-xl'}`}
       >
             <div className="max-w-7xl mx-auto px-6 lg:px-8 flex items-center justify-between h-16">
             {/* Logo */}

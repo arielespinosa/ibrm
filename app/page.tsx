@@ -78,8 +78,8 @@ function SermonCard({ sermon, index }: { sermon: Sermon, index: number }) {
             {sermon.scripture}
           </span>
         </div>
-        <div className="pt-3 flex-1">
-          <h3 className="truncate w-55 text-white text-sm font-medium leading-snug group-hover:text-[#c9a55a] transition-colors line-clamp-2">
+        <div className="pt-3 flex-1 min-w-0">
+          <h3 className="truncate w-full text-white text-sm font-medium leading-snug group-hover:text-[#c9a55a] transition-colors line-clamp-2">
             {sermon.title}
           </h3>
           <p className="text-white/40 text-xs mt-1">{sermon.date}</p>
