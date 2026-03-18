@@ -12,7 +12,6 @@ import SisterChurchesSection from '../components/home/SisterChurchesSection';
 import { Sermon } from '@/api/types';
 import { fetchSermons } from '@/api/objects-fetcher';
 import { Skeleton } from '@/components/ui/skeleton';
-//import { fetchSermonsData } from '../api/sermon-fetcher';
 
 const navLinks = [
   { name: 'Inicio', page: 'Home' },
@@ -22,7 +21,6 @@ const navLinks = [
   { name: 'Estudios', page: 'Estudios' },
   { name: 'Blog', page: 'Blog' },
 ];
-
 
 const BELIEFS = [
   { title: 'Sola Scriptura', sub: 'Solo la Escritura', icon: BookOpen },
