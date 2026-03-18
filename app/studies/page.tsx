@@ -7,65 +7,8 @@ import { Download, ExternalLink, FileText } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { supabaseObjectsBaseUrl } from '@/lib/utils';
 
-const STUDIES = [
-  {
-    id: 1,
-    title: "Estudio del Libro de Romanos",
-    book: "Romanos",
-    description: "Un estudio expositivo profundo de la carta de Pablo a los Romanos. Justificación, santificación y la soberanía de Dios en la salvación.",
-    lessons: 24,
-    image: "https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?w=600&q=80",
-    featured: true,
-  },
-  {
-    id: 2,
-    title: "Las Doctrinas de la Gracia (TULIP)",
-    book: "Teología",
-    description: "Estudio de los cinco puntos del calvinismo desde las Escrituras: Depravación Total, Elección, Expiación, Gracia Irresistible y Perseverancia.",
-    lessons: 12,
-    image: "https://images.unsplash.com/photo-1481627834876-b7833e8f5570?w=600&q=80",
-    featured: true,
-  },
-  {
-    id: 3,
-    title: "Confesión Bautista de Fe 1689",
-    book: "Confesión",
-    description: "Estudio capítulo por capítulo de la Segunda Confesión Bautista de Londres, la declaración doctrinal de nuestra iglesia.",
-    lessons: 32,
-    image: "https://images.unsplash.com/photo-1507842217343-583bb7270b66?w=600&q=80",
-    featured: true,
-    url: "https://www.chapellibrary.org/pdf/books/lbcos.pdf",
-  },
-  {
-    id: 4,
-    title: "El Evangelio según Juan",
-    book: "Juan",
-    description: "Versículo por versículo a través del Evangelio de Juan. La divinidad de Cristo y el llamado a creer.",
-    lessons: 28,
-    image: "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/69a491a015e58b1ec55092b3/ea5082c56_generated_image.png",
-  },
-  {
-    id: 5,
-    title: "Efesios: Riquezas en Cristo",
-    book: "Efesios",
-    description: "Bendiciones espirituales, la unidad de la iglesia y la vida práctica del creyente.",
-    lessons: 16,
-    image: "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/69a491a015e58b1ec55092b3/6a4a03fe2_generated_image.png",
-  },
-  {
-    id: 6,
-    title: "Hermenéutica Bíblica",
-    book: "Metodología",
-    description: "Principios fundamentales para la correcta interpretación de las Escrituras.",
-    lessons: 8,
-    image: "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/69a491a015e58b1ec55092b3/28eaf62fe_generated_image.png",
-  },
-];
 
 export default function Estudios() {
-  const featured = STUDIES.filter(s => s.featured);
-  const regular = STUDIES.filter(s => !s.featured);
-
   const [lastStudySeries, setLastStudySeries] = useState<BibleStudySerie[]>();
   const [studySeries, setStudySeries] = useState<BibleStudySerie[]>();
 
