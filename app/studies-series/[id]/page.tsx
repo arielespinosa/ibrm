@@ -3,7 +3,7 @@
 import { fetchStudy, fetchStudySeries } from '@/api/objects-fetcher';
 import { BibleStudy, BibleStudySerie } from '@/api/types';
 import { motion } from 'framer-motion';
-import { Download, ExternalLink, FileText } from 'lucide-react';
+import { Download, ExternalLink, FileText, User } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { supabaseObjectsBaseUrl } from '@/lib/utils';
 import { useParams } from 'next/navigation';
@@ -46,10 +46,10 @@ export default function StudySerieDetaillPage() {
         </div>
       </div>
       <section className="max-w-7xl mx-auto px-6 lg:px-8 py-16">
-        <p className="text-white/30 text-xs tracking-[0.3em] uppercase mb-8">Destacados</p>
-        <div className="grid lg:grid-cols-3 gap-px bg-white/5">
+        <p className="text-white/30 text-xs tracking-[0.3em] uppercase mb-8">Lecciones</p>
+        <div className="grid lg:grid-cols-3 gap-px">
           {studies && studies.map((study, i) => (
-            <a key={study.id} href={`studies/${study.id}`}>
+            <a key={study.id} href={`/studies/${study.id}`}>
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -75,9 +75,9 @@ export default function StudySerieDetaillPage() {
                   </h3>
                   <p className="text-white/30 text-sm leading-relaxed mb-4 line-clamp-2">{study.description}</p>
                   <div className="flex items-center justify-between">
-                    <span className="text-white/20 text-xs flex items-center gap-1">
-                      <FileText className="w-3.5 h-3.5" />
-                      12 lecciones
+                    <span className="text-white/20 text-xs flex items-center gap-1 group-hover:text-[#c9a55a] transition-colors">
+                      <User className="w-3.5 h-3.5" />
+                      {study.author.name}
                     </span>
                     {/* {study.url && (
                       <a

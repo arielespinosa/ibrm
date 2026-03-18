@@ -42,17 +42,17 @@ const LITURGY = [
 
 export default function Reuniones() {
   return (
-    <div className="min-h-screen bg-[#0a0a0a] text-white pt-16">
+    <div className="min-h-screen bg-[#0a0a0a] text-white">
 
       {/* Header */}
-      <div className="relative pt-16 pb-20 px-6 lg:px-8 overflow-hidden">
+      <div className="relative pt-32 pb-24 px-6 lg:px-8 overflow-hidden">
         <div className="absolute inset-0">
-          <img src="https://images.unsplash.com/photo-1438032992991-995b7058bbb3?w=1920&q=80" alt="" className="w-full h-full object-cover opacity-8" />
-          <div className="absolute inset-0 bg-gradient-to-b from-[#0a0a0a]/60 to-[#0a0a0a]" />
+          <img src="/rsc/img/meetings-cover.png" alt="" className="w-full h-full object-cover opacity-25" />
+          <div className="absolute inset-0 bg-gradient-to-b from-transparent to-[#0a0a0a]" />
         </div>
         <div className="relative max-w-7xl mx-auto">
           <p className="text-[#c9a55a] text-xs tracking-[0.3em] uppercase mb-3">Vida de Iglesia</p>
-          <h1 className="font-display text-5xl md:text-7xl text-white mb-4">Reuniones</h1>
+          <h1 className="font-display text-5xl md:text-7xl text-white mb-6">Cultos y <br/> Reuniones</h1>
           <div className="w-12 h-px bg-[#c9a55a]" />
         </div>
       </div>

@@ -7,7 +7,7 @@ export default function StudySerieCardList({serieStudies}:{serieStudies: BibleSt
   return (
     <div className="space-y-px bg-white/5">
         {serieStudies.map((study, i) => (
-        <a key={study.id} href={`studies/${study.id}`}>
+        <a key={study.id} href={`/studies/${study.id}`}>
             <motion.div               
             initial={{ opacity: 0, x: -16 }}
             whileInView={{ opacity: 1, x: 0 }}

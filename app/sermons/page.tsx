@@ -3,7 +3,6 @@
 import { use, useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { Play, ExternalLink, Search, Youtube, Info, User } from 'lucide-react';
-import { fetchData } from '@/api/data-fetcher';
 import { Sermon, SermonSerie } from '@/api/types';
 import { fetchSermons, fetchSermonSeries } from '@/api/objects-fetcher';
 import { HoverCard, HoverCardContent, HoverCardTrigger } from '@/components/ui/hover-card';
@@ -28,7 +27,6 @@ export default function Sermones() {
     }
     async function loadSermoSeries() {
       const data = await fetchSermonSeries();
-      console.log(data[0]);
       setSermonSeries(data);
     }
     loadSermoSeries();
@@ -64,14 +62,19 @@ export default function Sermones() {
   }, [playingId]);
 
   return (
-    <div className="min-h-screen bg-[#0a0a0a] text-white pt-16">
+    <div className="min-h-screen bg-[#0a0a0a] text-white">
       {/* Header */}
-      <div className="border-b border-white/5 pt-16 pb-12 px-6 lg:px-8">
-        <div className="max-w-7xl mx-auto">
+
+      <div className="relative pt-32 pb-24 px-6 lg:px-8 overflow-hidden">
+        <div className="absolute inset-0">
+          <img src="/rsc/img/sermons-cover.png" alt="" className="w-full h-full object-cover opacity-25" />
+          <div className="absolute inset-0 bg-gradient-to-b from-transparent to-[#0a0a0a]" />
+        </div>
+        <div className="relative max-w-7xl mx-auto">
           <p className="text-[#c9a55a] text-xs tracking-[0.3em] uppercase mb-3">Predicaciones</p>
-          <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
-            <h1 className="font-display text-5xl md:text-6xl text-white">Sermones</h1>
-            <a
+            <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
+          <h1 className="font-display text-5xl md:text-7xl text-white mb-6">Sermones y <br/> Conferencias</h1>
+          <a
               href="https://www.youtube.com/@Iglesia-ibrm"
               target="_blank"
               rel="noopener noreferrer"
@@ -80,9 +83,21 @@ export default function Sermones() {
               <Youtube className="w-4 h-4" />
               Canal de YouTube
             </a>
-          </div>
+            </div>
+
+          <div className="w-12 h-px bg-[#c9a55a]" />
         </div>
       </div>
+
+      {/* <div className="border-b border-white/5 pt-16 pb-12 px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto">
+          <p className="text-[#c9a55a] text-xs tracking-[0.3em] uppercase mb-3">Predicaciones</p>
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
+            <h1 className="font-display text-5xl md:text-6xl text-white">Sermones</h1>
+            
+          </div>
+        </div>
+      </div> */}
 
       {/* Filters */}
       <div className="border-b border-white/5 px-6 lg:px-8">

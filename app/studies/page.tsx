@@ -87,12 +87,17 @@ export default function Estudios() {
   }, [lastStudySeries])
   
   return (
-    <div className="min-h-screen bg-[#0a0a0a] text-white pt-16">
+    <div className="min-h-screen bg-[#0a0a0a] text-white">
       {/* Header */}
-      <div className="border-b border-white/5 pt-16 pb-12 px-6 lg:px-8">
-        <div className="max-w-7xl mx-auto">
+      <div className="relative pt-32 pb-24 px-6 lg:px-8 overflow-hidden">
+        <div className="absolute inset-0">
+          <img src="/rsc/img/studies-cover.png" alt="" className="w-full h-full object-cover opacity-25" />
+          <div className="absolute inset-0 bg-gradient-to-b from-transparent to-[#0a0a0a]" />
+        </div>
+        <div className="relative max-w-7xl mx-auto">
           <p className="text-[#c9a55a] text-xs tracking-[0.3em] uppercase mb-3">Recursos</p>
-          <h1 className="font-display text-5xl md:text-6xl text-white">Estudios<br />Bíblicos</h1>
+          <h1 className="font-display text-5xl md:text-7xl text-white mb-6">Estudios<br />Bíblicos</h1>
+          <div className="w-12 h-px bg-[#c9a55a]" />
         </div>
       </div>
 
@@ -101,7 +106,7 @@ export default function Estudios() {
         <p className="text-white/30 text-xs tracking-[0.3em] uppercase mb-8">Destacados</p>
         <div className="grid lg:grid-cols-3 gap-px bg-white/5">
           {lastStudySeries && lastStudySeries.map((study, i) => (
-            <a key={study.id} href={`studies/${study.id}`}>
+            <a key={study.id} href={`studies-series/${study.id}`}>
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -155,7 +160,7 @@ export default function Estudios() {
         <p className="text-white/30 text-xs tracking-[0.3em] uppercase mb-8">Más estudios</p>
         <div className="space-y-px bg-white/5">
           {studySeries && studySeries.map((study, i) => (
-            <a key={study.id} href={`studies/${study.id}`}>
+            <a key={study.id} href={`studies-series/${study.id}`}>
               <motion.div               
                 initial={{ opacity: 0, x: -16 }}
                 whileInView={{ opacity: 1, x: 0 }}

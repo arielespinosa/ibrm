@@ -6,6 +6,7 @@ import "./globals.css";
 import Navbar from "@/components/common/Navbar";
 import { useEffect, useState } from "react";
 import { usePathname } from 'next/navigation';
+import Footer from "@/components/common/Footer";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -58,6 +59,7 @@ export default function RootLayout({
           }}
         />
         {children}
+        <Footer />
       </body>
     </html>
   );

@@ -9,7 +9,7 @@ export default function Nosotros() {
       {/* Header */}
       <div className="relative pt-32 pb-24 px-6 lg:px-8 overflow-hidden">
         <div className="absolute inset-0">
-          <img src="https://images.unsplash.com/photo-1438232992991-995b7058bbb3?w=1920&q=80" alt="" className="w-full h-full object-cover opacity-10" />
+          <img src="/rsc/img/who-we-are-cover.png" alt="" className="w-full h-full object-cover opacity-25" />
           <div className="absolute inset-0 bg-gradient-to-b from-transparent to-[#0a0a0a]" />
         </div>
         <div className="relative max-w-7xl mx-auto">
@@ -36,8 +36,9 @@ export default function Nosotros() {
               </p>
               <p>
                 Nuestra única guía es la inerrante, infalible y suficiente Biblia. Como iglesia confesional, 
-                sostenemos la <span className="text-[#c9a55a]">Segunda Confesión Bautista de Fe de 1689</span>, 
-                que expresa fielmente las doctrinas bíblicas de la fe cristiana reformada.
+                sostenemos la <a href="https://www.chapellibrary.org/pdf/books/lbcos.pdf" target="_blank" rel="noopener noreferrer" className="text-[#c9a55a]">
+                  Segunda Confesión Bautista de Fe de 1689
+                </a>, que expresa fielmente las doctrinas bíblicas de la fe cristiana reformada.
               </p>
               <p>
                 Creemos en la predicación expositiva y sistemática de la Palabra de Dios como el medio 
@@ -46,7 +47,7 @@ export default function Nosotros() {
             </div>
 
             <div className="mt-8 flex flex-wrap gap-3">
-              <a href="#"
+              <a href="/beliefs"
                 className="flex items-center gap-2 bg-[#c9a55a] hover:bg-[#b8944a] text-black text-sm font-medium px-5 py-2.5 transition-colors group"
               >
                 Nuestras Creencias
@@ -63,14 +64,14 @@ export default function Nosotros() {
             transition={{ delay: 0.2 }}
             className="relative"
           >
-            <img
-              src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/69a491a015e58b1ec55092b3/7e8dc59f2_generated_image.png"
-              alt="Concilio de la Reforma"
-              className="w-full aspect-[4/3] object-cover"
-            />
-            <div className="absolute inset-0 bg-gradient-to-tr from-[#0a0a0a]/60 to-transparent" />
-            <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/80 to-transparent px-6 py-4">
-              <p className="text-white/40 text-xs italic">Concilio de la Reforma · Siglo XVI</p>
+            <div className="group relative overflow-hidden border border-white/5 hover:border-[#c9a55a]/30 transition-colors duration-300">
+              <div className="overflow-hidden">
+                <img
+                  src="/rsc/img/congregation.jpeg"
+                  alt="Congregación de la Iglesia Bautista Reformada de Murcia"
+                  className="w-full h-full object-cover object-top grayscale group-hover:grayscale-0 transition-all duration-500 group-hover:scale-105"
+                />
+              </div>
             </div>
           </motion.div>
         </div>
