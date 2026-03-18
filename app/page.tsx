@@ -92,7 +92,7 @@ function SermonCard({ sermon, index }: { sermon: Sermon, index: number }) {
 export default function Home() {
   const [heroLoaded, setHeroLoaded] = useState(false);
   const [lastSermons, setLastSermons] = useState<Sermon[]>([]);
-  const videoBackgroundUrl = "/rsc/video/cross.mp4"
+  const videoBackgroundUrl = "https://rgbmummrazuosxbcxkds.supabase.co/storage/v1/object/public/ibrm/resources/cross.mp4"
 
   useEffect(() => {
     async function loadLastSermons() {
