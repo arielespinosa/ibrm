@@ -97,7 +97,6 @@ export default function Home() {
   useEffect(() => {
     async function loadLastSermons() {
       const data = await fetchSermons({limit: 6});
-      console.log('📊 Datos recibidos en el cliente tyu:', data);
       setLastSermons(data);
     }
     loadLastSermons();

@@ -1,6 +1,7 @@
 'use server';
 
 import { fetchData } from './data-fetcher';
+import { Sermon } from './types';
 
 export type Filtering = {
   field: string,
@@ -15,7 +16,7 @@ interface FetchAttributes{
   filter?: Filtering[];
 }
 
-export async function fetchSermons({order, limit}: FetchAttributes = {}) {
+export async function fetchSermons({order, limit}: FetchAttributes = {}): Promise<Sermon[]> {
   const relations = {
     speaker: {
       table: "ibrm_person",
