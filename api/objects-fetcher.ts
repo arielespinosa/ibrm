@@ -33,12 +33,12 @@ export async function fetchSermons({order, limit}: FetchAttributes = {}): Promis
       flatten: true
     }
   }
-  const data = await fetchData('ibrm_sermon', relations, order, limit);   
+  const {data, error} = await fetchData('ibrm_sermon', relations, order, limit);  
   return data;
 }
 
 export async function fetchSermonSeries({order, limit}: FetchAttributes = {}) {
-  const data = await fetchData('ibrm_sermonserie');
+  const {data, error}  = await fetchData('ibrm_sermonserie');
   return data;
 }
 
@@ -51,7 +51,7 @@ export async function fetchSisterChurch({order, limit}: FetchAttributes = {}) {
       flatten: true
     }
   }
-  const data = await fetchData('ibrm_sisterchurch', relations);
+  const {data, error}  = await fetchData('ibrm_sisterchurch', relations);
   return data;
 }
 
@@ -64,7 +64,7 @@ export async function fetchStudySeries({order, limit, exclude, pk}: FetchAttribu
       flatten: true
     }
   }
-  const data = await fetchData('ibrm_biblestudyserie', relations, order, limit, exclude, pk);
+  const {data, error}  = await fetchData('ibrm_biblestudyserie', relations, order, limit, exclude, pk);
   return data;
 }
 
@@ -79,6 +79,6 @@ export async function fetchStudy({order, limit, exclude, pk}: FetchAttributes = 
       fields: ["id", "title"],
     }
   }
-  const data = await fetchData('ibrm_biblestudy', relations, order, limit, exclude, pk);
+  const {data, error}  = await fetchData('ibrm_biblestudy', relations, order, limit, exclude, pk);
   return data;
 }

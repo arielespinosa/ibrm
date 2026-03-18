@@ -10,14 +10,14 @@ import { useParams } from 'next/navigation';
 import { Skeleton } from '@/components/ui/skeleton';
 
 export default function StudySerieDetaillPage() {
-  const { id } = useParams();
+  const { paramId } = useParams();
+  const id = Number(paramId);
   const [serie, setSerie] = useState<BibleStudySerie>();
   const [studies, setStudies] = useState<BibleStudy[]>();
 
   useEffect(() => {
     async function loadSerie(){
       const data = await fetchStudySeries({pk: id});
-      console.log(data);
       setSerie(data[0]);
     }
     loadSerie();

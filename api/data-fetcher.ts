@@ -3,7 +3,12 @@
 import { cookies } from 'next/headers';
 import { createClient } from '@/lib/supabase/server';
 import { Filtering } from './objects-fetcher';
+import { PostgrestError } from '@supabase/supabase-js';
 
+export type FetchDataResponse = {
+  data: any;
+  error: PostgrestError | null | unknown;
+}
 
 function buildQuery(relations: any) {
   const relationQueries = Object.entries(relations).map(
@@ -23,7 +28,7 @@ function buildQuery(relations: any) {
   return relationQueries;
 }
 
-export async function fetchData(table: string, relations?: any, order?: string, limit?: number, exclude?:number[], pk?:number, filter?:Filtering[]) {
+export async function fetchData(table: string, relations?: any, order?: string, limit?: number, exclude?:number[], pk?:number, filter?:Filtering[]): Promise<FetchDataResponse> {
   try {
     let select = "*";
     const cookieStore = cookies();
@@ -57,11 +62,11 @@ export async function fetchData(table: string, relations?: any, order?: string, 
       query = query.limit(limit);
     }
 
-    const { data, error } = await query;
+    let { data, error } = await query;
 
     if (error) {
       console.error("❌ Error en la query:", error);
-      return [];
+      return { data, error };
     }
 
     let result = data || [];
@@ -81,11 +86,12 @@ export async function fetchData(table: string, relations?: any, order?: string, 
         return row;
       });
     }
-
-    return result;
+    data = result;
+    return { data,  error};
 
   } catch (error) {
     console.error("❌ Error fetching data:", error);
-    return [];
+    const data = null;
+    return { data,  error}
   }
 }

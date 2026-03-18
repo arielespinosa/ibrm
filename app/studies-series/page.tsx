@@ -116,7 +116,7 @@ export default function Estudios() {
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent" />
                   <div className="absolute bottom-3 left-3">
-                    {study.tags.map((tag, index) => (
+                    {study.tags?.map((tag, index) => (
                       <span key={index} className="bg-[#c9a55a] text-black text-[10px] font-bold px-2 py-0.5 uppercase tracking-wider">{tag.name}</span>
                     ))}
                   </div>
@@ -167,7 +167,7 @@ export default function Estudios() {
                   <img src={`${supabaseObjectsBaseUrl}${study.thumbnail}`} alt={study.title} className="w-full h-full object-cover opacity-60 group-hover:opacity-80 transition-opacity" />
                 </div>
                 <div>
-                  {study.tags.map((tag, index) => (
+                  {study.tags?.map((tag, index) => (
                     <span key={index} className="text-[#c9a55a] text-[10px] uppercase tracking-widest">{tag.name}</span>
                   ))}
                   <h3 className="text-white text-sm font-medium mt-0.5 group-hover:text-[#c9a55a] transition-colors">{study.title}</h3>

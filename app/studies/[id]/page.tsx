@@ -15,7 +15,8 @@ import StudySerieCardList from '@/components/studies/study-card';
 
 
 export default function StudyDetaillPage() {
-  const { id } = useParams();
+  const { paramsId } = useParams();
+  const id = Number(paramsId);
   const [study, setStudy] = useState<BibleStudy | null>(null);
   const [studySerie, setStudySerie] = useState<BibleStudy[] | null>(null);
   const [studyDate, setStudyDate] = useState("");
