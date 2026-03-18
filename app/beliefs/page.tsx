@@ -51,12 +51,17 @@ const DOCTRINES = [
 
 export default function Creencias() {
   return (
-    <div className="min-h-screen bg-[#0a0a0a] text-white pt-16">
+    <div className="min-h-screen bg-[#0a0a0a] text-white">
       {/* Header */}
-      <div className="border-b border-white/5 pt-16 pb-12 px-6 lg:px-8">
-        <div className="max-w-7xl mx-auto">
+      <div className="relative pt-32 pb-24 px-6 lg:px-8 overflow-hidden">
+        <div className="absolute inset-0">
+          <img src="/rsc/img/what-believe-cover.png" alt="" className="w-full h-full object-cover opacity-25" />
+          <div className="absolute inset-0 bg-gradient-to-b from-transparent to-[#0a0a0a]" />
+        </div>
+        <div className="relative max-w-7xl mx-auto">
           <p className="text-[#c9a55a] text-xs tracking-[0.3em] uppercase mb-3">Doctrina</p>
-          <h1 className="font-display text-5xl md:text-6xl text-white">Lo que Creemos</h1>
+          <h1 className="font-display text-5xl md:text-7xl text-white mb-6">Que <br/> Creemos</h1>
+          <div className="w-12 h-px bg-[#c9a55a]" />
         </div>
       </div>
 

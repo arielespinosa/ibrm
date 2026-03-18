@@ -2,10 +2,12 @@
 
 import { cookies } from 'next/headers';
 import { createClient } from '@/lib/supabase/server';
+import { Filtering } from './objects-fetcher';
+import { PostgrestError } from '@supabase/supabase-js';
 
-type RelationConfig = {
-  table: string
-  fields?: string[]
+export type FetchDataResponse = {
+  data: any;
+  error: PostgrestError | null | unknown;
 }
 
 function buildQuery(relations: any) {
@@ -26,46 +28,70 @@ function buildQuery(relations: any) {
   return relationQueries;
 }
 
-export async function fetchData(table: string, relations: any) {
+export async function fetchData(table: string, relations?: any, order?: string, limit?: number, exclude?:number[], pk?:number, filter?:Filtering[]): Promise<FetchDataResponse> {
   try {
-    const cookieStore = cookies()
-    const supabase = await createClient(cookieStore)
+    let select = "*";
+    const cookieStore = cookies();
+    const supabase = await createClient(cookieStore);
 
-    let select = "*"
-
-    const relationQueries = buildQuery(relations);
-
-    if (relationQueries.length) {
-      select += "," + relationQueries.join(",")
+    if (relations) {
+      const relationQueries = buildQuery(relations);
+      if (relationQueries.length) {
+        select += "," + relationQueries.join(",");
+      }
     }
 
-    const { data, error } = await supabase.from(table).select(select)
+    let query = supabase.from(table).select(select).order(order || "id");
+
+    if (pk) {
+      query = query.eq('id', pk);
+    }
+
+    if (filter) {
+      filter.forEach((item) => {
+        query = query.filter(item.field, 'eq', item.value);
+      })
+    }
+
+    // 🚀 EXCLUIR IDS
+    if (exclude && exclude.length > 0) {
+      query = query.not('id', 'in', `(${exclude.join(",")})`);
+    }
+
+    if (limit) {
+      query = query.limit(limit);
+    }
+
+    let { data, error } = await query;
 
     if (error) {
-      console.error("❌ Error en la query:", error)
-      return []
+      console.error("❌ Error en la query:", error);
+      return { data, error };
     }
 
-    let result = data || []
+    let result = data || [];
 
     // Flatten many-to-many
-    result = result.map((row: any) => {
-      Object.entries(relations).forEach(([alias, config]: any) => {
-        if (config.flatten && config.through) {
-          const bridge = row[config.through]
-          if (Array.isArray(bridge)) {
-            row[alias] = bridge.map((item: any) => item[config.table])
+    if (relations) {
+      result = result.map((row: any) => {
+        Object.entries(relations).forEach(([alias, config]: any) => {
+          if (config.flatten && config.through) {
+            const bridge = row[config.through];
+            if (Array.isArray(bridge)) {
+              row[alias] = bridge.map((item: any) => item[config.table]);
+            }
+            delete row[config.through];
           }
-          delete row[config.through]
-        }
-      })
-      return row
-    })
-
-    return result
+        });
+        return row;
+      });
+    }
+    data = result;
+    return { data,  error};
 
   } catch (error) {
-    console.error("❌ Error fetching data:", error)
-    return []
+    console.error("❌ Error fetching data:", error);
+    const data = null;
+    return { data,  error}
   }
 }

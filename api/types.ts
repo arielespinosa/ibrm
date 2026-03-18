@@ -14,6 +14,14 @@ export interface Person {
     is_pastor?: boolean;
     is_ibrm_member?: boolean;
     is_ibrm_pastor?: boolean;
+    email?: string;
+}
+
+export interface SermonSerie {
+  id: number;
+  title: string;
+  speakers?: Person[];
+  thumbnail_url?: string;
 }
 
 export interface Sermon {
@@ -29,23 +37,20 @@ export interface Sermon {
   video_url: string;
   thumbnail_url: string;
   tags?: Tag[];
+  serie: SermonSerie;
 }
 
-export interface SermonSerie {
-  id: number;
-  title: string;
-  speakers: Person[];
-  thumbnail_url: string;
-}
+
 
 export interface SisterChurch {
   id: number;
   name: string;
-  descripton: string;
+  description: string;
   location: string;
   website_url: string;
   logo_url: string;
-  pastor: Person;
+  cover_url: string;
+  pastors: Person[];
 }
 
 export interface ChurchServices {
@@ -55,17 +60,25 @@ export interface ChurchServices {
 }
 
 /* ESTUDIOS */
-export interface BibleStudy {
-  id: number;
-  title: string;
-  description: string;
-  content: string;
-  leader: Person;
-}
-
 export interface BibleStudySerie {
   id: number;
+  created?: string;
+  title: string;
+  description?: string;
+  thumbnail?: string;
+  tags?: Tag[];
+}
+
+export interface BibleStudy {
+  id: number;
+  created: string;
+  serie?: BibleStudySerie;
+  serie_id?: number;
+  serie_order?: number;
   title: string;
   description: string;
-  amount_of_sessions: number;
+  thumbnail: string;
+  content: string;
+  author: Person;
 }
+
