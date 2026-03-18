@@ -104,11 +104,6 @@ export default function Home() {
     setTimeout(() => setHeroLoaded(true), 100);    
   }, []);
 
-  if(lastSermons.length === 0)
-    return (
-      <Skeleton className="aspect-video w-full" />
-    )
-
   return (
     <div className="bg-[#0a0a0a] text-white">
 
@@ -248,61 +243,63 @@ export default function Home() {
       </div>
 
       {/* ─── LATEST SERMONS ─── */}
-      <section className="py-24 px-6 lg:px-8 max-w-7xl mx-auto">
-        <div className="flex items-end justify-between mb-12">
-          <div>
-            <p className="text-[#c9a55a] text-xs tracking-[0.3em] uppercase mb-2">Predicaciones</p>
-            <h2 className="font-display text-4xl md:text-5xl text-white">Últimos Sermones</h2>
-          </div>
-          <a
-            href="https://www.youtube.com/@Iglesia-ibrm/videos"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="hidden md:flex items-center gap-2 text-white/40 hover:text-[#c9a55a] text-sm transition-colors group"
-          >
-            Ver todos
-            <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-          </a>
-        </div>
-
-        <motion.div
-          onClick={() => window.open(`https://www.youtube.com/watch?v=${lastSermons[0].youtube_video_id}`, '_blank', 'noopener,noreferrer' )}
-          initial={{ opacity: 0, y: 24 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="group relative overflow-hidden mb-8 aspect-video md:aspect-[21/7] cursor-pointer"
-        >
-          <img
-            src={`https://img.youtube.com/vi/${lastSermons[0].youtube_video_id}/maxresdefault.jpg`}
-            alt={lastSermons[0].title}
-            className="w-full h-full object-cover opacity-70 group-hover:opacity-90 group-hover:scale-105 transition-all duration-700"
-            /* onError={(e) => { e.target.src = `https://img.youtube.com/vi/${REAL_SERMONS[0].id}/hqdefault.jpg`; }} */
-          />
-          <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/40 to-transparent" />
-          <div className="absolute inset-0 flex items-end p-8 md:p-12">
+      {lastSermons.length > 0 && (
+        <section className="py-24 px-6 lg:px-8 max-w-7xl mx-auto">
+          <div className="flex items-end justify-between mb-12">
             <div>
-              <span className="bg-[#c9a55a] text-black text-xs font-semibold px-3 py-1 mb-3 inline-block">
-                {lastSermons[0].scripture}
-              </span>
-              <h3 className="font-display text-2xl md:text-4xl text-white max-w-2xl leading-tight mb-2">
-                {lastSermons[0].title}
-              </h3>
-              <p className="text-white/50 text-sm">{lastSermons[0].date} · {lastSermons[0].duration}</p>
+              <p className="text-[#c9a55a] text-xs tracking-[0.3em] uppercase mb-2">Predicaciones</p>
+              <h2 className="font-display text-4xl md:text-5xl text-white">Últimos Sermones</h2>
             </div>
-            <div className="ml-auto">
-              <div className="w-14 h-14 rounded-full border-2 border-[#c9a55a] flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                <Play className="w-6 h-6 text-[#c9a55a] fill-[#c9a55a] ml-0.5" />
+            <a
+              href="https://www.youtube.com/@Iglesia-ibrm/videos"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hidden md:flex items-center gap-2 text-white/40 hover:text-[#c9a55a] text-sm transition-colors group"
+            >
+              Ver todos
+              <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+            </a>
+          </div>
+
+          <motion.div
+            onClick={() => window.open(`https://www.youtube.com/watch?v=${lastSermons[0].youtube_video_id}`, '_blank', 'noopener,noreferrer' )}
+            initial={{ opacity: 0, y: 24 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="group relative overflow-hidden mb-8 aspect-video md:aspect-[21/7] cursor-pointer"
+          >
+            <img
+              src={`https://img.youtube.com/vi/${lastSermons[0].youtube_video_id}/maxresdefault.jpg`}
+              alt={lastSermons[0].title}
+              className="w-full h-full object-cover opacity-70 group-hover:opacity-90 group-hover:scale-105 transition-all duration-700"
+              /* onError={(e) => { e.target.src = `https://img.youtube.com/vi/${REAL_SERMONS[0].id}/hqdefault.jpg`; }} */
+            />
+            <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/40 to-transparent" />
+            <div className="absolute inset-0 flex items-end p-8 md:p-12">
+              <div>
+                <span className="bg-[#c9a55a] text-black text-xs font-semibold px-3 py-1 mb-3 inline-block">
+                  {lastSermons[0].scripture}
+                </span>
+                <h3 className="font-display text-2xl md:text-4xl text-white max-w-2xl leading-tight mb-2">
+                  {lastSermons[0].title}
+                </h3>
+                <p className="text-white/50 text-sm">{lastSermons[0].date} · {lastSermons[0].duration}</p>
+              </div>
+              <div className="ml-auto">
+                <div className="w-14 h-14 rounded-full border-2 border-[#c9a55a] flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                  <Play className="w-6 h-6 text-[#c9a55a] fill-[#c9a55a] ml-0.5" />
+                </div>
               </div>
             </div>
-          </div>
-        </motion.div>
+          </motion.div>
 
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
-          {lastSermons.slice(1).map((s, i) => (
-            <SermonCard key={s.id} sermon={s} index={i} />
-          ))}
-        </div>
-      </section>
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+            {lastSermons.slice(1).map((s, i) => (
+              <SermonCard key={s.id} sermon={s} index={i} />
+            ))}
+          </div>
+        </section>
+      )}
 
       {/* ─── ABOUT / IDENTITY ─── */}
       <section className="py-24 px-6 lg:px-8 max-w-7xl mx-auto">
