@@ -73,6 +73,7 @@ export interface BibleStudy {
   id: number;
   created: string;
   serie?: BibleStudySerie;
+  serie_id?: number;
   serie_order?: number;
   title: string;
   description: string;

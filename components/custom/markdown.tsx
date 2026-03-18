@@ -15,24 +15,25 @@ interface MarkdownRendererProps {
 
 // Amber theme colors (matching the church app style)
 const colors = {
-  text: "text-gray-800",
+  text: "text-white/50 text-base leading-relaxed",
   textMuted: "text-gray-600",
   textLight: "text-gray-500",
-  heading: "text-gray-900",
-  link: "text-amber-600 hover:text-amber-700",
-  codeBg: "bg-amber-50",
-  codeText: "text-amber-700",
-  blockquoteBorder: "border-amber-500",
-  blockquoteBg: "bg-amber-50",
+  heading: "text-white",
+  link: "text-[#c9a55a] hover:font-medium text-[#c9a55a]-900",
+  codeBg: "bg-[#c9a55a]-50",
+  codeText: "text-[#c9a55a]-700",
+  blockquoteBorder: "border-[#c9a55a]",
+  blockquoteBg: "bg-gray-800",
   blockquoteText: "text-gray-700",
-  tableBorder: "border-amber-200",
-  tableHeaderBg: "bg-amber-50",
-  tableHover: "hover:bg-amber-50/50",
-  hrColor: "border-amber-200",
-  markBg: "bg-amber-200",
-  detailsBg: "bg-amber-50",
-  detailsBorder: "border-amber-200",
+  tableBorder: "border-[#c9a55a]-200",
+  tableHeaderBg: "bg-[#c9a55a]-50",
+  tableHover: "hover:bg-[#c9a55a]-50/50",
+  hrColor: "border-[#c9a55a]-200",
+  markBg: "bg-[#c9a55a]-200",
+  detailsBg: "bg-[#c9a55a]-50",
+  detailsBorder: "border-[#c9a55a]-200",
 }
+
 
 export function MarkdownRenderer({ content, className = "" }: MarkdownRendererProps) {
   return (
@@ -43,8 +44,7 @@ export function MarkdownRenderer({ content, className = "" }: MarkdownRendererPr
           rehypeRaw, 
           rehypeKatex, 
           rehypeHighlight,
-          rehypeSlug,
-          [rehypeAutolinkHeadings, { behavior: "wrap" }]
+          rehypeSlug
         ]}
         components={{
           // Headings
@@ -107,7 +107,7 @@ export function MarkdownRenderer({ content, className = "" }: MarkdownRendererPr
               href={href}
               target={href?.startsWith("#") ? undefined : "_blank"}
               rel={href?.startsWith("#") ? undefined : "noopener noreferrer"}
-              className={`font-medium underline underline-offset-2 transition-colors duration-200 ${colors.link}`}
+              className={`transition-colors duration-200 ${colors.link}`}
             >
               {children}
             </a>
@@ -135,7 +135,7 @@ export function MarkdownRenderer({ content, className = "" }: MarkdownRendererPr
           ul: ({ children, className }) => {
             const isTaskList = className?.includes("contains-task-list")
             return (
-              <ul className={`my-5 space-y-2 ${colors.text} ${isTaskList ? "list-none ml-0" : "list-disc ml-6"}`}>
+              <ul className={`my-5 ${colors.text} ${isTaskList ? "list-none ml-0" : "list-disc ml-6"}`}>
                 {children}
               </ul>
             )
@@ -143,7 +143,7 @@ export function MarkdownRenderer({ content, className = "" }: MarkdownRendererPr
 
           // Ordered List
           ol: ({ children, start }) => (
-            <ol start={start} className={`my-5 ml-6 list-decimal space-y-2 ${colors.text}`}>
+            <ol start={start} className={`my-5 ml-6 list-decimal ${colors.text}`}>
               {children}
             </ol>
           ),
@@ -176,7 +176,7 @@ export function MarkdownRenderer({ content, className = "" }: MarkdownRendererPr
 
           // Blockquote
           blockquote: ({ children }) => (
-            <blockquote className={`my-6 border-l-4 py-3 pl-6 pr-4 ${colors.blockquoteBorder} ${colors.blockquoteBg} ${colors.blockquoteText} rounded-r-lg`}>
+            <blockquote className={`my-6 border-l-4 py-3 pl-6 pr-4 ${colors.blockquoteBorder} ${colors.blockquoteBg} ${colors.blockquoteText}`}>
               {children}
             </blockquote>
           ),

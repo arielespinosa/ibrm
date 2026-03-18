@@ -2,11 +2,8 @@
 
 import { cookies } from 'next/headers';
 import { createClient } from '@/lib/supabase/server';
+import { Filtering } from './objects-fetcher';
 
-type RelationConfig = {
-  table: string
-  fields?: string[]
-}
 
 function buildQuery(relations: any) {
   const relationQueries = Object.entries(relations).map(
@@ -26,7 +23,7 @@ function buildQuery(relations: any) {
   return relationQueries;
 }
 
-export async function fetchData(table: string, relations?: any, order?: string, limit?: number, exclude?:number[], pk?:number) {
+export async function fetchData(table: string, relations?: any, order?: string, limit?: number, exclude?:number[], pk?:number, filter?:Filtering[]) {
   try {
     let select = "*";
     const cookieStore = cookies();
@@ -43,6 +40,12 @@ export async function fetchData(table: string, relations?: any, order?: string, 
 
     if (pk) {
       query = query.eq('id', pk);
+    }
+
+    if (filter) {
+      filter.forEach((item) => {
+        query = query.filter(item.field, 'eq', item.value);
+      })
     }
 
     // 🚀 EXCLUIR IDS

@@ -2,11 +2,17 @@
 
 import { fetchData } from './data-fetcher';
 
+export type Filtering = {
+  field: string,
+  value: any;
+}
+
 interface FetchAttributes{
   order?: string;
   limit?: number;
   exclude?: number[];
   pk?: number;
+  filter?: Filtering[];
 }
 
 export async function fetchSermons({order, limit}: FetchAttributes = {}) {
