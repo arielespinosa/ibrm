@@ -54,7 +54,7 @@ export async function fetchSisterChurch({order, limit}: FetchAttributes = {}) {
   return data;
 }
 
-export async function fetchStudySeries({order, limit, exclude}: FetchAttributes = {}) {
+export async function fetchStudySeries({order, limit, exclude, pk}: FetchAttributes = {}) {
   const relations = {
     tags: {
       table: "ibrm_tag",
@@ -63,7 +63,7 @@ export async function fetchStudySeries({order, limit, exclude}: FetchAttributes 
       flatten: true
     }
   }
-  const data = await fetchData('ibrm_biblestudyserie', relations, order, limit, exclude);
+  const data = await fetchData('ibrm_biblestudyserie', relations, order, limit, exclude, pk);
   return data;
 }
 
