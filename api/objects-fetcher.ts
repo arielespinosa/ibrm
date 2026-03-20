@@ -37,8 +37,8 @@ export async function fetchSermons({order, limit, exclude, pk, filter}: FetchAtt
   return data;
 }
 
-export async function fetchSermonSeries({order, limit}: FetchAttributes = {}) {
-  const {data, error}  = await fetchData('ibrm_sermonserie');
+export async function fetchSermonSeries({order, limit, exclude, pk, filter}: FetchAttributes = {}) {
+  const {data, error}  = await fetchData('ibrm_sermonserie', undefined,  order, limit, exclude, pk, filter);
   return data;
 }
 

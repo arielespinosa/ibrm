@@ -22,6 +22,8 @@ export interface SermonSerie {
   title: string;
   speakers?: Person[];
   thumbnail_url?: string;
+  description?: string;
+  is_current_dominical: boolean;
 }
 
 export interface Sermon {
@@ -39,6 +41,7 @@ export interface Sermon {
   tags?: Tag[];
   serie: SermonSerie;
   is_on_straming: boolean;
+  is_current_dominical: boolean;
 }
 
 
