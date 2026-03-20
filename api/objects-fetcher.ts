@@ -16,7 +16,7 @@ interface FetchAttributes{
   filter?: Filtering[];
 }
 
-export async function fetchSermons({order, limit}: FetchAttributes = {}): Promise<Sermon[]> {
+export async function fetchSermons({order, limit, exclude, pk, filter}: FetchAttributes = {}): Promise<Sermon[]> {
   const relations = {
     speaker: {
       table: "ibrm_person",
@@ -33,7 +33,7 @@ export async function fetchSermons({order, limit}: FetchAttributes = {}): Promis
       flatten: true
     }
   }
-  const {data, error} = await fetchData('ibrm_sermon', relations, order, limit);  
+  const {data, error} = await fetchData('ibrm_sermon', relations, order, limit, exclude, pk, filter);  
   return data;
 }
 
@@ -55,16 +55,21 @@ export async function fetchSisterChurch({order, limit}: FetchAttributes = {}) {
   return data;
 }
 
-export async function fetchStudySeries({order, limit, exclude, pk}: FetchAttributes = {}) {
+export async function fetchStudySeries({order, limit, exclude, pk, filter}: FetchAttributes = {}) {
   const relations = {
     tags: {
       table: "ibrm_tag",
       through: "ibrm_biblestudyserie_tags",
       fields: ["id", "name"],
       flatten: true
+    },
+    studies_id: {
+      table: "ibrm_biblestudy",
+      fields: ["id"],
+      foreignKey: "serie_id"
     }
   }
-  const {data, error}  = await fetchData('ibrm_biblestudyserie', relations, order, limit, exclude, pk);
+  const {data, error}  = await fetchData('ibrm_biblestudyserie', relations, order, limit, exclude, pk, filter);
   return data;
 }
 

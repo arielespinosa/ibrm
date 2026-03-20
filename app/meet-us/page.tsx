@@ -138,14 +138,19 @@ export default function Nosotros() {
               <p className="text-[#c9a55a] text-xs tracking-[0.3em] uppercase mb-6">Ubicación</p>
               <div className="flex items-start gap-3 mb-6">
                 <MapPin className="w-4 h-4 text-[#c9a55a] flex-shrink-0 mt-1" />
-                <p className="text-white/50 text-sm leading-relaxed">
-                  Calle Pintor José María Párraga 1, Bajo 3<br />
-                  Alcantarilla, Murcia
-                </p>
+                <a
+                  target="_blank"
+                  rel="noopener noreferrer" 
+                  href='https://www.google.com/maps/place/IGLESIA+BAUTISTA+REFORMADA+DE+MURCIA/@37.973111,-1.220111,16z/data=!4m6!3m5!1s0xd648126c37b4e9d:0x91368909031a3d45!8m2!3d37.9710936!4d-1.2171174!16s%2Fg%2F11scc7t_pz?hl=es-ES&entry=ttu&g_ep=EgoyMDI2MDMxNy4wIKXMDSoASAFQAw%3D%3D'>
+                  
+                  <p className="text-white/50 text-sm leading-relaxed">
+                    Calle Pintor José María Párraga 1, Bajo 3, Alcantarilla, Murcia
+                  </p>
+                </a>
               </div>
               <div className="aspect-video bg-zinc-900 overflow-hidden">
                 <iframe
-                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3147.7731753449894!2d-1.2201!3d37.9731!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMzfCsDU4JzIzLjIiTiAxwrAxMycxMi40Ilc!5e0!3m2!1ses!2ses!4v1234567890"
+                  src="https://www.google.com/maps?q=37.9710936,-1.2171174&z=16&output=embed"
                   width="100%" height="100%"
                   style={{ border: 0, filter: 'grayscale(1) invert(0.9) contrast(0.8)' }}
                   allowFullScreen loading="lazy"

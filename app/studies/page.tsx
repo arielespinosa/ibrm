@@ -14,7 +14,7 @@ export default function Estudios() {
 
   useEffect(() => {
     async function loadLastStudySeries(){
-      const data = await fetchStudySeries({limit:3});
+      const data = await fetchStudySeries({limit:3, filter:[{field: "recomended", value: true}]});
       setLastStudySeries(data);
     }
     loadLastStudySeries();
@@ -46,8 +46,8 @@ export default function Estudios() {
 
       {/* Featured */}
       <section className="max-w-7xl mx-auto px-6 lg:px-8 py-16">
-        <p className="text-white/30 text-xs tracking-[0.3em] uppercase mb-8">Destacados</p>
-        <div className="grid lg:grid-cols-3 gap-px bg-white/5">
+        <p className="text-white/30 text-xs tracking-[0.3em] uppercase mb-8">Recomendados</p>
+        <div className="grid lg:grid-cols-3 gap-px">
           {lastStudySeries && lastStudySeries.map((study, i) => (
             <a key={study.id} href={`studies-series/${study.id}`}>
               <motion.div
@@ -77,7 +77,7 @@ export default function Estudios() {
                   <div className="flex items-center justify-between">
                     <span className="text-white/20 text-xs flex items-center gap-1">
                       <FileText className="w-3.5 h-3.5" />
-                      12 lecciones
+                      {study.studies_id?.length} lecciones
                     </span>
                     {/* {study.url && (
                       <a
@@ -122,7 +122,7 @@ export default function Estudios() {
                   <p className="text-white/25 text-xs mt-1 line-clamp-1">{study.description}</p>
                 </div>
                 <div className="flex items-center gap-4">
-                  <span className="text-white/20 text-xs hidden md:block">12 lecciones</span>
+                  <span className="text-white/20 text-xs hidden md:block"> {study.studies_id?.length} lecciones</span>
                   {/* {study.url ? (
                     <a href={study.url} target="_blank" rel="noopener noreferrer" className="text-[#c9a55a] hover:text-white transition-colors">
                       <ExternalLink className="w-4 h-4" />

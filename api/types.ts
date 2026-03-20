@@ -38,6 +38,7 @@ export interface Sermon {
   thumbnail_url: string;
   tags?: Tag[];
   serie: SermonSerie;
+  is_on_straming: boolean;
 }
 
 
@@ -67,6 +68,7 @@ export interface BibleStudySerie {
   description?: string;
   thumbnail?: string;
   tags?: Tag[];
+  studies_id?: number[];
 }
 
 export interface BibleStudy {

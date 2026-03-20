@@ -6,7 +6,9 @@ import {
   Play, ChevronDown, ArrowRight, MapPin, Clock,
   BookOpen, Shield, Flame, Star, Users,
   Rainbow,
-  Crown
+  Crown,
+  MapIcon,
+  MapPinIcon
 } from 'lucide-react';
 import SisterChurchesSection from '../components/home/SisterChurchesSection';
 import { Sermon } from '@/api/types';
@@ -184,20 +186,22 @@ export default function Home() {
                   className="flex flex-wrap gap-3"
                 >
                   <a
-                    href="https://www.youtube.com/@Iglesia-ibrm/streams"
+                    href="https://www.youtube.com/@Iglesia-ibrm/videos"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="flex items-center gap-2 bg-[#c9a55a] hover:bg-[#b8944a] text-black font-semibold px-6 py-3 text-sm transition-all duration-200 group"
                   >
                     <Play className="w-4 h-4 fill-black" />
-                    Ver en Vivo
+                    Sermones
                   </a>
                   <a
-                    href="#"
+                    href="https://maps.app.goo.gl/RWNsyN2VoYmMyMLq8"
+                    target="_blank"
+                    rel="noopener noreferrer"
                     className="flex items-center gap-2 border border-white/20 hover:border-[#c9a55a] text-white/80 hover:text-[#c9a55a] px-6 py-3 text-sm transition-all duration-200"
                   >
-                    Escuchar Sermones
-                    <ArrowRight className="w-4 h-4" />
+                    Visitar
+                    <MapPinIcon className="w-4 h-4" />
                   </a>
                 </motion.div>
               </>
@@ -250,12 +254,7 @@ export default function Home() {
               <p className="text-[#c9a55a] text-xs tracking-[0.3em] uppercase mb-2">Predicaciones</p>
               <h2 className="font-display text-4xl md:text-5xl text-white">Últimos Sermones</h2>
             </div>
-            <a
-              href="https://www.youtube.com/@Iglesia-ibrm/videos"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="hidden md:flex items-center gap-2 text-white/40 hover:text-[#c9a55a] text-sm transition-colors group"
-            >
+            <a href="/sermons" className="hidden md:flex items-center gap-2 text-white/40 hover:text-[#c9a55a] text-sm transition-colors group">
               Ver todos
               <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
             </a>
@@ -324,11 +323,11 @@ export default function Home() {
               y tenemos a la Segunda Confesión Bautista de Fe de 1689 como nuestra declaración doctrinal.
             </p>
             <div className="flex flex-wrap gap-3">
-              <a href="#" className="flex items-center gap-2 bg-white/5 hover:bg-[#c9a55a] hover:text-black text-white/70 text-sm px-5 py-2.5 border border-white/10 hover:border-[#c9a55a] transition-all duration-200 group">
+              <a href="/meet-us" className="flex items-center gap-2 bg-white/5 hover:bg-[#c9a55a] hover:text-black text-white/70 text-sm px-5 py-2.5 border border-white/10 hover:border-[#c9a55a] transition-all duration-200 group">
                 Quiénes somos
                 <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
               </a>
-              <a href="#" className="flex items-center gap-2 border border-white/10 hover:border-[#c9a55a] text-white/50 hover:text-[#c9a55a] text-sm px-5 py-2.5 transition-all duration-200">
+              <a href="/beliefs" className="flex items-center gap-2 border border-white/10 hover:border-[#c9a55a] text-white/50 hover:text-[#c9a55a] text-sm px-5 py-2.5 transition-all duration-200">
                 Lo que creemos
               </a>
             </div>
@@ -343,7 +342,7 @@ export default function Home() {
           >
             {[
               {
-                name: 'Pedro Francisco Pérez',
+                name: 'Pedro Francisco Pérez García',
                 img: 'https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/69a491a015e58b1ec55092b3/d2bfa3590_603054689_10239637937154575_4186765685569892296_n.jpg',
               },
               {
@@ -395,7 +394,7 @@ export default function Home() {
             ))}
           </div>
           <div className="mt-8 text-center">
-            <a href="#" className="text-white/30 hover:text-[#c9a55a] text-sm transition-colors inline-flex items-center gap-2">
+            <a href="/beliefs" className="text-white/30 hover:text-[#c9a55a] text-sm transition-colors inline-flex items-center gap-2">
               Conoce más sobre lo que creemos <ArrowRight className="w-4 h-4" />
             </a>
           </div>
@@ -450,12 +449,6 @@ export default function Home() {
                 <Clock className="w-4 h-4" />
                 {ev.time}
               </div>
-              {ev.link && (
-                <a href="#" className="inline-flex items-center gap-1.5 text-white/30 hover:text-[#c9a55a] text-xs transition-colors group/link mt-1">
-                  Más información
-                  <ArrowRight className="w-3 h-3 group-hover/link:translate-x-1 transition-transform" />
-                </a>
-              )}
             </motion.div>
           ))}
         </div>

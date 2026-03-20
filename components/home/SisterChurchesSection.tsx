@@ -70,7 +70,7 @@ export default function SisterChurchesSection() {
                           <AvatarFallback>{pastor.name}</AvatarFallback>
                         </Avatar>
                         <div className="flex flex-col">
-                          <span className="text-white/80 text-sm font-medium">Pr. {pastor.name}</span>
+                          <span className="text-white/80 text-sm font-medium">Pstr. {pastor.name}</span>
                           <span className="text-[#c9a55a]/60 text-xs tracking-wide">{pastor.email}</span>
                         </div>
                       </div>

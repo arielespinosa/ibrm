@@ -3,6 +3,8 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X } from 'lucide-react';
+import { Sermon } from '@/api/types';
+import { fetchSermons } from '@/api/objects-fetcher';
 
 
 interface NavbarProps {
@@ -24,6 +26,15 @@ const navLinks = [
 ];
 
 export default function Navbar({attr}: {attr: NavbarProps}) {
+    const [streaming, setStreaming] = useState<Sermon>();
+
+    useEffect(() => {
+        async function loadStreaming(){
+            const data = await fetchSermons({filter:[{field: "is_on_straming", value: true}]});
+            setStreaming(data[0]);
+        }
+        loadStreaming();
+    }, [])
 
     return (
         <motion.header
@@ -36,14 +47,14 @@ export default function Navbar({attr}: {attr: NavbarProps}) {
             {/* Logo */}
             <a href="#" className="flex items-center gap-3 group">
                 <div className="w-10 h-10 flex-shrink-0 overflow-hidden">
-                <img
-                    src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/69a491a015e58b1ec55092b3/0b4c6b327_ChatGPT_Image_2_mar_2026__20_24_35-removebg-preview.png"
-                    alt="IBRM Logo"
-                    className="w-full h-full object-contain"
-                />
+                    <img
+                        src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/69a491a015e58b1ec55092b3/0b4c6b327_ChatGPT_Image_2_mar_2026__20_24_35-removebg-preview.png"
+                        alt="IBRM Logo"
+                        className="w-full h-full object-contain"
+                    />
                 </div>
                 <span className="font-display text-white text-lg tracking-wide hidden sm:block">
-                <span className="text-[#c9a55a]">IBR</span>M
+                    <span className="text-[#c9a55a]">IBRM</span>
                 </span>
             </a>
 
@@ -64,17 +75,20 @@ export default function Navbar({attr}: {attr: NavbarProps}) {
             </nav>
 
             {/* CTA */}
-            <div className="hidden lg:flex items-center gap-3">
-                <a
-                href="https://www.youtube.com/@Iglesia-ibrm/streams"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-2 bg-[#c9a55a] hover:bg-[#b8944a] text-black text-sm font-medium px-4 py-2 transition-colors duration-200"
-                >
-                <span className="w-2 h-2 bg-red-600 rounded-full animate-pulse" />
-                En Vivo
-                </a>
-            </div>
+            
+                <div className="hidden lg:flex items-center gap-3">
+                    {streaming &&
+                        <a
+                            href={`https://www.youtube.com/watch?v=${streaming.youtube_video_id}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="flex items-center gap-2 bg-[#c9a55a] hover:bg-[#b8944a] text-black text-sm font-medium px-4 py-2 transition-colors duration-200"
+                        >
+                            <span className="w-2 h-2 bg-red-600 rounded-full animate-pulse" /> Ver en vivo
+                        </a>
+                    }
+                </div>
+            
 
             {/* Mobile toggle */}
             <button
@@ -106,15 +120,17 @@ export default function Navbar({attr}: {attr: NavbarProps}) {
                         {link.name}
                     </a>
                     ))}
-                    <a
-                    href="https://www.youtube.com/@Iglesia-ibrm/streams"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center gap-2 bg-[#c9a55a] text-black text-sm font-medium px-4 py-2 w-fit mt-2"
-                    >
-                    <span className="w-2 h-2 bg-red-600 rounded-full animate-pulse" />
-                    Ver En Vivo
-                    </a>
+                    {streaming &&
+                        <a
+                            href={`https://www.youtube.com/watch?v=${streaming.youtube_video_id}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="flex items-center gap-2 bg-[#c9a55a] text-black text-sm font-medium px-4 py-2 w-fit mt-2"
+                            >
+                            <span className="w-2 h-2 bg-red-600 rounded-full animate-pulse" />
+                            Ver en vivo
+                        </a>
+                    }
                 </div>
                 </motion.div>
             )}
