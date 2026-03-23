@@ -22,7 +22,7 @@ const navLinks = [
   { name: 'Estudios', page: '/studies' },
   { name: 'Reuniones', page: '/services' },
   { name: 'Blog', page: '/blog' },
-  { name: 'Donaciones', page: '/donations' },
+ /*  { name: 'Donaciones', page: '/donations' }, */
 ];
 
 export default function Navbar({attr}: {attr: NavbarProps}) {
@@ -30,7 +30,12 @@ export default function Navbar({attr}: {attr: NavbarProps}) {
 
     useEffect(() => {
         async function loadStreaming(){
-            const data = await fetchSermons({filter:[{field: "is_on_straming", value: true}]});
+            const currentDate = new Date().toISOString().split('T')[0];
+            const filterFields = [
+                {field: "is_on_straming", value: true},
+                {field: "date", value: currentDate},
+            ]
+            const data = await fetchSermons({filter:filterFields});
             setStreaming(data[0]);
         }
         loadStreaming();

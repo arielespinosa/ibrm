@@ -104,11 +104,11 @@ export default function Footer() {
                   Blog
                 </a>
               </li>
-                <li>
+     {/*          <li>
                 <a href="/blog" className="text-gray-400 hover:text-[#c9a55a] transition-colors">
                   Donations
                 </a>
-              </li>
+              </li> */}
        
             </ul>
           </div>
