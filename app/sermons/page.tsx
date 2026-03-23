@@ -2,12 +2,14 @@
 
 import { use, useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
-import { Play, ExternalLink, Search, Youtube, Info, User } from 'lucide-react';
+import { Play, ExternalLink, Search, Youtube, Info, User, Filter } from 'lucide-react';
 import { Sermon, SermonSerie } from '@/api/types';
 import { fetchSermons, fetchSermonSeries } from '@/api/objects-fetcher';
 import { HoverCard, HoverCardContent, HoverCardTrigger } from '@/components/ui/hover-card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { supabaseObjectsBaseUrl } from '@/lib/utils';
+import { Button } from '@/components/ui/button';
+import { FilterSermonModalForm } from '@/components/sermon/filter';
 
 
 export default function Sermones() {
@@ -19,6 +21,10 @@ export default function Sermones() {
   const [filteredSermons, setFilteredSermons] = useState<Sermon[]>([]);
   const [sermons, setSermons] = useState<Sermon[]>([]);
   
+  // UI
+  const [sermonFilterModalOpen, setSermonFilterModalOpen] = useState(false);
+
+
   useEffect(() => {
     async function loadSermons() {
       const data = await fetchSermons();
@@ -130,7 +136,7 @@ export default function Sermones() {
             ))}
           </div>
           {/* Search */}
-          <div className="relative">
+          <div className="flex flex-row relative gap-2">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/30" />
             <input
               type="text"
@@ -139,6 +145,9 @@ export default function Sermones() {
               onChange={e => setSearch(e.target.value)}
               className="bg-white/5 border border-white/10 text-white placeholder-white/30 text-sm pl-9 pr-4 py-1.5 focus:outline-none focus:border-[#c9a55a] transition-colors w-52"
             />
+            <Button onClick={() => setSermonFilterModalOpen(true)} size={"icon"} className="px-4 py-1.5 text-xs tracking-wide text-white/40 hover:text-[#c9a55a] border border-white/10 hover:border-[#c9a55a] rounded-none">
+              <Filter />
+            </Button>
           </div>
         </div>
       </div>
@@ -275,6 +284,9 @@ export default function Sermones() {
           </div>
         )}
       </div>
+
+       {/* Forms */}
+      <FilterSermonModalForm open={sermonFilterModalOpen} setOpen={setSermonFilterModalOpen} />
     </div>
   );
 }
