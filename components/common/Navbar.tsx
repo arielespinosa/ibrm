@@ -38,10 +38,13 @@ export default function Navbar({attr}: {attr: NavbarProps}) {
 
     return (
         <motion.header
-        initial={{ y: -80 }}
-        animate={{ y: 0 }}
-        transition={{ duration: 0.6, ease: 'easeOut' }}
-        className={`fixed top-0 left-0 right-0 w-full max-w-full z-50 transition-all duration-500 ${attr.transparent ? 'bg-transparent' : 'bg-black/80 backdrop-blur-xl'}`}
+       initial={{ y: -80 }}
+  animate={{ y: 0 }}
+  transition={{ duration: 0.6, ease: 'easeOut' }}
+  style={{ width: '100vw' }}
+  className={`fixed top-0 inset-x-0 z-50 overflow-x-hidden transition-all duration-500 ${
+    attr.transparent ? 'bg-transparent' : 'bg-black/80 backdrop-blur-xl'
+  }`}
       >
             <div className="max-w-7xl mx-auto px-6 lg:px-8 flex items-center justify-between h-16">
             {/* Logo */}
@@ -75,19 +78,18 @@ export default function Navbar({attr}: {attr: NavbarProps}) {
             </nav>
 
             {/* CTA */}
-            
-                <div className="hidden lg:flex items-center gap-3">
-                    {streaming &&
-                        <a
-                            href={`https://www.youtube.com/watch?v=${streaming.youtube_video_id}`}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="flex items-center gap-2 bg-[#c9a55a] hover:bg-[#b8944a] text-black text-sm font-medium px-4 py-2 transition-colors duration-200"
-                        >
-                            <span className="w-2 h-2 bg-red-600 rounded-full animate-pulse" /> Ver en vivo
-                        </a>
-                    }
-                </div>
+            <div className="hidden lg:flex items-center gap-3">
+                {streaming &&
+                    <a
+                        href={`https://www.youtube.com/watch?v=${streaming.youtube_video_id}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center gap-2 bg-[#c9a55a] hover:bg-[#b8944a] text-black text-sm font-medium px-4 py-2 transition-colors duration-200"
+                    >
+                        <span className="w-2 h-2 bg-red-600 rounded-full animate-pulse" /> Ver en vivo
+                    </a>
+                }
+            </div>
             
 
             {/* Mobile toggle */}

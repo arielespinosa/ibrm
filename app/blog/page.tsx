@@ -79,7 +79,7 @@ export default function Blog() {
       {/* Header */}
       <div className="relative pt-32 pb-24 px-6 lg:px-8 overflow-hidden">
         <div className="absolute inset-0">
-          <img src="/rsc/img/blog-cover.png" alt="" className="w-full h-full object-cover opacity-25" />
+          <img src="/rsc/img/blog-cover.png" alt="" className="w-full h-full object-cover opacity-50" />
           <div className="absolute inset-0 bg-gradient-to-b from-transparent to-[#0a0a0a]" />
         </div>
         <div className="relative max-w-7xl mx-auto">
