@@ -4,7 +4,8 @@ import { fetchData } from './data-fetcher';
 import { BibleStudy, BibleStudySerie, Person, Sermon, SermonSerie, SisterChurch } from './types';
 
 export type Filtering = {
-  field: string,
+  field: string;
+  query?: string;
   value: any;
 }
 

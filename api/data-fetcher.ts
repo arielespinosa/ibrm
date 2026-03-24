@@ -113,7 +113,16 @@ export async function fetchData(
 
     if (filter) {
       filter.forEach((item) => {
-        query = query.eq(item.field, item.value);
+        switch(item.query){
+          default:
+            query = query.eq(item.field, item.value);
+          case "eq":
+            query = query.eq(item.field, item.value);
+          case "like":
+            query = query.like(item.field,  `%${item.value}%`);     
+          case "ilike":
+            query = query.ilike(item.field,  `%${item.value}%`);        
+        }
       });
     }
 

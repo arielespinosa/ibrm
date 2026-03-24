@@ -8,7 +8,8 @@ import { Loader2 } from "lucide-react";
 import { useEffect, useState } from "react";
 import DialogCombobox, { DialogComboboxItems } from "@/components/ui/dialog-combobox";
 import { CreateUpdateModalForm } from "@/components/forms/modal";
-import { fetchPerson, fetchSermonSeries } from "@/api/objects-fetcher";
+import { fetchPerson, fetchSermons, fetchSermonSeries } from "@/api/objects-fetcher";
+import { Input } from "../ui/input";
 
 
 interface ModalForm{
@@ -22,10 +23,10 @@ export interface SermonFormData {
   date?: string;
   scripture?: string;
   duration?: string;
-  speakerId?: number;
-  serieId?: number;
-  isOnStraming?: boolean;
-  isCurrentDominical?: boolean;
+  speaker_id?: number;
+  serie_id?: number;
+  is_on_straming?: boolean;
+  is_current_dominical?: boolean;
 }
 
 export function FilterSermonModalForm({ open, setOpen }: ModalForm) {
@@ -40,6 +41,14 @@ export function FilterSermonModalForm({ open, setOpen }: ModalForm) {
   const [submitError, setSubmitError] = useState<string | null>(null);
   const { handleSubmit, register, setError, formState: { errors, isSubmitting }, control } = useForm<SermonFormData>();
   
+  const buildFilters = (data: SermonFormData, useLike?: string[]) => {
+    return Object.entries(data)
+      .filter(([_, value]) => value !== undefined && value !== null && value !== "")
+      .map(([key, value]) => (
+        useLike && useLike.includes(key) ? {field: key, query: "like", value} : {field: key, value}
+      ))
+  }
+
   async function fetchSpeaker() {
     const data = await fetchPerson();
     setSpeaker(data.map(i => ({value: i.id.toString(), label: i.name})));    
@@ -50,59 +59,28 @@ export function FilterSermonModalForm({ open, setOpen }: ModalForm) {
     setSerie(data.map(i => ({value: i.id.toString(), label: i.title})));    
   }
 
+  async function filterSermons(data: SermonFormData) {
+    let likes = [];
+    if(data.title)
+      likes.push("title")
+    const filterData = buildFilters(data, likes);
+    const filteredSermons = await fetchSermons({filter: filterData});
+    return filteredSermons;
+  }
+
   useEffect(() =>{
     fetchSpeaker();
     fetchSeries();
   }, [])
 
-  const renderBody = () => {
-    return (
-      <div className="grid gap-4 py-2">
-        <div className="grid gap-2">
-          <Label htmlFor="instructor" className="text-white/70 text-sm">Expositor</Label>
-          <Controller
-            name="speakerId"
-            control={control}
-            rules={{ required: "Debes seleccionar un expositor" }}
-            render={({ field }) => (
-              <DialogCombobox
-                placeholder="Seleccione un expositor"
-                items={speaker}
-                value={field.value?.toString() || ""}
-                onChange={(value) => field.onChange(value ? parseInt(value, 10) : undefined)}
-              />
-            )}
-          />
-        </div>
-        <div className="grid gap-2">
-          <Label htmlFor="lesson" className="text-white/70 text-sm">Lección</Label>
-          <Controller
-            name="serieId"
-            control={control}
-            rules={{ required: "Debes seleccionar una serie" }}
-            render={({ field }) => (
-              <DialogCombobox
-                placeholder="Seleccione una lección"
-                items={serie}
-                value={field.value?.toString() || ""}
-                onChange={(value) => field.onChange(value ? parseInt(value, 10) : undefined)}
-              />
-            )}
-          />
-        </div>
-        <div className="grid gap-2">
-          <Label htmlFor="route">Ruta</Label>
-        </div>                    
-      </div>
-    )
-  }
-
+  
   const onSubmit = async (data: SermonFormData) => {
     setSubmitError(null);  
     console.log(data);
     
     try {
-      console.log("Sesión práctica creada exitosamente");
+      const filteredSermons = filterSermons(data);
+      console.log(filteredSermons);    
       setOpen(false);
     } catch (err: unknown) {
       console.error(err);
@@ -112,6 +90,49 @@ export function FilterSermonModalForm({ open, setOpen }: ModalForm) {
     }
   }
 
+
+  const renderBody = () => {
+    return (
+      <div className="grid gap-4 py-2">
+        <div className="grid gap-2">
+          <Label htmlFor="instructor" className="text-white/70 text-sm">Expositor</Label>
+          <Controller
+            name="speaker_id"
+            control={control}
+            render={({ field }) => (
+              <DialogCombobox
+                placeholder="Seleccione un expositor"
+                items={speaker}
+                value={field.value?.toString() || null}
+                onChange={(value) => field.onChange(value ? parseInt(value, 10) : null)}
+              />
+            )}
+          />
+        </div>
+        <div className="grid gap-2">
+          <Label htmlFor="lesson" className="text-white/70 text-sm">Serie</Label>
+          <Controller
+            name="serie_id"
+            control={control}
+            render={({ field }) => (
+              <DialogCombobox
+                placeholder="Seleccione una serie"
+                items={serie}
+                value={field.value?.toString() || null}
+                onChange={(value) => field.onChange(value ? parseInt(value, 10) : null)}
+              />
+            )}
+          />
+        </div>
+        <div className="grid gap-2">
+          <Label htmlFor="title">Título</Label>
+          <Input id="title" {...register("title")} />
+        </div>                    
+      </div>
+    )
+  }
+
+  
   return (
     <CreateUpdateModalForm 
         open={open}
