@@ -89,7 +89,9 @@ export async function fetchData(
   limit?: number,
   exclude?: number[],
   pk?: number,
-  filter?: Filtering[]
+  filter?: Filtering[],
+  fromPage?: number,
+  toPage?: number
 ): Promise<FetchDataResponse> {
 
   try {
@@ -105,7 +107,9 @@ export async function fetchData(
       }
     }
 
-    let query = supabase.from(table).select(select).order(order || "id");
+    let query = (fromPage !== undefined && toPage !== undefined)
+    ? supabase.from(table).select(select, { count: "exact" }).order(order || "id").range(fromPage, toPage) 
+    : supabase.from(table).select(select).order(order || "id");
 
     if (pk) {
       query = query.eq("id", pk);
@@ -114,14 +118,18 @@ export async function fetchData(
     if (filter) {
       filter.forEach((item) => {
         switch(item.query){
-          default:
-            query = query.eq(item.field, item.value);
           case "eq":
             query = query.eq(item.field, item.value);
+            break
           case "like":
             query = query.like(item.field,  `%${item.value}%`);     
+            break
           case "ilike":
-            query = query.ilike(item.field,  `%${item.value}%`);        
+            query = query.ilike(item.field,  `%${item.value}%`);  
+            break 
+          default:
+            query = query.eq(item.field, item.value);
+            break     
         }
       });
     }

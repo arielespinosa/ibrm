@@ -7,10 +7,19 @@ import { Sermon, SermonSerie } from '@/api/types';
 import { fetchSermons, fetchSermonSeries } from '@/api/objects-fetcher';
 import { HoverCard, HoverCardContent, HoverCardTrigger } from '@/components/ui/hover-card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { supabaseObjectsBaseUrl } from '@/lib/utils';
+import { PAGE_SIZE, supabaseObjectsBaseUrl } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { FilterSermonModalForm } from '@/components/sermon/filter';
+import { PaginatorPageProps, SermonPaginator } from '@/components/sermon/paginator';
 
+
+const initialPages = [
+    {value: 1, isActive: true},
+    {value: 2, isActive: false},
+    {value: 3, isActive: false},
+    {value: 4, isActive: false},
+    {value: 5, isActive: false},
+];
 
 export default function Sermones() {
   const [search, setSearch] = useState('');
@@ -20,24 +29,41 @@ export default function Sermones() {
   const [playingSermon, setPlayingSermon] = useState<Sermon | null>(null);
   const [filteredSermons, setFilteredSermons] = useState<Sermon[]>([]);
   const [sermons, setSermons] = useState<Sermon[]>([]);
+
+
+  const [page, setPage] = useState(1);
+  const [paginatorPages, setPaginatorPages] = useState<PaginatorPageProps[]>(initialPages);
+  const [total, setTotal] = useState(0);
   
   // UI
   const [sermonFilterModalOpen, setSermonFilterModalOpen] = useState(false);
 
+  async function loadSermons() {
+    let fromPage = (page - 1) * PAGE_SIZE
+    let toPage = fromPage + PAGE_SIZE - 1
+    const data = await fetchSermons({fromPage: fromPage, toPage: toPage});
+    setSermons(data);
+    setFilteredSermons(data);
+  }
+  
+  async function loadSermoSeries() {
+    const data = await fetchSermonSeries();
+    setSermonSeries(data);
+  }
 
-  useEffect(() => {
-    async function loadSermons() {
-      const data = await fetchSermons();
-      setSermons(data);
-      setFilteredSermons(data);
+  function reloadPaginatorPages() {
+    let data = []
+    let fromPage = page-3 <= 0 ? 1 : page-2
+    for(let i = fromPage; i <= fromPage + 4; i++){
+      data.push({value: i, isActive: i==page})
     }
-    async function loadSermoSeries() {
-      const data = await fetchSermonSeries();
-      setSermonSeries(data);
-    }
+    console.log(data);
+    setPaginatorPages(data);    
+  }
+
+  useEffect(() => {   
     loadSermoSeries();
     loadSermons();
-    //setSupabaseObjectsBaseUrl(process.env.SUPABASE_OBJECTS_BASE_URL);
   }, []);
 
   useEffect(() => {
@@ -67,6 +93,11 @@ export default function Sermones() {
     setPlayingSermon(filtered[0]);
   }, [playingId]);
 
+  useEffect(() => {
+    loadSermons();
+    reloadPaginatorPages();
+  }, [page])
+
   return (
     <div className="min-h-screen bg-[#0a0a0a] text-white">
       {/* Header */}
@@ -94,16 +125,6 @@ export default function Sermones() {
           <div className="w-12 h-px bg-[#c9a55a]" />
         </div>
       </div>
-
-      {/* <div className="border-b border-white/5 pt-16 pb-12 px-6 lg:px-8">
-        <div className="max-w-7xl mx-auto">
-          <p className="text-[#c9a55a] text-xs tracking-[0.3em] uppercase mb-3">Predicaciones</p>
-          <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
-            <h1 className="font-display text-5xl md:text-6xl text-white">Sermones</h1>
-            
-          </div>
-        </div>
-      </div> */}
 
       {/* Filters */}
       <div className="border-b border-white/5 px-6 lg:px-8">
@@ -274,8 +295,13 @@ export default function Sermones() {
                   </div>                  
                 </div>
               </div>
+
             </motion.div>
           ))}
+        </div>
+        
+        <div className='pt-20'>
+          <SermonPaginator pages={paginatorPages} setPage={setPage}/>
         </div>
 
         {sermons.length === 0 && (
@@ -286,7 +312,7 @@ export default function Sermones() {
       </div>
 
        {/* Forms */}
-      <FilterSermonModalForm open={sermonFilterModalOpen} setOpen={setSermonFilterModalOpen} />
+      <FilterSermonModalForm open={sermonFilterModalOpen} setOpen={setSermonFilterModalOpen} callback={setFilteredSermons} />
     </div>
   );
 }

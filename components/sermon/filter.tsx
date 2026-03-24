@@ -15,6 +15,7 @@ import { Input } from "../ui/input";
 interface ModalForm{
     open: boolean;
     setOpen: (value: boolean) => void;
+    callback?: (value: any) => void;
 }
 
 export interface SermonFormData {
@@ -29,7 +30,7 @@ export interface SermonFormData {
   is_current_dominical?: boolean;
 }
 
-export function FilterSermonModalForm({ open, setOpen }: ModalForm) {
+export function FilterSermonModalForm({ open, setOpen, callback }: ModalForm) {
   const [speaker, setSpeaker] = useState<DialogComboboxItems[]>([]);
   const [serie, setSerie] = useState<DialogComboboxItems[]>([]);
   const [title, setTitle] = useState<string | null>(null);
@@ -76,17 +77,15 @@ export function FilterSermonModalForm({ open, setOpen }: ModalForm) {
   
   const onSubmit = async (data: SermonFormData) => {
     setSubmitError(null);  
-    console.log(data);
-    
+
     try {
-      const filteredSermons = filterSermons(data);
-      console.log(filteredSermons);    
+      const filteredSermons = await filterSermons(data);
+      callback?.(filteredSermons);   
       setOpen(false);
     } catch (err: unknown) {
       console.error(err);
       const message = "No se pudo agregar la sesión práctica.";
       setSubmitError(message);
-      //setError("instructor", { message });
     }
   }
 
@@ -126,12 +125,11 @@ export function FilterSermonModalForm({ open, setOpen }: ModalForm) {
         </div>
         <div className="grid gap-2">
           <Label htmlFor="title">Título</Label>
-          <Input id="title" {...register("title")} />
+          <Input id="title" {...register("title")} className="rounded-none w-full text-white/40 bg-white/5 border border-white/10 text-sm flex items-center justify-between px-3 py-2 hover:text-white hover:border-[#c9a55a] focus:border-[#c9a55a]" />
         </div>                    
       </div>
     )
   }
-
   
   return (
     <CreateUpdateModalForm 

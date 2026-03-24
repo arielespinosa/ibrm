@@ -15,9 +15,11 @@ interface FetchAttributes{
   exclude?: number[];
   pk?: number;
   filter?: Filtering[];
+  fromPage?: number;
+  toPage?: number;
 }
 
-export async function fetchSermons({order, limit, exclude, pk, filter}: FetchAttributes = {}): Promise<Sermon[]> {
+export async function fetchSermons({order, limit, exclude, pk, filter, fromPage, toPage}: FetchAttributes = {}): Promise<Sermon[]> {
   const relations = {
     speaker: {
       table: "ibrm_person",
@@ -34,7 +36,7 @@ export async function fetchSermons({order, limit, exclude, pk, filter}: FetchAtt
       flatten: true
     }
   }
-  const {data, error} = await fetchData('ibrm_sermon', relations, order, limit, exclude, pk, filter);  
+  const {data, error} = await fetchData('ibrm_sermon', relations, order, limit, exclude, pk, filter, fromPage, toPage);  
   return data;
 }
 
@@ -74,7 +76,7 @@ export async function fetchStudySeries({order, limit, exclude, pk, filter}: Fetc
   return data;
 }
 
-export async function fetchStudy({order, limit, exclude, pk}: FetchAttributes = {}): Promise<BibleStudy[]> {
+export async function fetchStudy({order, limit, exclude, pk, filter, fromPage, toPage}: FetchAttributes = {}): Promise<BibleStudy[]> {
   const relations = {
     author: {
       table: "ibrm_person",
@@ -85,11 +87,11 @@ export async function fetchStudy({order, limit, exclude, pk}: FetchAttributes = 
       fields: ["id", "title"],
     }
   }
-  const {data, error}  = await fetchData('ibrm_biblestudy', relations, order, limit, exclude, pk);
+  const {data, error}  = await fetchData('ibrm_biblestudy', relations, order, limit, exclude, pk, filter, fromPage, toPage);
   return data;
 }
 
-export async function fetchPerson({order, limit, exclude, pk, filter}: FetchAttributes = {}): Promise<Person[]> {
-  const {data, error} = await fetchData('ibrm_person', undefined, order, limit, exclude, pk, filter);  
+export async function fetchPerson({order, limit, exclude, pk, filter, fromPage, toPage}: FetchAttributes = {}): Promise<Person[]> {
+  const {data, error} = await fetchData('ibrm_person', undefined, order, limit, exclude, pk, filter, fromPage, toPage);  
   return data;
 }
