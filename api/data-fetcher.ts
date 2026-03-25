@@ -82,6 +82,19 @@ function buildQuery(relations: Record<string, RelationConfig>): string[] {
   });
 }
 
+export async function fetchCountData(table: string): Promise<number|null> {
+   try {
+    const cookieStore = cookies();
+    const supabase = await createClient(cookieStore);
+    const { count, error } = await supabase.from(table).select("*", { count: "exact", head: true });
+    return count
+  } catch (error) {
+    console.error("❌ Error fetching data:", error);
+    return null;
+  }
+
+}
+
 export async function fetchData(
   table: string,
   relations?: Record<string, RelationConfig>,

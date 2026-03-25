@@ -1,6 +1,6 @@
 'use server';
 
-import { fetchData } from './data-fetcher';
+import { fetchCountData, fetchData } from './data-fetcher';
 import { BibleStudy, BibleStudySerie, Person, Sermon, SermonSerie, SisterChurch } from './types';
 
 export type Filtering = {
@@ -17,6 +17,12 @@ interface FetchAttributes{
   filter?: Filtering[];
   fromPage?: number;
   toPage?: number;
+}
+
+export async function fetchCount(table: string): Promise<number> {
+  let data = await fetchCountData(table);  
+  data = data ? data : 0
+  return data
 }
 
 export async function fetchSermons({order, limit, exclude, pk, filter, fromPage, toPage}: FetchAttributes = {}): Promise<Sermon[]> {
