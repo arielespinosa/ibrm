@@ -14,6 +14,7 @@ import SisterChurchesSection from '../components/home/SisterChurchesSection';
 import { Sermon } from '@/api/types';
 import { fetchSermons } from '@/api/objects-fetcher';
 import { Skeleton } from '@/components/ui/skeleton';
+import BiographyDialog from '@/components/biographies/pastor';
 
 const navLinks = [
   { name: 'Inicio', page: 'Home' },
@@ -92,6 +93,8 @@ function SermonCard({ sermon, index }: { sermon: Sermon, index: number }) {
 export default function Home() {
   const [heroLoaded, setHeroLoaded] = useState(false);
   const [lastSermons, setLastSermons] = useState<Sermon[]>([]);
+  const [openBiographyDialog, setOpenBiographyDialog] = useState(false);
+  const [clickedPastor, setClickedPastor] = useState(0);
   const videoBackgroundUrl = "https://rgbmummrazuosxbcxkds.supabase.co/storage/v1/object/public/ibrm/resources/cross.mp4"
 
   useEffect(() => {
@@ -342,15 +345,22 @@ export default function Home() {
           >
             {[
               {
+                id: 0,
                 name: 'Pedro Francisco Pérez García',
                 img: 'https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/69a491a015e58b1ec55092b3/d2bfa3590_603054689_10239637937154575_4186765685569892296_n.jpg',
               },
               {
+                id: 1,
                 name: 'David Eduardo Martinez Cicchini',
                 img: 'https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/69a491a015e58b1ec55092b3/be62c2002_634729718_10162168009566976_5993971085413391884_n.jpg',
               },
             ].map((pastor) => (
-              <div key={pastor.name} className="group relative overflow-hidden border border-white/5 hover:border-[#c9a55a]/30 transition-colors duration-300">
+              <div key={pastor.name} className="group relative overflow-hidden border border-white/5 hover:border-[#c9a55a]/30 transition-colors duration-300"
+                onClick={() => {
+                  setClickedPastor(pastor.id)
+                  setOpenBiographyDialog(true)
+                }}
+              >
                 <div className="aspect-[3/4] overflow-hidden">
                   <img
                     src={pastor.img}
@@ -464,7 +474,8 @@ export default function Home() {
 
       {/* ─── SISTER CHURCHES ─── */}
       <SisterChurchesSection />
-
+        
+      <BiographyDialog person={clickedPastor} open={openBiographyDialog} setOpen={setOpenBiographyDialog}/>
 
     </div>
   );
