@@ -10,7 +10,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { PAGE_SIZE, supabaseObjectsBaseUrl } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { FilterSermonModalForm } from '@/components/sermon/filter';
-import { PaginatorPageProps, SermonPaginator } from '@/components/sermon/paginator';
+import { PaginatorPageProps, Paginator } from '@/components/sermon/paginator';
 
 
 export default function Sermones() {
@@ -24,12 +24,14 @@ export default function Sermones() {
 
   const [page, setPage] = useState(1);
   const [paginatorPages, setPaginatorPages] = useState<PaginatorPageProps[]|null>(null);
+  const [paginatorHasPrevious, setPaginatorHasPrevious] = useState(false);
+  const [paginatorHasNext, setPaginatorHasNext] = useState(false);
   const [total, setTotal] = useState<number|undefined>();
   
   // UI
   const [sermonFilterModalOpen, setSermonFilterModalOpen] = useState(false);
 
-   async function loadTotaLSermons() {
+  async function loadTotaLSermons() {
     const data = await fetchCount("ibrm_sermon");
     const resto = data % PAGE_SIZE !== 0
     const totalPage = resto ? Math.trunc(data / PAGE_SIZE) + 1 : Math.trunc(data / PAGE_SIZE)
@@ -50,7 +52,6 @@ export default function Sermones() {
   }
 
   function reloadPaginatorPages() {
-    console.log("Aquiiiiii")
     let data = []
     let fromPage = page-3 <= 0 ? 1 : page-2
     let toPage = fromPage + 4;
@@ -62,7 +63,15 @@ export default function Sermones() {
     for(let i = fromPage; i <= toPage; i++){
       data.push({value: i, isActive: i==page})
     }
+
     setPaginatorPages(data);    
+  }
+
+  function checkPaginatorPreviousNext() {
+    setPaginatorHasPrevious(paginatorPages?.[0].value !==1);
+
+    if(paginatorPages && total)
+      setPaginatorHasNext(paginatorPages[paginatorPages.length - 1].value < total);
   }
 
   useEffect(() => {  
@@ -73,6 +82,10 @@ export default function Sermones() {
   useEffect(() => {  
     loadSermons();
   }, [page]);
+
+  useEffect(() => {  
+    checkPaginatorPreviousNext();
+  }, [paginatorPages]);
 
   useEffect(() => {
     const filtered = sermons.filter(sermon => {
@@ -317,7 +330,7 @@ export default function Sermones() {
               className="group"
             >
                 <div className='pt-20'>
-                  <SermonPaginator pages={paginatorPages} setPage={setPage}/>
+                  <Paginator pages={paginatorPages} hasPrevious={paginatorHasPrevious} hasNext={paginatorHasNext} setPage={setPage}/>
                 </div>
             </motion.div>
           </>

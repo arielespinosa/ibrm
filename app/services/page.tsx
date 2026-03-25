@@ -20,14 +20,14 @@ const STUDY_GROUPS = [
   {
     city: 'Totana',
     image: 'https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/69a491a015e58b1ec55092b3/ade58755a_WhatsAppImage2026-03-02at180927.jpg',
-    description: 'Grupo de estudio bíblico y oración en Totana. Un tiempo dedicado a la Escritura, la comunión y la intercesión.',
+    description: 'Grupo de estudio bíblico y oración en Totana. Un tiempo dedicado a la Escritura, la comunión y la intercesión. ¡Qué el Señor envíe obreros a la mies!',
     schedule: 'Jueves · 18:00 PM',
     mapsUrl: 'https://www.google.com/maps/search/?api=1&query=Totana+Murcia',
   },
   {
     city: 'Hellín',
     image: 'https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/69a491a015e58b1ec55092b3/d243e3d76_WhatsAppImage2026-03-02at1808351.jpg',
-    description: 'Grupo de estudio bíblico y oración en Hellín. Compartimos la Palabra de Dios y nos edificamos mutuamente en la fe.',
+    description: 'Grupo de estudio bíblico y oración en Hellín. Compartimos la Palabra de Dios y nos edificamos mutuamente en la fe. Te esperamos.',
     schedule: 'Jueves · 18:00 PM',
     mapsUrl: 'https://www.google.com/maps/search/?api=1&query=Hellín+Albacete',
   },

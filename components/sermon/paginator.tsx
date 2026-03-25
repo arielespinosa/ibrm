@@ -17,16 +17,20 @@ export interface PaginatorPageProps {
 
 export interface PaginatorProps  {
   pages: PaginatorPageProps[];
+  hasPrevious: boolean; 
+  hasNext: boolean;
   setPage: (value: number) => void;
 }
 
-export function SermonPaginator({pages, setPage}: PaginatorProps) {
+export function Paginator({pages, hasPrevious, hasNext, setPage}: PaginatorProps) {
   return (
     <Pagination>
       <PaginationContent>
-        <PaginationItem>
-          <PaginationPrevious href="#" className="text-white/40 hover:bg-[#c9a55a]"/>
-        </PaginationItem>
+        {hasPrevious && (
+          <PaginationItem>
+            <PaginationPrevious href="#" className="rounded-none text-white/40 hover:bg-[#c9a55a]"/>
+          </PaginationItem>
+        )}
         {pages.map(item => (
           <PaginationItem key={item.value}>
             <PaginationLink
@@ -45,10 +49,12 @@ export function SermonPaginator({pages, setPage}: PaginatorProps) {
               {item.value}
             </PaginationLink>
             </PaginationItem>
-        ))}        
-        <PaginationItem>
-          <PaginationNext href="#"  className="text-white/40 hover:bg-[#c9a55a]"/>
-        </PaginationItem>
+        ))}  
+        {hasNext && (      
+          <PaginationItem>
+            <PaginationNext href="#"  className="rounded-none text-white/40 hover:bg-[#c9a55a]"/>
+          </PaginationItem>
+        )}
       </PaginationContent>
     </Pagination>
   )

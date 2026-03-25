@@ -1,5 +1,5 @@
-import React from 'react';
-import { Youtube, Mail, Facebook, Phone } from 'lucide-react';
+import { Mail, Phone } from 'lucide-react';
+import { navLinks } from './Navbar';
 
 export default function Footer() {
   return (
@@ -69,47 +69,13 @@ export default function Footer() {
           <div>
             <h4 className="font-medium text-white mb-4">Navegación</h4>
             <ul className="space-y-2">
-              <li>
-                <a href="/" className="text-gray-400 hover:text-[#c9a55a] transition-colors">
-                  Inicio
-                </a>
-              </li>
-              <li>
-                <a href="/mmet-us" className="text-gray-400 hover:text-[#c9a55a] transition-colors">
-                  Nosotros
-                </a>
-              </li>
-              <li>
-                <a href="/believe" className="text-gray-400 hover:text-[#c9a55a] transition-colors">
-                  Creencias
-                </a>
-              </li>
-              <li>
-                <a href="/sermons" className="text-gray-400 hover:text-[#c9a55a] transition-colors">
-                  Sermones
-                </a>
-              </li>
-              <li>
-                <a href="/studies" className="text-gray-400 hover:text-[#c9a55a] transition-colors">
-                  Estudios
-                </a>
-              </li>
-              <li>
-                <a href="/services" className="text-gray-400 hover:text-[#c9a55a] transition-colors">
-                  Reuniones
-                </a>
-              </li>
-              <li>
-                <a href="/blog" className="text-gray-400 hover:text-[#c9a55a] transition-colors">
-                  Blog
-                </a>
-              </li>
-     {/*          <li>
-                <a href="/blog" className="text-gray-400 hover:text-[#c9a55a] transition-colors">
-                  Donations
-                </a>
-              </li> */}
-       
+              {navLinks.map((item, key) => (
+                <li key={key}>
+                  <a href={item.page} className="text-gray-400 hover:text-[#c9a55a] transition-colors">
+                    {item.name}
+                  </a>
+                </li>
+              ))}       
             </ul>
           </div>
 

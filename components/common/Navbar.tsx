@@ -14,14 +14,14 @@ interface NavbarProps {
     setIsMobileMenuOpen: (open: boolean) => void;
 }
 
-const navLinks = [
+export const navLinks = [
   { name: 'Inicio', page: '/' },
   { name: 'Nosotros', page: '/meet-us' },
   { name: 'Creencias', page: '/beliefs' },
   { name: 'Sermones', page: '/sermons' },
   { name: 'Estudios', page: '/studies' },
   { name: 'Reuniones', page: '/services' },
-  { name: 'Blog', page: '/blog' },
+ /*  { name: 'Blog', page: '/blog' }, */
  /*  { name: 'Donaciones', page: '/donations' }, */
 ];
 
