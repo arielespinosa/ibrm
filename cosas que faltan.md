@@ -1,0 +1,1 @@
+- Pasar funcion en el paginator para el boton next y previous

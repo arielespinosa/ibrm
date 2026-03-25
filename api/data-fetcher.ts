@@ -5,35 +5,114 @@ import { createClient } from '@/lib/supabase/server';
 import { Filtering } from './objects-fetcher';
 import { PostgrestError } from '@supabase/supabase-js';
 
+/**  Ejemplo de como usarla
+ * const { data } = await fetchData("users", {
+  posts: {
+    table: "posts",
+    fields: ["id", "title"],
+    foreignKey: "posts_user_id_fkey", // 🔥 reversa
+    relations: {
+      comments: {
+        table: "comments",
+        fields: ["id", "content"],
+        relations: {
+          author: {
+            table: "users",
+            fields: ["id", "name"]
+          }
+        }
+      }
+    }
+  },
+  tags: {
+    table: "tags",
+    through: "user_tags",
+    flatten: true
+  }
+});
+
+*/
 export type FetchDataResponse = {
   data: any;
   error: PostgrestError | null | unknown;
 }
 
-function buildQuery(relations: any) {
-  const relationQueries = Object.entries(relations).map(
-    ([alias, config]: any) => {
-
-      const fields = config.fields?.length
-        ? config.fields.join(",")
-        : "*"
-
-      if (config.through) {
-        return `${config.through}(${config.table}(${fields}))`
-      }
-
-      return `${alias}:${config.table}(${fields})`
-    }
-  )
-  return relationQueries;
+type RelationConfig = {
+  table: string;
+  fields?: string[];
+  through?: string;
+  foreignKey?: string;
+  flatten?: boolean;
+  relations?: Record<string, RelationConfig>; // 🔥 nested
 }
 
-export async function fetchData(table: string, relations?: any, order?: string, limit?: number, exclude?:number[], pk?:number, filter?:Filtering[]): Promise<FetchDataResponse> {
+// 🔥 RECURSIVO
+function buildQuery(relations: Record<string, RelationConfig>): string[] {
+  return Object.entries(relations).map(([alias, config]) => {
+
+    const fields = config.fields?.length
+      ? config.fields.join(",")
+      : "*";
+
+    // 🔥 nested relations
+    let nested = "";
+    if (config.relations) {
+      const nestedQuery = buildQuery(config.relations);
+      if (nestedQuery.length) {
+        nested = "," + nestedQuery.join(",");
+      }
+    }
+
+    const content = `${fields}${nested}`;
+
+    // 🔥 MANY TO MANY
+    if (config.through) {
+      if (config.foreignKey) {
+        return `${config.through}!${config.foreignKey}(${config.table}(${content}))`;
+      }
+      return `${config.through}(${config.table}(${content}))`;
+    }
+
+    // 🔥 RELACIÓN NORMAL / REVERSA
+    if (config.foreignKey) {
+      return `${alias}:${config.table}!${config.foreignKey}(${content})`;
+    }
+
+    return `${alias}:${config.table}(${content})`;
+  });
+}
+
+export async function fetchCountData(table: string): Promise<number|null> {
+   try {
+    const cookieStore = cookies();
+    const supabase = await createClient(cookieStore);
+    const { count, error } = await supabase.from(table).select("*", { count: "exact", head: true });
+    return count
+  } catch (error) {
+    console.error("❌ Error fetching data:", error);
+    return null;
+  }
+
+}
+
+export async function fetchData(
+  table: string,
+  relations?: Record<string, RelationConfig>,
+  order?: string,
+  limit?: number,
+  exclude?: number[],
+  pk?: number,
+  filter?: Filtering[],
+  fromPage?: number,
+  toPage?: number
+): Promise<FetchDataResponse> {
+
   try {
     let select = "*";
     const cookieStore = cookies();
     const supabase = await createClient(cookieStore);
 
+    // 🔥 construir select dinámico
     if (relations) {
       const relationQueries = buildQuery(relations);
       if (relationQueries.length) {
@@ -41,21 +120,35 @@ export async function fetchData(table: string, relations?: any, order?: string, 
       }
     }
 
-    let query = supabase.from(table).select(select).order(order || "id");
+    let query = (fromPage !== undefined && toPage !== undefined)
+    ? supabase.from(table).select(select, { count: "exact" }).order(order || "id").range(fromPage, toPage) 
+    : supabase.from(table).select(select).order(order || "id");
 
     if (pk) {
-      query = query.eq('id', pk);
+      query = query.eq("id", pk);
     }
 
     if (filter) {
       filter.forEach((item) => {
-        query = query.filter(item.field, 'eq', item.value);
-      })
+        switch(item.query){
+          case "eq":
+            query = query.eq(item.field, item.value);
+            break
+          case "like":
+            query = query.like(item.field,  `%${item.value}%`);     
+            break
+          case "ilike":
+            query = query.ilike(item.field,  `%${item.value}%`);  
+            break 
+          default:
+            query = query.eq(item.field, item.value);
+            break     
+        }
+      });
     }
 
-    // 🚀 EXCLUIR IDS
     if (exclude && exclude.length > 0) {
-      query = query.not('id', 'in', `(${exclude.join(",")})`);
+      query = query.not("id", "in", `(${exclude.join(",")})`);
     }
 
     if (limit) {
@@ -71,27 +164,51 @@ export async function fetchData(table: string, relations?: any, order?: string, 
 
     let result = data || [];
 
-    // Flatten many-to-many
-    if (relations) {
-      result = result.map((row: any) => {
-        Object.entries(relations).forEach(([alias, config]: any) => {
-          if (config.flatten && config.through) {
-            const bridge = row[config.through];
-            if (Array.isArray(bridge)) {
-              row[alias] = bridge.map((item: any) => item[config.table]);
-            }
-            delete row[config.through];
+    // 🔥 FLATTEN MANY-TO-MANY + nested
+    function flattenRow(row: any, relations: Record<string, RelationConfig>) {
+      Object.entries(relations).forEach(([alias, config]) => {
+
+        // MANY TO MANY
+        if (config.flatten && config.through) {
+          const bridge = row[config.through];
+          if (Array.isArray(bridge)) {
+            row[alias] = bridge.map((item: any) => {
+              const value = item[config.table];
+
+              // 🔥 aplicar flatten recursivo si hay nested
+              if (config.relations && value) {
+                return flattenRow(value, config.relations);
+              }
+
+              return value;
+            });
           }
-        });
-        return row;
+          delete row[config.through];
+        }
+
+        // 🔥 nested normal
+        if (config.relations && row[alias]) {
+          if (Array.isArray(row[alias])) {
+            row[alias] = row[alias].map((item: any) =>
+              flattenRow(item, config.relations!)
+            );
+          } else {
+            row[alias] = flattenRow(row[alias], config.relations);
+          }
+        }
       });
+
+      return row;
     }
-    data = result;
-    return { data,  error};
+
+    if (relations) {
+      result = result.map((row: any) => flattenRow(row, relations));
+    }
+
+    return { data: result, error };
 
   } catch (error) {
     console.error("❌ Error fetching data:", error);
-    const data = null;
-    return { data,  error}
+    return { data: null, error };
   }
 }

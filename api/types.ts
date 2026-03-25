@@ -22,6 +22,8 @@ export interface SermonSerie {
   title: string;
   speakers?: Person[];
   thumbnail_url?: string;
+  description?: string;
+  is_current_dominical: boolean;
 }
 
 export interface Sermon {
@@ -38,6 +40,8 @@ export interface Sermon {
   thumbnail_url: string;
   tags?: Tag[];
   serie: SermonSerie;
+  is_on_straming: boolean;
+  is_current_dominical: boolean;
 }
 
 
@@ -67,6 +71,7 @@ export interface BibleStudySerie {
   description?: string;
   thumbnail?: string;
   tags?: Tag[];
+  studies_id?: number[];
 }
 
 export interface BibleStudy {

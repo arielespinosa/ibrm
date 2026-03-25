@@ -1,40 +1,93 @@
 "use client"
 
-import { fetchStudySeries } from '@/api/objects-fetcher';
+import { fetchCount, fetchStudySeries } from '@/api/objects-fetcher';
 import { BibleStudySerie } from '@/api/types';
 import { motion } from 'framer-motion';
 import { Download, ExternalLink, FileText } from 'lucide-react';
 import { useEffect, useState } from 'react';
-import { supabaseObjectsBaseUrl } from '@/lib/utils';
+import { PAGE_SIZE, supabaseObjectsBaseUrl } from '@/lib/utils';
+import { Paginator, PaginatorPageProps } from '@/components/sermon/paginator';
 
+const STUDIES_SERIES_PAGE_SIZE = 3
 
 export default function Estudios() {
   const [lastStudySeries, setLastStudySeries] = useState<BibleStudySerie[]>();
   const [studySeries, setStudySeries] = useState<BibleStudySerie[]>();
 
-  useEffect(() => {
-    async function loadLastStudySeries(){
-      const data = await fetchStudySeries({limit:3});
-      setLastStudySeries(data);
+  const [paginatorCurrentPage, setPaginatorCurrentPage] = useState(1);
+  const [paginatorPages, setPaginatorPages] = useState<PaginatorPageProps[]|null>(null);
+  const [paginatorHasPrevious, setPaginatorHasPrevious] = useState(false);
+  const [paginatorHasNext, setPaginatorHasNext] = useState(false);
+  const [paginatorTotalPages, setPaginatorTotalPages] = useState<number|undefined>();
+
+  async function loadPaginatorTotalPages() {
+    const data = await fetchCount("ibrm_biblestudyserie");
+    const resto = data % STUDIES_SERIES_PAGE_SIZE !== 0
+    const totalPage = resto ? Math.trunc(data / STUDIES_SERIES_PAGE_SIZE) + 1 : Math.trunc(data / STUDIES_SERIES_PAGE_SIZE)
+    setPaginatorTotalPages(totalPage);
+  }
+
+  function reloadPaginatorPages() {
+    let data = []
+    let fromPage = paginatorCurrentPage-3 <= 0 ? 1 : paginatorCurrentPage-2
+    let toPage = fromPage + 4;
+
+    if(paginatorTotalPages && (paginatorTotalPages===0 || paginatorTotalPages <= toPage)){
+      toPage = paginatorTotalPages;
     }
+
+    for(let i = fromPage; i <= toPage; i++){
+      data.push({value: i, isActive: i==paginatorCurrentPage})
+    }
+
+    setPaginatorPages(data);    
+  }
+
+  function checkPaginatorPreviousNext() {
+    setPaginatorHasPrevious(paginatorPages?.[0].value !==1);
+
+    if(paginatorPages && paginatorTotalPages)
+      setPaginatorHasNext(paginatorPages[paginatorPages.length - 1].value < paginatorTotalPages);
+  }
+
+  async function loadLastStudySeries(){
+    const data = await fetchStudySeries({limit:3, filter:[{field: "recomended", value: true}]});
+    setLastStudySeries(data);
+  }
+
+  async function loadStudySeries(){
+    let fromItem = (paginatorCurrentPage - 1) * PAGE_SIZE
+    let toItem = fromItem + PAGE_SIZE - 1
+    //const exlcude = lastStudySeries?.map((study) => study.id)
+    const data = await fetchStudySeries({limit:3, fromPage: fromItem, toPage: toItem});
+    setStudySeries(data);
+  }
+
+  useEffect(() => {  
+    checkPaginatorPreviousNext();
+  }, [paginatorPages]);
+
+  useEffect(() => {
+    if (paginatorTotalPages !== undefined) {
+      reloadPaginatorPages();
+    }
+  }, [paginatorTotalPages, paginatorCurrentPage]);
+
+  useEffect(() => {  
+    loadPaginatorTotalPages() 
     loadLastStudySeries();
   }, [])
 
   useEffect(() => {
-    async function loadStudySeries(){
-      const exlcude = lastStudySeries?.map((study) => study.id)
-      const data = await fetchStudySeries({limit:3, exclude:exlcude});
-      setStudySeries(data);
-    }
     loadStudySeries();
-  }, [lastStudySeries])
+  }, [paginatorCurrentPage])
   
   return (
     <div className="min-h-screen bg-[#0a0a0a] text-white">
       {/* Header */}
       <div className="relative pt-32 pb-24 px-6 lg:px-8 overflow-hidden">
         <div className="absolute inset-0">
-          <img src="/rsc/img/studies-cover.png" alt="" className="w-full h-full object-cover opacity-25" />
+          <img src="/rsc/img/studies-cover.png" alt="" className="w-full h-full object-cover opacity-50" />
           <div className="absolute inset-0 bg-gradient-to-b from-transparent to-[#0a0a0a]" />
         </div>
         <div className="relative max-w-7xl mx-auto">
@@ -46,8 +99,8 @@ export default function Estudios() {
 
       {/* Featured */}
       <section className="max-w-7xl mx-auto px-6 lg:px-8 py-16">
-        <p className="text-white/30 text-xs tracking-[0.3em] uppercase mb-8">Destacados</p>
-        <div className="grid lg:grid-cols-3 gap-px bg-white/5">
+        <p className="text-white/30 text-xs tracking-[0.3em] uppercase mb-8">Recomendados</p>
+        <div className="grid lg:grid-cols-3 gap-px">
           {lastStudySeries && lastStudySeries.map((study, i) => (
             <a key={study.id} href={`studies-series/${study.id}`}>
               <motion.div
@@ -77,19 +130,8 @@ export default function Estudios() {
                   <div className="flex items-center justify-between">
                     <span className="text-white/20 text-xs flex items-center gap-1">
                       <FileText className="w-3.5 h-3.5" />
-                      12 lecciones
+                      {study.studies_id?.length} lecciones
                     </span>
-                    {/* {study.url && (
-                      <a
-                        href={study.url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="flex items-center gap-1 text-[#c9a55a] text-xs hover:underline"
-                      >
-                        <Download className="w-3.5 h-3.5" />
-                        Descargar PDF
-                      </a>
-                    )} */}
                   </div>
                 </div>
               </motion.div>
@@ -122,7 +164,7 @@ export default function Estudios() {
                   <p className="text-white/25 text-xs mt-1 line-clamp-1">{study.description}</p>
                 </div>
                 <div className="flex items-center gap-4">
-                  <span className="text-white/20 text-xs hidden md:block">12 lecciones</span>
+                  <span className="text-white/20 text-xs hidden md:block"> {study.studies_id?.length} lecciones</span>
                   {/* {study.url ? (
                     <a href={study.url} target="_blank" rel="noopener noreferrer" className="text-[#c9a55a] hover:text-white transition-colors">
                       <ExternalLink className="w-4 h-4" />
@@ -135,6 +177,18 @@ export default function Estudios() {
             </a>
           ))}
         </div>
+        {paginatorPages && (
+         <motion.div
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1, delay: 0.05 }}
+            className="group"
+          >
+              <div className='pt-20'>
+                <Paginator pages={paginatorPages} hasPrevious={paginatorHasPrevious} hasNext={paginatorHasNext} setPage={setPaginatorCurrentPage}/>
+              </div>
+          </motion.div>
+        )}
       </section>
     </div>
   );

@@ -1,10 +1,13 @@
 
 "use client"
 
+import { fetchSermonSeries, fetchStudySeries } from '@/api/objects-fetcher';
+import { BibleStudySerie, SermonSerie } from '@/api/types';
 import { motion } from 'framer-motion';
-import { Clock, MapPin, BookOpen, Users, ArrowRight, ExternalLink } from 'lucide-react';
+import { Clock, MapPin,ExternalLink } from 'lucide-react';
+import { useEffect, useState } from 'react';
 
-const MAPS_URL = 'https://www.google.com/maps/search/?api=1&query=Calle+Pintor+José+María+Párraga+1+Alcantarilla+Murcia';
+const MAPS_URL = 'https://maps.app.goo.gl/TBjLMjPiat1NfkqN6';
 
 const STUDY_GROUPS = [
   {
@@ -17,14 +20,14 @@ const STUDY_GROUPS = [
   {
     city: 'Totana',
     image: 'https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/69a491a015e58b1ec55092b3/ade58755a_WhatsAppImage2026-03-02at180927.jpg',
-    description: 'Grupo de estudio bíblico y oración en Totana. Un tiempo dedicado a la Escritura, la comunión y la intercesión.',
+    description: 'Grupo de estudio bíblico y oración en Totana. Un tiempo dedicado a la Escritura, la comunión y la intercesión. ¡Qué el Señor envíe obreros a la mies!',
     schedule: 'Jueves · 18:00 PM',
     mapsUrl: 'https://www.google.com/maps/search/?api=1&query=Totana+Murcia',
   },
   {
     city: 'Hellín',
     image: 'https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/69a491a015e58b1ec55092b3/d243e3d76_WhatsAppImage2026-03-02at1808351.jpg',
-    description: 'Grupo de estudio bíblico y oración en Hellín. Compartimos la Palabra de Dios y nos edificamos mutuamente en la fe.',
+    description: 'Grupo de estudio bíblico y oración en Hellín. Compartimos la Palabra de Dios y nos edificamos mutuamente en la fe. Te esperamos.',
     schedule: 'Jueves · 18:00 PM',
     mapsUrl: 'https://www.google.com/maps/search/?api=1&query=Hellín+Albacete',
   },
@@ -32,22 +35,42 @@ const STUDY_GROUPS = [
 
 const LITURGY = [
   { n: '01', title: 'Llamado a la Adoración', desc: 'Inicio del culto con un saludo litúrgico y lectura bíblica que convoca a la congregación a adorar a Dios.' },
-  { n: '02', title: 'Himnos de Adoración', desc: 'Canto congregacional de himnos que exaltan la gloria, la soberanía y la gracia de Dios.' },
-  { n: '03', title: 'Oración de Confesión', desc: 'La congregación se humilla ante Dios confesando sus pecados y recibiendo el perdón en Cristo.' },
-  { n: '04', title: 'Lectura de la Escritura', desc: 'Lectura pública del texto bíblico que será expuesto en el sermón.' },
-  { n: '05', title: 'Predicación de la Palabra', desc: 'Exposición expositiva y sistemática de la Biblia, corazón del culto reformado.' },
-  { n: '06', title: 'Cena del Señor', desc: 'Celebración periódica del sacramento instituido por Cristo para su iglesia. (Primer domingo del mes)' },
-  { n: '07', title: 'Ofrenda y Comisión', desc: 'La congregación responde con gratitud y es enviada a vivir el evangelio en el mundo.' },
+  { n: '02', title: 'Devocional para niños', desc: 'Instrucción de los niños en la congregación siguiendo alguno de los catecismos históricos para los niños (Domingos alternos)' },
+  { n: '03', title: 'Escuela dominical', desc: 'Estudio bíblico expositivo y continuo (Domingos alternos)' },
+  { n: '04', title: 'Himnos de Adoración', desc: 'Canto congregacional de himnos que exaltan la gloria, la soberanía y la gracia de Dios.' },
+  { n: '05', title: 'Oración de Confesión', desc: 'La congregación se humilla ante Dios confesando sus pecados y recibiendo el perdón en Cristo.' },
+  { n: '06', title: 'Lectura de la Escritura', desc: 'Lectura pública del texto bíblico que será expuesto en el sermón.' },
+  { n: '07', title: 'Predicación de la Palabra', desc: 'Exposición expositiva y sistemática de la Biblia, corazón del culto reformado.' },
+  { n: '08', title: 'Cena del Señor', desc: 'Celebración periódica del sacramento instituido por Cristo para su iglesia. (Domingos alternos)' },
+  { n: '09', title: 'Ofrenda y Comisión', desc: 'La congregación responde con gratitud y es enviada a vivir el evangelio en el mundo.' },
 ];
 
 export default function Reuniones() {
+  const [currentStudySerie, setCurrentStudySerie] = useState<BibleStudySerie>();
+  const [currentSermonSeries, setCurrentSermonSeries] = useState<SermonSerie[]>();
+
+  async function loadCurrentStudy() {
+    const data = await fetchStudySeries({filter:[{field: "is_current_dominical", value:true}]})
+    setCurrentStudySerie(data[0]);
+  }
+
+  async function loadCurrentSermonSeries() {
+    const data = await fetchSermonSeries({limit: 2, filter:[{field: "is_current_dominical", value:true}]})
+    setCurrentSermonSeries(data);
+  }
+  
+  useEffect(() =>{
+    loadCurrentStudy();
+    loadCurrentSermonSeries();
+  }, [])
+
   return (
     <div className="min-h-screen bg-[#0a0a0a] text-white">
 
       {/* Header */}
       <div className="relative pt-32 pb-24 px-6 lg:px-8 overflow-hidden">
         <div className="absolute inset-0">
-          <img src="/rsc/img/meetings-cover.png" alt="" className="w-full h-full object-cover opacity-25" />
+          <img src="/rsc/img/meetings-cover.png" alt="" className="w-full h-full object-cover opacity-50" />
           <div className="absolute inset-0 bg-gradient-to-b from-transparent to-[#0a0a0a]" />
         </div>
         <div className="relative max-w-7xl mx-auto">
@@ -80,11 +103,30 @@ export default function Reuniones() {
               </p>
 
               {/* Current study */}
-              <div className="border border-[#c9a55a]/20 bg-[#c9a55a]/5 p-6 mb-8">
-                <p className="text-[#c9a55a] text-xs tracking-[0.2em] uppercase mb-2">Estudio actual en el Culto</p>
-                <h3 className="text-white text-xl font-display mb-1">Epístola a los Filipenses</h3>
-                <p className="text-white/40 text-sm">Predicación expositiva versículo a versículo</p>
-              </div>
+              {currentStudySerie && (
+                <a href={`/studies/${currentStudySerie.id}`}>
+                  <div className="border border-[#c9a55a]/20 bg-[#c9a55a]/5 p-6 mb-8">
+                    <p className="text-[#c9a55a] text-xs tracking-[0.2em] uppercase mb-2">Serie actual de estudio en el Culto</p>
+                    <h3 className="text-white text-xl font-display mb-1">{currentStudySerie.title}</h3>
+                    <p className="text-white/40 text-sm">{currentStudySerie.description}</p>
+                  </div>
+                </a>
+              )}
+
+              {currentSermonSeries && (
+                <div className="border border-[#c9a55a]/20 bg-[#c9a55a]/5 p-6 mb-8">
+                  <p className="text-[#c9a55a] text-xs tracking-[0.2em] uppercase mb-2">Serie actual de sermones en el Culto</p>
+                  {currentSermonSeries.map((serie) => (
+                    <div key={serie.id} className='pb-4'>
+                      <a href={`/studies/${serie.id}`}>              
+                        <h3 className="text-white text-xl font-display mb-1">{serie.title}</h3>
+                        <p className="text-white/40 text-sm">{serie.description}</p>
+                      </a>
+                    </div>
+                  ))}
+                  
+                </div>
+              )}
 
               {/* Schedule & Location */}
               <div className="flex flex-wrap gap-4">
