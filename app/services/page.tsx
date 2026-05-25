@@ -51,12 +51,12 @@ export default function Reuniones() {
 
   async function loadCurrentStudy() {
     const data = await fetchStudySeries({filter:[{field: "is_current_dominical", value:true}]})
-    setCurrentStudySerie(data[0]);
+    setCurrentStudySerie(data?.[0]);
   }
 
   async function loadCurrentSermonSeries() {
     const data = await fetchSermonSeries({limit: 2, filter:[{field: "is_current_dominical", value:true}]})
-    setCurrentSermonSeries(data);
+    setCurrentSermonSeries(data ?? []);
   }
   
   useEffect(() =>{
