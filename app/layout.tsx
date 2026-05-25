@@ -7,7 +7,6 @@ import Navbar from "@/components/common/Navbar";
 import { useEffect, useState } from "react";
 import { usePathname } from 'next/navigation';
 import Footer from "@/components/common/Footer";
-import { AuthProvider } from "@/context/AuthContext";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -34,6 +33,9 @@ export default function RootLayout({
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const pathname = usePathname();
 
+  // Check if current route should have the public layout (navbar + footer)
+  const isPublicRoute = !pathname.startsWith('/admin') && !pathname.startsWith('/login');
+
   useEffect(() => {
     setIsMobileMenuOpen(false);
     setIsScrolled(false);
@@ -51,18 +53,22 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`} >
-        <AuthProvider>
-          <Navbar 
-            attr={{
-              currentPageName: pathname,
-              transparent: transparent,
-              isMobileMenuOpen: isMobileMenuOpen,
-              setIsMobileMenuOpen: setIsMobileMenuOpen
-            }}
-          />
-          {children}
-          <Footer />
-        </AuthProvider>
+        {isPublicRoute ? (
+          <>
+            <Navbar 
+              attr={{
+                currentPageName: pathname,
+                transparent: transparent,
+                isMobileMenuOpen: isMobileMenuOpen,
+                setIsMobileMenuOpen: setIsMobileMenuOpen
+              }}
+            />
+            {children}
+            <Footer />
+          </>
+        ) : (
+          children
+        )}
       </body>
     </html>
   );
