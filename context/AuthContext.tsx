@@ -9,18 +9,13 @@ interface User {
 
 interface AuthContextType {
   user: User | null;
-  login: (username: string, password: string) => boolean;
+  login: (username: string, password: string) => Promise<boolean>;
   logout: () => void;
   isAuthenticated: boolean;
   isLoading: boolean;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
-
-const VALID_CREDENTIALS = {
-  username: 'Admin',
-  password: 'adminadmin'
-};
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
@@ -35,17 +30,30 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setIsLoading(false);
   }, []);
 
-  const login = (username: string, password: string): boolean => {
-    if (username === VALID_CREDENTIALS.username && password === VALID_CREDENTIALS.password) {
+  const login = async (username: string, password: string): Promise<boolean> => {
+    try {
+      const response = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username, password }),
+      });
+
+      if (!response.ok) {
+        return false;
+      }
+
+      const data = await response.json();
       const userData: User = {
-        username,
-        role: 'admin'
+        username: data.username,
+        role: data.role ?? 'admin',
       };
       setUser(userData);
       localStorage.setItem('auth_user', JSON.stringify(userData));
       return true;
+    } catch (error) {
+      console.error('Login error:', error);
+      return false;
     }
-    return false;
   };
 
   const logout = () => {
