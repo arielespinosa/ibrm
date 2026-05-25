@@ -97,7 +97,7 @@ export default function Home() {
   useEffect(() => {
     async function loadLastSermons() {
       const data = await fetchSermons({limit: 6});
-      setLastSermons(data);
+      setLastSermons(data ?? []);
     }
     loadLastSermons();
   }, []);

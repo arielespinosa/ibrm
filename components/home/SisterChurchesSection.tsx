@@ -15,7 +15,7 @@ export default function SisterChurchesSection() {
   useEffect(() => {
     async function loadSisterChurch(){
       const data = await fetchSisterChurch();
-      setChurchs(data);
+      setChurchs(data ?? []);
     }
     loadSisterChurch();
     
