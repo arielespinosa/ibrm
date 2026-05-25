@@ -7,6 +7,7 @@ import Navbar from "@/components/common/Navbar";
 import { useEffect, useState } from "react";
 import { usePathname } from 'next/navigation';
 import Footer from "@/components/common/Footer";
+import { AuthProvider } from "@/context/AuthContext";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -50,16 +51,18 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`} >
-        <Navbar 
-          attr={{
-            currentPageName: pathname,
-            transparent: transparent,
-            isMobileMenuOpen: isMobileMenuOpen,
-            setIsMobileMenuOpen: setIsMobileMenuOpen
-          }}
-        />
-        {children}
-        <Footer />
+        <AuthProvider>
+          <Navbar 
+            attr={{
+              currentPageName: pathname,
+              transparent: transparent,
+              isMobileMenuOpen: isMobileMenuOpen,
+              setIsMobileMenuOpen: setIsMobileMenuOpen
+            }}
+          />
+          {children}
+          <Footer />
+        </AuthProvider>
       </body>
     </html>
   );

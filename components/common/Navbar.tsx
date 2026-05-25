@@ -94,6 +94,12 @@ export default function Navbar({attr}: {attr: NavbarProps}) {
                         <span className="w-2 h-2 bg-red-600 rounded-full animate-pulse" /> Ver en vivo
                     </a>
                 }
+                <a
+                    href="/login"
+                    className="flex items-center gap-2 bg-white/10 hover:bg-white/20 text-white text-sm font-medium px-4 py-2 transition-colors duration-200 border border-white/10"
+                >
+                    Acceder
+                </a>
             </div>
             
 
@@ -138,6 +144,12 @@ export default function Navbar({attr}: {attr: NavbarProps}) {
                             Ver en vivo
                         </a>
                     }
+                    <a
+                        href="/login"
+                        className="flex items-center gap-2 bg-white/10 text-white text-sm font-medium px-4 py-2 w-fit mt-2 border border-white/10"
+                    >
+                        Acceder
+                    </a>
                 </div>
                 </motion.div>
             )}
