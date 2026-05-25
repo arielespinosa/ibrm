@@ -7,21 +7,18 @@ import Sidebar from '@/components/admin/Sidebar';
 import TopBar from '@/components/admin/TopBar';
 
 function AdminLayoutContent({ children }: { children: React.ReactNode }) {
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, isLoading: authLoading } = useAuth();
   const router = useRouter();
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    if (!isAuthenticated) {
+    if (!authLoading && !isAuthenticated) {
       router.push('/login');
-    } else {
-      setIsLoading(false);
     }
-  }, [isAuthenticated, router]);
+  }, [isAuthenticated, authLoading, router]);
 
-  if (isLoading || !isAuthenticated) {
+  if (authLoading || !isAuthenticated) {
     return (
       <div className="min-h-screen bg-black flex items-center justify-center">
         <div className="w-8 h-8 border-2 border-[#c9a55a]/30 border-t-[#c9a55a] rounded-full animate-spin" />
