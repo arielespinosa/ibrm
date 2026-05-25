@@ -52,12 +52,12 @@ export function FilterSermonModalForm({ open, setOpen, callback }: ModalForm) {
 
   async function fetchSpeaker() {
     const data = await fetchPerson();
-    setSpeaker(data.map(i => ({value: i.id.toString(), label: i.name})));    
+    setSpeaker((data ?? []).map(i => ({value: i.id.toString(), label: i.name})));    
   }
 
   async function fetchSeries() {
     const data = await fetchSermonSeries();
-    setSerie(data.map(i => ({value: i.id.toString(), label: i.title})));    
+    setSerie((data ?? []).map(i => ({value: i.id.toString(), label: i.title})));    
   }
 
   async function filterSermons(data: SermonFormData) {
