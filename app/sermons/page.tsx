@@ -42,13 +42,13 @@ export default function Sermones() {
     let fromItem = (page - 1) * PAGE_SIZE
     let toItem = fromItem + PAGE_SIZE - 1
     const data = await fetchSermons({fromPage: fromItem, toPage: toItem});
-    setSermons(data);
-    setFilteredSermons(data);
+    setSermons(data ?? []);
+    setFilteredSermons(data ?? []);
   }
   
   async function loadSermoSeries() {
     const data = await fetchSermonSeries();
-    setSermonSeries(data);
+    setSermonSeries(data ?? []);
   }
 
   function reloadPaginatorPages() {

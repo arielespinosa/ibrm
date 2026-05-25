@@ -36,7 +36,7 @@ export default function Navbar({attr}: {attr: NavbarProps}) {
                 {field: "date", value: currentDate},
             ]
             const data = await fetchSermons({filter:filterFields});
-            setStreaming(data[0]);
+            setStreaming(data?.[0]);
         }
         loadStreaming();
     }, [])
