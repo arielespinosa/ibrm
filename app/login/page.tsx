@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
 import { motion } from 'framer-motion';
@@ -11,7 +11,6 @@ export default function LoginPage() {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const [services, setServices] = useState<any[]>([]);
   const { login } = useAuth();
   const router = useRouter();
 
@@ -20,43 +19,20 @@ export default function LoginPage() {
     setError('');
     setIsLoading(true);
 
-    // Small delay for UX
+    // Simulate a small delay for UX
     await new Promise(resolve => setTimeout(resolve, 500));
 
-    const success = await login(username, password);
-
+    const success = login(username, password);
+    
     if (success) {
       router.push('/admin');
     } else {
       setError('Usuario o contraseña incorrectos');
     }
-
+    
     setIsLoading(false);
   };
 
-  useEffect(() => {
-    document.title = 'Login - Panel de Administración';
-
-    async function loadServices() {
-      try {
-        const response = await fetch('/api/sermons');
-        if (!response.ok) {
-          throw new Error('No se pudo cargar el listado de servicios');
-        }
-    
-
-        const result = await response.json();
-        console.log(result);
-       
-        //setServices(result.data || []);
-        console.log('Listado de servicios:', result.data);
-      } catch (error) {
-        console.error('Error cargando servicios:', error);
-      }
-    }
-
-    loadServices();
-  }, []);
   return (
     <main className="min-h-screen bg-gradient-to-b from-black via-[#0d0d0d] to-black flex items-center justify-center px-4">
       <motion.div
