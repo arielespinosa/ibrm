@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
 import { motion } from 'framer-motion';
@@ -19,17 +19,17 @@ export default function LoginPage() {
     setError('');
     setIsLoading(true);
 
-    // Small delay for UX
+    // Simulate a small delay for UX
     await new Promise(resolve => setTimeout(resolve, 500));
 
-    const success = await login(username, password);
-
+    const success = login(username, password);
+    
     if (success) {
       router.push('/admin');
     } else {
       setError('Usuario o contraseña incorrectos');
     }
-
+    
     setIsLoading(false);
   };
 

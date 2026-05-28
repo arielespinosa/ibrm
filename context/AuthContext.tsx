@@ -17,6 +17,11 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
+const VALID_CREDENTIALS = {
+  username: 'Admin',
+  password: 'adminadmin'
+};
+
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -44,14 +49,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
       const data = await response.json();
       const userData: User = {
-        username: data.username,
-        role: data.role ?? 'admin',
+        username,
+        role: 'admin'
       };
       setUser(userData);
       localStorage.setItem('auth_user', JSON.stringify(userData));
       return true;
     } catch (error) {
-      console.error('Login error:', error);
+      console.error(error);
       return false;
     }
   };
