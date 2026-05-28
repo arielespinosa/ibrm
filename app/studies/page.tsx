@@ -52,7 +52,7 @@ export default function Estudios() {
 
   async function loadLastStudySeries(){
     const data = await fetchStudySeries({limit:3, filter:[{field: "recomended", value: true}]});
-    setLastStudySeries(data);
+    setLastStudySeries(data || []);
   }
 
   async function loadStudySeries(){
@@ -60,7 +60,7 @@ export default function Estudios() {
     let toItem = fromItem + PAGE_SIZE - 1
     //const exlcude = lastStudySeries?.map((study) => study.id)
     const data = await fetchStudySeries({limit:3, fromPage: fromItem, toPage: toItem});
-    setStudySeries(data);
+    setStudySeries(data || []);
   }
 
   useEffect(() => {  

@@ -312,8 +312,8 @@ export default function SeriesAdmin() {
 
       {/* Table */}
       <DataTable
-        columns={activeTab === 'sermon' ? sermonColumns : studyColumns}
-        data={activeTab === 'sermon' ? sermonSeries : studySeries}
+        columns={(activeTab === 'sermon' ? sermonColumns : studyColumns) as any}
+        data={(activeTab === 'sermon' ? sermonSeries : studySeries) as any}
         totalItems={totalItems}
         currentPage={currentPage}
         itemsPerPage={itemsPerPage}

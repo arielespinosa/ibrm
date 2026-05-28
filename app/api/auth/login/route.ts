@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
+import { serializeBigInt } from '../../utils';
 
 export async function POST(request: Request) {
   const body = await request.json();
@@ -23,10 +24,15 @@ export async function POST(request: Request) {
     );
   }
 
-  return NextResponse.json({
+  const person = await prisma.ibrm_person.findUnique({
+    where: { user_id: user.id },
+  });
+
+  return NextResponse.json(serializeBigInt({
     id: user.id,
     username: user.username,
     email: user.email,
     role: user.is_superuser || user.is_staff ? 'admin' : 'user',
-  });
+    person: person
+  }));
 }

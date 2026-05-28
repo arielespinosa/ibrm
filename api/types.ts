@@ -17,6 +17,12 @@ export interface Person {
     email?: string;
 }
 
+export interface User {
+  username: string;
+  role: string;
+  person?: Person;
+}
+
 export interface SermonSerie {
   id: number;
   title: string;

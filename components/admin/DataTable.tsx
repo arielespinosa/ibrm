@@ -16,7 +16,7 @@ interface Column<T> {
   key: keyof T | string;
   label: string;
   sortable?: boolean;
-  render?: (item: T) => React.ReactNode;
+  render?: (item: any) => React.ReactNode;
 }
 
 interface DataTableProps<T> {

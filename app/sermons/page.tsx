@@ -232,15 +232,15 @@ export default function Sermones() {
               <div className="w-12 h-px bg-[#c9a55a] mb-8" />
               <p className="text-[#c9a55a] text-xs tracking-[0.3em] mb-3">{playingSermon.scripture}</p>
               <p className="text-white/50 leading-relaxed mb-6">{playingSermon.description}</p>
-              {playingSermon.ibrm_person && (
+              {(playingSermon as any).ibrm_person && (
                 <div className="flex items-center gap-3">
                   <Avatar className="w-15 h-15">
-                    <AvatarImage src={`${supabaseObjectsBaseUrl}${playingSermon.ibrm_person.avatar}`} alt={playingSermon.ibrm_person.name} />
-                    <AvatarFallback>{playingSermon.ibrm_person.name?.charAt(0)}</AvatarFallback>
+                    <AvatarImage src={`${supabaseObjectsBaseUrl}${(playingSermon as any).ibrm_person.avatar}`} alt={(playingSermon as any).ibrm_person.name} />
+                    <AvatarFallback>{(playingSermon as any).ibrm_person.name?.charAt(0)}</AvatarFallback>
                   </Avatar>
                   <div className="flex flex-col">
-                    <span className="text-white/80 text-sm font-medium">Pr. {playingSermon.ibrm_person.name}</span>
-                    <span className="text-[#c9a55a]/60 text-xs tracking-wide">{playingSermon.ibrm_person.email}</span>
+                    <span className="text-white/80 text-sm font-medium">Pr. {(playingSermon as any).ibrm_person.name}</span>
+                    <span className="text-[#c9a55a]/60 text-xs tracking-wide">{(playingSermon as any).ibrm_person.email}</span>
                   </div>
                 </div>
               )}
@@ -297,7 +297,7 @@ export default function Sermones() {
                       <div className='flex justify-between items-start gap-2'>
                         <p className="text-white/30 text-xs mt-1">{sermon.scripture}</p>
                         <div className='flex justify-between items-start gap-2'>
-                          {sermon.ibrm_person && (
+                          {(sermon as any).ibrm_person && (
                             <HoverCard>
                               <HoverCardTrigger>
                                 <User className="text-white/20 hover:text-[#c9a55a] transition-colors flex-shrink-0 mt-0.5 w-3.5 h-3.5" />
@@ -305,10 +305,10 @@ export default function Sermones() {
                               <HoverCardContent side="top" align="end" className="border border-white/10 text-white bg-[#0A0A0A]">
                                 <div className="flex items-center gap-3">
                                   <Avatar className="w-10 h-10">
-                                    <AvatarImage src={`${supabaseObjectsBaseUrl}${sermon.ibrm_person.avatar}`} alt={sermon.ibrm_person.name} />
-                                    <AvatarFallback>{sermon.ibrm_person.name?.charAt(0)}</AvatarFallback>
+                                    <AvatarImage src={`${supabaseObjectsBaseUrl}${(sermon as any).ibrm_person.avatar}`} alt={(sermon as any).ibrm_person.name} />
+                                    <AvatarFallback>{(sermon as any).ibrm_person.name?.charAt(0)}</AvatarFallback>
                                   </Avatar>
-                                  <span className="text-white/80 text-sm font-medium">{sermon.ibrm_person.name}</span>
+                                  <span className="text-white/80 text-sm font-medium">{(sermon as any).ibrm_person.name}</span>
                                 </div>
                               </HoverCardContent>
                             </HoverCard>

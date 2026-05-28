@@ -18,14 +18,16 @@ interface FetchAttributes{
   fromPage?: number;
   toPage?: number;
 }
-/* 
+
 export async function fetchCount(table: string): Promise<number> {
-  let data = await fetchCountData(table);  
+  return 0; // placeholder
+  /* let data = await fetchCountData(table);  
   data = data ? data : 0
-  return data
+  return data */
 }
 
-export async function fetchSermons({order, limit, exclude, pk, filter, fromPage, toPage}: FetchAttributes = {}): Promise<Sermon[]> {
+export async function fetchSermons({order, limit, exclude, pk, filter, fromPage, toPage}: FetchAttributes = {}): Promise<Sermon[]|null> {
+  return null; // placeholder
   const relations = {
     speaker: {
       table: "ibrm_person",
@@ -46,12 +48,14 @@ export async function fetchSermons({order, limit, exclude, pk, filter, fromPage,
   return data;
 }
 
-export async function fetchSermonSeries({order, limit, exclude, pk, filter}: FetchAttributes = {}): Promise<SermonSerie[]> {
+export async function fetchSermonSeries({order, limit, exclude, pk, filter}: FetchAttributes = {}): Promise<SermonSerie[]|null> {
+  return null; // placeholder
   const {data, error}  = await fetchData('ibrm_sermonserie', undefined,  order, limit, exclude, pk, filter);
   return data;
 }
 
-export async function fetchSisterChurch({order, limit}: FetchAttributes = {}): Promise<SisterChurch[]> {
+export async function fetchSisterChurch({order, limit}: FetchAttributes = {}): Promise<SisterChurch[]|null> {
+  return null; // placeholder
   const relations = {
     pastors: {
       table: "ibrm_person",
@@ -64,7 +68,8 @@ export async function fetchSisterChurch({order, limit}: FetchAttributes = {}): P
   return data;
 }
 
-export async function fetchStudySeries({order, limit, exclude, pk, filter}: FetchAttributes = {}): Promise<BibleStudySerie[]> {
+export async function fetchStudySeries({order, limit, exclude, pk, filter}: FetchAttributes = {}): Promise<BibleStudySerie[]|null> {
+  return null; // placeholder
   const relations = {
     tags: {
       table: "ibrm_tag",
@@ -82,7 +87,7 @@ export async function fetchStudySeries({order, limit, exclude, pk, filter}: Fetc
   return data;
 }
 
-export async function fetchStudy({order, limit, exclude, pk, filter, fromPage, toPage}: FetchAttributes = {}): Promise<BibleStudy[]> {
+export async function fetchStudy({order, limit, exclude, pk, filter, fromPage, toPage}: FetchAttributes = {}): Promise<BibleStudy[]|null> {
   const relations = {
     author: {
       table: "ibrm_person",
@@ -97,8 +102,9 @@ export async function fetchStudy({order, limit, exclude, pk, filter, fromPage, t
   return data;
 }
 
-export async function fetchPerson({order, limit, exclude, pk, filter, fromPage, toPage}: FetchAttributes = {}): Promise<Person[]> {
+export async function fetchPerson({order, limit, exclude, pk, filter, fromPage, toPage}: FetchAttributes = {}): Promise<Person[]|null> {
+  return null; // placeholder
   const {data, error} = await fetchData('ibrm_person', undefined, order, limit, exclude, pk, filter, fromPage, toPage);  
   return data;
 }
- */
+ 

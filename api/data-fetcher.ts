@@ -47,7 +47,7 @@ type RelationConfig = {
 }
 
 // 🔥 RECURSIVO
-/* function buildQuery(relations: Record<string, RelationConfig>): string[] {
+function buildQuery(relations: Record<string, RelationConfig>): string[] {
   return Object.entries(relations).map(([alias, config]) => {
 
     const fields = config.fields?.length
@@ -83,7 +83,8 @@ type RelationConfig = {
 }
 
 export async function fetchCountData(table: string): Promise<number|null> {
-   try {
+   return null;
+   /* try {
     const cookieStore = cookies();
     const supabase = await createClient(cookieStore);
     const { count, error } = await supabase.from(table).select("*", { count: "exact", head: true });
@@ -91,7 +92,7 @@ export async function fetchCountData(table: string): Promise<number|null> {
   } catch (error) {
     console.error("❌ Error fetching data:", error);
     return null;
-  }
+  } */
 
 }
 
@@ -106,8 +107,9 @@ export async function fetchData(
   fromPage?: number,
   toPage?: number
 ): Promise<FetchDataResponse> {
+  return { data: null, error: null }; // placeholder
 
-  try {
+  /* try {
     let select = "*";
     const cookieStore = cookies();
     const supabase = await createClient(cookieStore);
@@ -210,5 +212,5 @@ export async function fetchData(
   } catch (error) {
     console.error("❌ Error fetching data:", error);
     return { data: null, error };
-  }
-} */
+  } */
+} 

@@ -56,8 +56,8 @@ export function InputField({
   error,
 }: InputFieldProps) {
   return (
-    <div className="space-y-1.5">
-      <label htmlFor={name} className="block text-sm font-medium text-white/80">
+    <div className="space-y-1 sm:space-y-1.5">
+      <label htmlFor={name} className="block text-xs sm:text-sm font-medium text-white/80">
         {label}
         {required && <span className="text-red-400 ml-1">*</span>}
       </label>
@@ -70,7 +70,7 @@ export function InputField({
         placeholder={placeholder}
         required={required}
         disabled={disabled}
-        className={`w-full px-3 py-2 bg-white/5 border rounded-lg text-white text-sm placeholder:text-white/40 focus:outline-none focus:border-[#c9a55a]/50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed ${
+        className={`w-full px-2 sm:px-3 py-1.5 sm:py-2 bg-white/5 border rounded-lg text-white text-xs sm:text-sm placeholder:text-white/40 focus:outline-none focus:border-[#c9a55a]/50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed ${
           error ? 'border-red-500' : 'border-white/10'
         }`}
       />
@@ -91,8 +91,8 @@ export function TextareaField({
   error,
 }: TextareaFieldProps) {
   return (
-    <div className="space-y-1.5">
-      <label htmlFor={name} className="block text-sm font-medium text-white/80">
+    <div className="space-y-1 sm:space-y-1.5">
+      <label htmlFor={name} className="block text-xs sm:text-sm font-medium text-white/80">
         {label}
         {required && <span className="text-red-400 ml-1">*</span>}
       </label>
@@ -105,7 +105,7 @@ export function TextareaField({
         required={required}
         disabled={disabled}
         rows={rows}
-        className={`w-full px-3 py-2 bg-white/5 border rounded-lg text-white text-sm placeholder:text-white/40 focus:outline-none focus:border-[#c9a55a]/50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed resize-none ${
+        className={`w-full px-2 sm:px-3 py-1.5 sm:py-2 bg-white/5 border rounded-lg text-white text-xs sm:text-sm placeholder:text-white/40 focus:outline-none focus:border-[#c9a55a]/50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed resize-none ${
           error ? 'border-red-500' : 'border-white/10'
         }`}
       />
@@ -126,8 +126,8 @@ export function SelectField({
   error,
 }: SelectFieldProps) {
   return (
-    <div className="space-y-1.5">
-      <label htmlFor={name} className="block text-sm font-medium text-white/80">
+    <div className="space-y-1 sm:space-y-1.5">
+      <label htmlFor={name} className="block text-xs sm:text-sm font-medium text-white/80">
         {label}
         {required && <span className="text-red-400 ml-1">*</span>}
       </label>
@@ -138,7 +138,7 @@ export function SelectField({
         onChange={onChange}
         required={required}
         disabled={disabled}
-        className={`w-full px-3 py-2 bg-white/5 border rounded-lg text-white text-sm focus:outline-none focus:border-[#c9a55a]/50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed ${
+        className={`w-full px-2 sm:px-3 py-1.5 sm:py-2 bg-white/5 border rounded-lg text-white text-xs sm:text-sm focus:outline-none focus:border-[#c9a55a]/50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed ${
           error ? 'border-red-500' : 'border-white/10'
         }`}
       >
@@ -162,7 +162,7 @@ export function CheckboxField({
   disabled = false,
 }: CheckboxFieldProps) {
   return (
-    <label className="flex items-center gap-3 cursor-pointer">
+    <label className="flex items-center gap-2 sm:gap-3 cursor-pointer">
       <input
         type="checkbox"
         id={name}
@@ -172,7 +172,7 @@ export function CheckboxField({
         disabled={disabled}
         className="w-4 h-4 rounded border-white/20 bg-white/5 text-[#c9a55a] focus:ring-[#c9a55a]/50 focus:ring-offset-0 disabled:opacity-50 disabled:cursor-not-allowed"
       />
-      <span className="text-sm text-white/80">{label}</span>
+      <span className="text-xs sm:text-sm text-white/80">{label}</span>
     </label>
   );
 }
@@ -191,12 +191,12 @@ export function FormActions({
   cancelLabel?: string;
 }) {
   return (
-    <div className="flex justify-end gap-3 pt-4 border-t border-white/10 mt-6">
+    <div className="flex flex-col-reverse sm:flex-row sm:justify-end gap-2 sm:gap-3 pt-3 sm:pt-4 border-t border-white/10 mt-4 sm:mt-6">
       <button
         type="button"
         onClick={onCancel}
         disabled={isLoading}
-        className="px-4 py-2 text-sm text-white/60 hover:text-white hover:bg-white/10 rounded-lg transition-colors disabled:opacity-50"
+        className="px-3 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm text-white/60 hover:text-white hover:bg-white/10 rounded-lg transition-colors disabled:opacity-50 w-full sm:w-auto"
       >
         {cancelLabel}
       </button>
@@ -204,10 +204,10 @@ export function FormActions({
         type="button"
         onClick={onSubmit}
         disabled={isLoading}
-        className="px-4 py-2 text-sm bg-[#c9a55a] hover:bg-[#b8944a] text-black font-medium rounded-lg transition-colors disabled:opacity-50 flex items-center gap-2"
+        className="px-3 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm bg-[#c9a55a] hover:bg-[#b8944a] text-black font-medium rounded-lg transition-colors disabled:opacity-50 flex items-center justify-center gap-2 w-full sm:w-auto"
       >
         {isLoading && (
-          <div className="w-4 h-4 border-2 border-black/30 border-t-black rounded-full animate-spin" />
+          <div className="w-3 h-3 sm:w-4 sm:h-4 border-2 border-black/30 border-t-black rounded-full animate-spin" />
         )}
         {submitLabel}
       </button>

@@ -1,11 +1,9 @@
 "use client";
 
+import { User } from '@/api/types';
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 
-interface User {
-  username: string;
-  role: string;
-}
+
 
 interface AuthContextType {
   user: User | null;
@@ -16,11 +14,6 @@ interface AuthContextType {
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
-
-const VALID_CREDENTIALS = {
-  username: 'Admin',
-  password: 'adminadmin'
-};
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
@@ -48,9 +41,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       }
 
       const data = await response.json();
+
       const userData: User = {
         username,
-        role: 'admin'
+        role: data.role,
+        person: data.person
       };
       setUser(userData);
       localStorage.setItem('auth_user', JSON.stringify(userData));

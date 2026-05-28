@@ -288,34 +288,34 @@ export default function AdminDashboard() {
   }
 
   return (
-    <div>
+    <div className="">
       {/* Header */}
-      <div>
-        <h1 className="text-2xl font-bold text-white">Dashboard</h1>
-        <p className="text-white/60 mt-1">Resumen general de la administración</p>
+      <div className="mb-2 sm:mb-4">
+        <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-white">Dashboard</h1>
+        <p className="text-xs sm:text-sm text-white/60 mt-1">Resumen general de la administración</p>
       </div>
 
       {/* Stats Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 py-2 sm:grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-3 md:gap-4">
         {stats.map((stat, index) => (
           <motion.div
             key={stat.label}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.3, delay: index * 0.1 }}
-            className="bg-white/5 border border-white/10 rounded-lg p-5"
+            className="bg-white/5 border border-white/10 rounded-lg p-3 sm:p-4 md:p-5"
           >
-            <div className="flex items-start justify-between">
-              <div>
-                <p className="text-white/60 text-sm">{stat.label}</p>
-                <p className="text-3xl font-bold text-white mt-1">{stat.value}</p>
-                <p className="text-[#c9a55a] text-xs mt-2 flex items-center gap-1">
-                  <TrendingUp className="w-3 h-3" />
-                  {stat.trend}
+            <div className="flex items-start justify-between gap-2">
+              <div className="min-w-0 flex-1">
+                <p className="text-white/60 text-xs sm:text-sm truncate">{stat.label}</p>
+                <p className="text-xl sm:text-2xl md:text-3xl font-bold text-white mt-1 md:mt-2">{stat.value}</p>
+                <p className="text-[#c9a55a] text-xs mt-1 md:mt-2 flex items-center gap-1 truncate">
+                  <TrendingUp className="w-2.5 h-2.5 md:w-3 md:h-3 flex-shrink-0" />
+                  <span className="truncate">{stat.trend}</span>
                 </p>
               </div>
-              <div className="w-10 h-10 bg-[#c9a55a]/10 rounded-lg flex items-center justify-center">
-                <stat.icon className="w-5 h-5 text-[#c9a55a]" />
+              <div className="w-8 h-8 sm:w-10 sm:h-10 bg-[#c9a55a]/10 rounded-lg flex items-center justify-center flex-shrink-0">
+                <stat.icon className="w-4 h-4 sm:w-5 sm:h-5 text-[#c9a55a]" />
               </div>
             </div>
           </motion.div>
@@ -323,27 +323,27 @@ export default function AdminDashboard() {
       </div>
 
       {/* Main Content Grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 py-2 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 md:gap-5">
         {/* Quick Actions */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.3, delay: 0.4 }}
-          className="lg:col-span-1 bg-white/5 border border-white/10 rounded-lg p-5"
+          className="sm:col-span-1 lg:col-span-1 bg-white/5 border border-white/10 rounded-lg p-3 sm:p-4 md:p-5"
         >
-          <h2 className="text-lg font-semibold text-white mb-4">Acciones Rápidas</h2>
+          <h2 className="text-base sm:text-lg font-semibold text-white mb-3 sm:mb-4">Acciones Rápidas</h2>
           {successMessage && (
-            <div className="mb-4 rounded-lg border border-green-400/20 bg-green-500/10 p-3 text-sm text-green-200">
+            <div className="mb-3 sm:mb-4 rounded-lg border border-green-400/20 bg-green-500/10 p-2 sm:p-3 text-xs sm:text-sm text-green-200">
               {successMessage}
             </div>
           )}
-          <div className="space-y-3">
+          <div className="space-y-2 sm:space-y-3">
             {quickActions.map((action) => (
               <button
                 key={action.title}
                 type="button"
                 onClick={() => openActionModal(action.action as QuickActionType)}
-                className={`w-full text-sm font-medium px-4 py-3 rounded-lg transition-colors hover:opacity-90 ${action.color}`}
+                className={`w-full text-xs sm:text-sm font-medium px-3 sm:px-4 py-2 sm:py-3 rounded-lg transition-colors hover:opacity-90 ${action.color}`}
               >
                 {action.title}
               </button>
@@ -356,25 +356,25 @@ export default function AdminDashboard() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.3, delay: 0.5 }}
-          className="lg:col-span-2 bg-white/5 border border-white/10 rounded-lg p-5"
+          className="sm:col-span-1 lg:col-span-2 bg-white/5 border border-white/10 rounded-lg p-3 sm:p-4 md:p-5"
         >
-          <h2 className="text-lg font-semibold text-white mb-4">Actividad Reciente</h2>
-          <div className="space-y-4">
+          <h2 className="text-base sm:text-lg font-semibold text-white mb-3 sm:mb-4">Actividad Reciente</h2>
+          <div className="space-y-2 sm:space-y-4">
             {recentActivity.map((activity, index) => (
               <div
                 key={index}
-                className="flex items-start gap-4 p-3 rounded-lg hover:bg-white/5 transition-colors"
+                className="flex items-start gap-2 sm:gap-3 md:gap-4 p-2 sm:p-3 rounded-lg hover:bg-white/5 transition-colors"
               >
-                <div className="w-10 h-10 bg-white/10 rounded-lg flex items-center justify-center flex-shrink-0">
-                  <activity.icon className="w-5 h-5 text-white/60" />
+                <div className="w-8 h-8 sm:w-10 sm:h-10 bg-white/10 rounded-lg flex items-center justify-center flex-shrink-0">
+                  <activity.icon className="w-4 h-4 sm:w-5 sm:h-5 text-white/60" />
                 </div>
                 <div className="flex-1 min-w-0">
-                  <p className="text-sm text-white">{activity.action}</p>
-                  <p className="text-sm text-white/60 truncate">{activity.item}</p>
+                  <p className="text-xs sm:text-sm text-white">{activity.action}</p>
+                  <p className="text-xs sm:text-sm text-white/60 truncate">{activity.item}</p>
                 </div>
-                <div className="flex items-center gap-1 text-white/40 text-xs">
-                  <Clock className="w-3 h-3" />
-                  {activity.time}
+                <div className="flex items-center gap-1 text-white/40 text-xs flex-shrink-0">
+                  <Clock className="w-2.5 h-2.5 sm:w-3 sm:h-3" />
+                  <span className="hidden sm:inline">{activity.time}</span>
                 </div>
               </div>
             ))}
@@ -389,11 +389,11 @@ export default function AdminDashboard() {
         title={getModalTitle()}
         size="lg"
       >
-        <div className="space-y-4">
-          <p className="text-sm text-white/60">{getModalDescription()}</p>
+        <div className="space-y-3 sm:space-y-4">
+          <p className="text-xs sm:text-sm text-white/60">{getModalDescription()}</p>
           {renderModalBody()}
           {submitError && (
-            <div className="rounded-lg border border-red-500/20 bg-red-500/10 p-3 text-sm text-red-200">
+            <div className="rounded-lg border border-red-500/20 bg-red-500/10 p-2 sm:p-3 text-xs sm:text-sm text-red-200">
               {submitError}
             </div>
           )}
@@ -411,10 +411,10 @@ export default function AdminDashboard() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.3, delay: 0.6 }}
-        className="bg-white/5 border border-white/10 rounded-lg p-5"
+        className="bg-white/5 my-2 border border-white/10 rounded-lg p-3 sm:p-4 md:p-5"
       >
-        <h2 className="text-lg font-semibold text-white mb-4">Módulos de Administración</h2>
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3">
+        <h2 className="text-base sm:text-lg font-semibold text-white mb-3 sm:mb-4">Módulos de Administración</h2>
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-2 sm:gap-3 md:gap-4">
           {[
             { title: 'Sermones', icon: Mic, href: '/admin/sermons' },
             { title: 'Estudios', icon: BookOpen, href: '/admin/studies' },
@@ -426,10 +426,10 @@ export default function AdminDashboard() {
             <a
               key={module.title}
               href={module.href}
-              className="flex flex-col items-center gap-2 p-4 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 hover:border-white/20 transition-all group"
+              className="flex flex-col items-center gap-1.5 sm:gap-2 p-2.5 sm:p-3 md:p-4 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 hover:border-white/20 transition-all group"
             >
-              <module.icon className="w-6 h-6 text-white/60 group-hover:text-[#c9a55a] transition-colors" />
-              <span className="text-sm text-white/80 group-hover:text-white">{module.title}</span>
+              <module.icon className="w-5 h-5 sm:w-6 sm:h-6 text-white/60 group-hover:text-[#c9a55a] transition-colors" />
+              <span className="text-xs sm:text-sm text-center text-white/80 group-hover:text-white leading-tight">{module.title}</span>
             </a>
           ))}
         </div>
