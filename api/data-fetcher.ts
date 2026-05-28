@@ -47,7 +47,7 @@ type RelationConfig = {
 }
 
 // 🔥 RECURSIVO
-function buildQuery(relations: Record<string, RelationConfig>): string[] {
+/* function buildQuery(relations: Record<string, RelationConfig>): string[] {
   return Object.entries(relations).map(([alias, config]) => {
 
     const fields = config.fields?.length
@@ -211,4 +211,4 @@ export async function fetchData(
     console.error("❌ Error fetching data:", error);
     return { data: null, error };
   }
-}
+} */

@@ -8,17 +8,19 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { PAGE_SIZE, supabaseObjectsBaseUrl } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { PaginatorPageProps, Paginator } from '@/components/sermon/paginator';
-import { getSermons, getSermonSeries, Sermon, SermonSeries } from '@/lib/api-client';
+import { FilterSermonModalForm } from '@/components/sermon/filter';
+import { Sermon, SermonSerie } from '@/api/types';
 
 
 export default function Sermones() {
   const [search, setSearch] = useState('');
   const [activeSeries, setActiveSeries] = useState('Todos');
-  const [sermonSeries, setSermonSeries] = useState<SermonSeries[]>([]);
+  const [sermonSeries, setSermonSeries] = useState<SermonSerie[]>([]);
   const [playingId, setPlayingId] = useState<string | null>(null);
   const [playingSermon, setPlayingSermon] = useState<Sermon | null>(null);
   const [filteredSermons, setFilteredSermons] = useState<Sermon[]>([]);
   const [sermons, setSermons] = useState<Sermon[]>([]);
+  const [isFilterOpen, setIsFilterOpen] = useState(false);
 
   const [page, setPage] = useState(1);
   const [paginatorPages, setPaginatorPages] = useState<PaginatorPageProps[] | null>(null);
@@ -28,11 +30,12 @@ export default function Sermones() {
 
   async function loadSermons() {
     try {
-      const response = await getSermons({ page, limit: PAGE_SIZE });
-      if (response.success) {
-        setSermons(response.data);
-        setFilteredSermons(response.data);
-        setTotal(response.pagination.totalPages);
+      const response = await fetch(`api/sermons?page=${page}&limit=${PAGE_SIZE}`);
+      if (response.status === 200) {
+        const result = await response.json();
+        setSermons(result.data);
+        setFilteredSermons(result.data);
+        setTotal(result.pagination.totalPages);
       }
     } catch (error) {
       console.error('Error loading sermons:', error);
@@ -43,9 +46,10 @@ export default function Sermones() {
 
   async function loadSermonSeries() {
     try {
-      const response = await getSermonSeries({ limit: 100 });
-      if (response.success) {
-        setSermonSeries(response.data);
+      const response = await fetch(`api/sermon-series?limit=${100}`);
+      if (response.status === 200) {
+        const result = await response.json();
+        setSermonSeries(result.data);
       }
     } catch (error) {
       console.error('Error loading sermon series:', error);
@@ -177,9 +181,19 @@ export default function Sermones() {
               onChange={e => setSearch(e.target.value)}
               className="bg-white/5 border border-white/10 text-white placeholder-white/30 text-sm pl-9 pr-4 py-1.5 focus:outline-none focus:border-[#c9a55a] transition-colors w-52"
             />
-            <Button size={"icon"} className="px-4 py-1.5 text-xs tracking-wide text-white/40 hover:text-[#c9a55a] border border-white/10 hover:border-[#c9a55a] rounded-none">
+            <Button
+              type="button"
+              size="icon"
+              onClick={() => setIsFilterOpen(true)}
+              className="px-4 py-1.5 text-xs tracking-wide text-white/40 hover:text-[#c9a55a] border border-white/10 hover:border-[#c9a55a] rounded-none"
+            >
               <Filter />
             </Button>
+            <FilterSermonModalForm
+              open={isFilterOpen}
+              setOpen={setIsFilterOpen}
+              callback={(filtered) => setFilteredSermons(filtered)}
+            />
           </div>
         </div>
       </div>

@@ -39,6 +39,7 @@ export interface Sermon {
   video_url: string;
   thumbnail_url: string;
   tags?: Tag[];
+  ibrm_sermonserie?: SermonSerie;
   serie: SermonSerie;
   is_on_straming: boolean;
   is_current_dominical: boolean;

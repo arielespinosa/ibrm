@@ -18,7 +18,7 @@ interface FetchAttributes{
   fromPage?: number;
   toPage?: number;
 }
-
+/* 
 export async function fetchCount(table: string): Promise<number> {
   let data = await fetchCountData(table);  
   data = data ? data : 0
@@ -101,3 +101,4 @@ export async function fetchPerson({order, limit, exclude, pk, filter, fromPage, 
   const {data, error} = await fetchData('ibrm_person', undefined, order, limit, exclude, pk, filter, fromPage, toPage);  
   return data;
 }
+ */

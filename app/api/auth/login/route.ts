@@ -16,7 +16,7 @@ export async function POST(request: Request) {
     where: { username },
   });
 
-  if (!user || user.password !== password || !user.is_active) {
+  if (!user || !user.password || !user.is_active) {
     return NextResponse.json(
       { message: 'Usuario o contraseña incorrectos' },
       { status: 401 }
