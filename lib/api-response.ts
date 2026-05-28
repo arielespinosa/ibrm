@@ -1,7 +1,9 @@
+import { serializeBigInt } from '@/app/api/utils';
 import { NextResponse } from 'next/server'
 
-export function successResponse<T>(data: T, status = 200) {
-  return NextResponse.json({ success: true, data }, { status })
+export function successResponse(data: any, status = 200) {
+  const responseData = serializeBigInt(data);
+  return NextResponse.json({ success: true, }, { status })
 }
 
 export function errorResponse(message: string, status = 500) {
