@@ -9,6 +9,7 @@ import { SidebarInset, SidebarProvider, SidebarTrigger } from '@/components/ui/s
 import { SiteHeader } from '@/components/site-header';
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from '@/components/ui/breadcrumb';
 import { Separator } from '@/components/ui/separator';
+import { Toaster } from '@/components/ui/sonner';
 
 // TEMPORAL: Cambiar a false para requerir autenticación
 const BYPASS_AUTH = true;
@@ -80,6 +81,7 @@ export default function AdminLayout({
   return (
     <AuthProvider>
       <AdminLayoutContent>{children}</AdminLayoutContent>
+      <Toaster position="top-right" richColors closeButton />
     </AuthProvider>
   );
 }

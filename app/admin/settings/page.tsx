@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from 'react';
+import { toast } from 'sonner';
 import { 
   Settings, 
   Globe, 
@@ -56,7 +57,7 @@ export default function SettingsAdmin() {
     // Simulate save - would connect to API
     setTimeout(() => {
       setIsSaving(false);
-      alert('Configuracion guardada correctamente');
+      toast.success('Configuracion guardada correctamente');
     }, 1000);
   }
 

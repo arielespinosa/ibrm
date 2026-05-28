@@ -2,10 +2,12 @@
 
 import { useState, useEffect } from 'react';
 import { Library, Mic, BookOpen } from 'lucide-react';
+import { toast } from 'sonner';
 import DataTable from '@/components/admin/DataTable';
 import Modal from '@/components/admin/Modal';
 import DeleteConfirmModal from '@/components/admin/DeleteConfirmModal';
 import { InputField, TextareaField, CheckboxField, FormActions } from '@/components/admin/FormField';
+import { validateForm, hasErrors, ValidationErrors } from '@/lib/form-validation';
 import { 
   getSermonSeries, 
   createSermonSeries, 
@@ -51,6 +53,7 @@ export default function SeriesAdmin() {
   const [deletingItem, setDeletingItem] = useState<SermonSeries | StudySeries | null>(null);
   const [sermonFormData, setSermonFormData] = useState(initialSermonSeriesForm);
   const [studyFormData, setStudyFormData] = useState(initialStudySeriesForm);
+  const [formErrors, setFormErrors] = useState<ValidationErrors>({});
   const [isSaving, setIsSaving] = useState(false);
 
   const itemsPerPage = 10;
@@ -99,6 +102,7 @@ export default function SeriesAdmin() {
 
   function handleAdd() {
     setEditingItem(null);
+    setFormErrors({});
     if (activeTab === 'sermon') {
       setSermonFormData(initialSermonSeriesForm);
     } else {
@@ -109,6 +113,7 @@ export default function SeriesAdmin() {
 
   function handleEdit(item: SermonSeries | StudySeries) {
     setEditingItem(item);
+    setFormErrors({});
     if (activeTab === 'sermon') {
       const sermon = item as SermonSeries;
       setSermonFormData({
@@ -136,26 +141,46 @@ export default function SeriesAdmin() {
   }
 
   async function handleSave() {
+    // Validate form based on active tab
+    const dataToValidate = activeTab === 'sermon' ? sermonFormData : studyFormData;
+    const errors = validateForm(
+      dataToValidate,
+      { title: { required: true, minLength: 3 } },
+      { title: 'Titulo' }
+    );
+
+    if (hasErrors(errors)) {
+      setFormErrors(errors);
+      toast.error('Por favor, corrige los errores del formulario');
+      return;
+    }
+
+    setFormErrors({});
     setIsSaving(true);
     try {
       if (activeTab === 'sermon') {
         if (editingItem) {
           await updateSermonSeries(editingItem.id, sermonFormData);
+          toast.success('Serie de sermones actualizada correctamente');
         } else {
           await createSermonSeries(sermonFormData);
+          toast.success('Serie de sermones creada correctamente');
         }
         loadSermonSeries();
       } else {
         if (editingItem) {
           await updateStudySeries(editingItem.id, studyFormData);
+          toast.success('Serie de estudios actualizada correctamente');
         } else {
           await createStudySeries(studyFormData);
+          toast.success('Serie de estudios creada correctamente');
         }
         loadStudySeries();
       }
       setIsModalOpen(false);
     } catch (error) {
       console.error('Error saving series:', error);
+      toast.error('Error al guardar la serie');
     } finally {
       setIsSaving(false);
     }
@@ -169,14 +194,17 @@ export default function SeriesAdmin() {
       if (activeTab === 'sermon') {
         await deleteSermonSeries(deletingItem.id);
         loadSermonSeries();
+        toast.success('Serie de sermones eliminada correctamente');
       } else {
         await deleteStudySeries(deletingItem.id);
         loadStudySeries();
+        toast.success('Serie de estudios eliminada correctamente');
       }
       setIsDeleteModalOpen(false);
       setDeletingItem(null);
     } catch (error) {
       console.error('Error deleting series:', error);
+      toast.error('Error al eliminar la serie');
     } finally {
       setIsSaving(false);
     }
@@ -342,6 +370,7 @@ export default function SeriesAdmin() {
               value={sermonFormData.title}
               onChange={(e) => setSermonFormData({ ...sermonFormData, title: e.target.value })}
               required
+              error={formErrors.title}
             />
 
             <TextareaField
@@ -381,6 +410,7 @@ export default function SeriesAdmin() {
               value={studyFormData.title}
               onChange={(e) => setStudyFormData({ ...studyFormData, title: e.target.value })}
               required
+              error={formErrors.title}
             />
 
             <TextareaField

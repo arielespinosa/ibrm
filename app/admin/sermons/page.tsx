@@ -2,10 +2,12 @@
 
 import { useState, useEffect } from 'react';
 import { Mic } from 'lucide-react';
+import { toast } from 'sonner';
 import DataTable from '@/components/admin/DataTable';
 import Modal from '@/components/admin/Modal';
 import DeleteConfirmModal from '@/components/admin/DeleteConfirmModal';
 import { InputField, TextareaField, SelectField, CheckboxField, FormActions } from '@/components/admin/FormField';
+import { validateForm, hasErrors, ValidationErrors } from '@/lib/form-validation';
 import { 
   getSermons, 
   createSermon, 
@@ -47,6 +49,7 @@ export default function SermonsAdmin() {
   const [editingSermon, setEditingSermon] = useState<Sermon | null>(null);
   const [deletingSermon, setDeletingSermon] = useState<Sermon | null>(null);
   const [formData, setFormData] = useState(initialFormData);
+  const [formErrors, setFormErrors] = useState<ValidationErrors>({});
   const [isSaving, setIsSaving] = useState(false);
 
   const itemsPerPage = 10;
@@ -97,11 +100,13 @@ export default function SermonsAdmin() {
   function handleAdd() {
     setEditingSermon(null);
     setFormData(initialFormData);
+    setFormErrors({});
     setIsModalOpen(true);
   }
 
   function handleEdit(sermon: Sermon) {
     setEditingSermon(sermon);
+    setFormErrors({});
     setFormData({
       title: sermon.title,
       description: sermon.description || '',
@@ -125,6 +130,28 @@ export default function SermonsAdmin() {
   }
 
   async function handleSave() {
+    // Validate form
+    const errors = validateForm(
+      formData,
+      {
+        title: { required: true, minLength: 3 },
+        date: { required: true },
+        speaker_id: { required: true },
+      },
+      {
+        title: 'Titulo',
+        date: 'Fecha',
+        speaker_id: 'Predicador',
+      }
+    );
+
+    if (hasErrors(errors)) {
+      setFormErrors(errors);
+      toast.error('Por favor, corrige los errores del formulario');
+      return;
+    }
+
+    setFormErrors({});
     setIsSaving(true);
     try {
       const data = {
@@ -135,14 +162,17 @@ export default function SermonsAdmin() {
 
       if (editingSermon) {
         await updateSermon(editingSermon.id, data);
+        toast.success('Sermon actualizado correctamente');
       } else {
         await createSermon(data);
+        toast.success('Sermon creado correctamente');
       }
       
       setIsModalOpen(false);
       loadSermons();
     } catch (error) {
       console.error('Error saving sermon:', error);
+      toast.error('Error al guardar el sermon');
     } finally {
       setIsSaving(false);
     }
@@ -157,8 +187,10 @@ export default function SermonsAdmin() {
       setIsDeleteModalOpen(false);
       setDeletingSermon(null);
       loadSermons();
+      toast.success('Sermon eliminado correctamente');
     } catch (error) {
       console.error('Error deleting sermon:', error);
+      toast.error('Error al eliminar el sermon');
     } finally {
       setIsSaving(false);
     }
@@ -253,6 +285,7 @@ export default function SermonsAdmin() {
               value={formData.title}
               onChange={(e) => setFormData({ ...formData, title: e.target.value })}
               required
+              error={formErrors.title}
             />
             <InputField
               label="Fecha"
@@ -261,6 +294,7 @@ export default function SermonsAdmin() {
               value={formData.date}
               onChange={(e) => setFormData({ ...formData, date: e.target.value })}
               required
+              error={formErrors.date}
             />
           </div>
 
@@ -297,6 +331,7 @@ export default function SermonsAdmin() {
               onChange={(e) => setFormData({ ...formData, speaker_id: e.target.value })}
               options={speakers.map(s => ({ value: s.id, label: s.name }))}
               required
+              error={formErrors.speaker_id}
             />
             <SelectField
               label="Serie"
