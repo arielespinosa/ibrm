@@ -473,7 +473,7 @@ export default function Home() {
       </section>
 
       {/* ─── SISTER CHURCHES ─── */}
-      <SisterChurchesSection />
+      {/* <SisterChurchesSection /> */}
         
       <BiographyDialog person={clickedPastor} open={openBiographyDialog} setOpen={setOpenBiographyDialog}/>
 

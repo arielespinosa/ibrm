@@ -11,6 +11,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar"
 
 const BIOGRAPHIES = [
     {
+    mail: "pastor-pedro@ibrm.es",
     name: "Pedro Francisco Pérez García",
     avatar: "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/69a491a015e58b1ec55092b3/d2bfa3590_603054689_10239637937154575_4186765685569892296_n.jpg",
     content:`Pedro Francisco Pérez García sirve como pastor en la Iglesia Bautista Reformada de Murcia, donde desarrolla un ministerio centrado en la predicación expositiva de la Palabra de Dios,
@@ -27,20 +28,12 @@ const BIOGRAPHIES = [
     "Fiel a la Palabra, en todo tiempo y contra todo error."`},
 
     {
+    mail: "pastor-eduardo@ibrm.es",
     name: "David Eduardo Martinez Cicchini",
     avatar: "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/69a491a015e58b1ec55092b3/be62c2002_634729718_10162168009566976_5993971085413391884_n.jpg",
-    content:`David Eduardo Martinez Cicchini....sirve como pastor en la Iglesia Bautista Reformada de Murcia, donde desarrolla un ministerio centrado en la predicación expositiva de la Palabra de Dios,
-    la enseñanza bíblica y el cuidado pastoral.Desde su ordenación en junio de 2025, ejerce su labor junto a otros ancianos dentro de un modelo de liderazgo plural, comprometido con la 
-    fidelidad a las Escrituras y la edificación de la iglesia en la sana doctrina. Actualmente cursa estudios de Teología en el Seminario Reformado Latinoamericano (SRL), donde continúa 
-    formándose con el propósito de profundizar en el conocimiento de Dios y en la correcta interpretación de Su Palabra.
-    Tras experimentar de manera transformadora la gracia de Dios en su vida, fue llevado a un compromiso firme con la verdad del Evangelio y al servicio en el ministerio pastoral. Su 
-    ministerio se caracteriza por un enfoque expositivo, procurando explicar el texto bíblico en su contexto y aplicar fielmente su mensaje, llamando a los creyentes a una fe sólida, 
-    centrada en el Evangelio. Ha desarrollado una exposición completa de la carta a los Romanos y comparte enseñanzas bíblicas de manera sistemática a través de diferentes medios, 
-    incluyendo series expositivas como el Evangelio de Juan y el Sermón del Monte.
-    Además de su labor en la iglesia local, comparte contenido bíblico a través de plataformas digitales, con el propósito de instruir, exhortar y guiar a otros hacia una comprensión más 
-    profunda de la verdad revelada en las Escrituras.
-    Compagina su ministerio pastoral con su actividad profesional, procurando vivir de manera íntegra y coherente con el llamamiento recibido. Es padre de dos hijos.
-    "Fiel a la Palabra, en todo tiempo y contra todo error."`},
+    content:`David Eduardo Martinez Cicchini nació en 1981 en Perú. Desde 2006 reside en Murcia, España. Está casado con Elisa Baeza Torrente, y juntos tienen dos hijos: Noah y Lucca. David completó sus estudios teológicos en el seminario William Carey. En 2022, junto a otras familias, comenzaron una plantación de iglesia, y en 2023 se oficializó como Iglesia Bautista Reformada de Murcia (IBRM). A día de hoy, la iglesia ha crecido por la misericordia del Señor, pasando de ser un pequeño grupo a una comunidad vibrante, de la cual David es pastor, guiado siempre por su fe y su dedicación a la misión. 
+    Si estás leyendo esta biografía, te pido que ores por nuestra iglesia, para que cada paso que demos esté bajo la guía de Dios, que sigamos creciendo en unidad, fe y amor, y que seamos luz en nuestra comunidad. Te agradezco profundamente tu apoyo y tus oraciones.
+    `},
 ]
 
 export default function BiographyDialog({person, open, setOpen}:{person:number, open:boolean, setOpen:(value: boolean) => void}){
@@ -64,7 +57,7 @@ export default function BiographyDialog({person, open, setOpen}:{person:number, 
                         </Avatar>
                         <div className="flex flex-col">
                           <span className="text-white/80 text-sm font-medium">Pstr. {BIOGRAPHIES[person].name}</span>
-                          <span className="text-[#c9a55a]/60 text-xs tracking-wide">pastor@gmail.com</span>
+                          <span className="text-[#c9a55a]/60 text-xs tracking-wide">{BIOGRAPHIES[person].mail}</span>
                         </div>
                       </div></DialogTitle>
                     <DialogDescription>
@@ -75,7 +68,7 @@ export default function BiographyDialog({person, open, setOpen}:{person:number, 
                 <div className="flex justify-end mt-6">
                     <DialogClose asChild>
                         <Button type="button" onClick={() => setOpen(false)} className="rounded-none bg-[#c9a55a] text-black hover:bg-[#c9a55a]">
-                        Close
+                        Cerrar
                         </Button>
                     </DialogClose>
                 </div>
