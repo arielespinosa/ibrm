@@ -18,7 +18,7 @@ export default function StudySerieDetaillPage() {
   useEffect(() => {
     async function loadSerie(){
       const data = await fetchStudySeries({pk: serieId});
-      setSerie(data[0]);
+      if (data) setSerie(data[0]);
     }
     loadSerie();
   }, [])
@@ -26,7 +26,7 @@ export default function StudySerieDetaillPage() {
   useEffect(() => {
     async function loadStudies(){
       const data = await fetchStudy({filter: [{field: "serie_id", value: serieId}]});
-      setStudies(data);
+      if (data) setStudies(data);
     }
     loadStudies();
   }, [serie])

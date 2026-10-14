@@ -23,7 +23,9 @@ export default function StudyDetaillPage() {
 
   async function loadStudy() {
     const data = await fetchStudy({pk: id});
-    setStudy(data[0]);
+    if (data && data[0]) {
+      setStudy(data[0]);
+    }
   }
 
   async function loadStudySerie(serieId:number) {

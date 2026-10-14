@@ -33,6 +33,9 @@ export default function RootLayout({
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const pathname = usePathname();
 
+  // Check if current route should have the public layout (navbar + footer)
+  const isPublicRoute = !pathname.startsWith('/admin') && !pathname.startsWith('/login');
+
   useEffect(() => {
     setIsMobileMenuOpen(false);
     setIsScrolled(false);
@@ -50,16 +53,22 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`} >
-        <Navbar 
-          attr={{
-            currentPageName: pathname,
-            transparent: transparent,
-            isMobileMenuOpen: isMobileMenuOpen,
-            setIsMobileMenuOpen: setIsMobileMenuOpen
-          }}
-        />
-        {children}
-        <Footer />
+        {isPublicRoute ? (
+          <>
+            <Navbar 
+              attr={{
+                currentPageName: pathname,
+                transparent: transparent,
+                isMobileMenuOpen: isMobileMenuOpen,
+                setIsMobileMenuOpen: setIsMobileMenuOpen
+              }}
+            />
+            {children}
+            <Footer />
+          </>
+        ) : (
+          children
+        )}
       </body>
     </html>
   );

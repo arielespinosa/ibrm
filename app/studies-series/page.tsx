@@ -72,7 +72,7 @@ export default function Estudios() {
   useEffect(() => {
     async function loadLastStudySeries(){
       const data = await fetchStudySeries({limit:3});
-      setLastStudySeries(data);
+      if (data) setLastStudySeries(data);
     }
     loadLastStudySeries();
   }, [])
@@ -81,7 +81,7 @@ export default function Estudios() {
     async function loadStudySeries(){
       const exlcude = lastStudySeries?.map((study) => study.id)
       const data = await fetchStudySeries({limit:3, exclude:exlcude});
-      setStudySeries(data);
+      if (data) setStudySeries(data);
     }
     loadStudySeries();
   }, [lastStudySeries])

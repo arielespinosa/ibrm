@@ -17,6 +17,12 @@ export interface Person {
     email?: string;
 }
 
+export interface User {
+  username: string;
+  role: string;
+  person?: Person;
+}
+
 export interface SermonSerie {
   id: number;
   title: string;
@@ -39,6 +45,7 @@ export interface Sermon {
   video_url: string;
   thumbnail_url: string;
   tags?: Tag[];
+  ibrm_sermonserie?: SermonSerie;
   serie: SermonSerie;
   is_on_straming: boolean;
   is_current_dominical: boolean;
