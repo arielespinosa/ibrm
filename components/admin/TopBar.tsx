@@ -109,8 +109,8 @@ export default function TopBar({ onMenuToggle }: TopBarProps) {
             onClick={() => setShowUserMenu(!showUserMenu)}
             className="flex items-center gap-1 sm:gap-2 p-1.5 sm:p-2 text-white/60 hover:text-white hover:bg-white/5 rounded-lg transition-colors flex-shrink-0"
           >
-            {user?.avatar_url ? (
-              <img src={user.avatar_url} alt="Avatar" className="w-6 h-6 sm:w-8 sm:h-8 rounded-full object-cover" />
+            {user?.person?.avatar ? (
+              <img src={user.person.avatar} alt="Avatar" className="w-6 h-6 sm:w-8 sm:h-8 rounded-full object-cover" />
             ) : ( 
             <div className="w-6 h-6 sm:w-8 sm:h-8 bg-[#c9a55a]/20 rounded-full flex items-center justify-center flex-shrink-0">
               <User className="w-3 h-3 sm:w-4 sm:h-4 text-[#c9a55a]" />

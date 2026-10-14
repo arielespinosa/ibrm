@@ -2,8 +2,6 @@
 
 import { useState } from 'react';
 import { 
-  ChevronLeft, 
-  ChevronRight, 
   Search, 
   Plus, 
   Pencil, 
@@ -11,6 +9,8 @@ import {
   MoreVertical,
   ArrowUpDown
 } from 'lucide-react';
+
+import { TablePagination } from '@/components/ui/table-pagination'
 
 interface Column<T> {
   key: keyof T | string;
@@ -26,6 +26,8 @@ interface DataTableProps<T> {
   currentPage: number;
   itemsPerPage: number;
   onPageChange: (page: number) => void;
+  onPageSizeChange?: (size: number) => void;
+  rowsPerPageOptions?: number[];
   onSearch: (search: string) => void;
   onAdd: () => void;
   onEdit: (item: T) => void;
@@ -51,6 +53,8 @@ export default function DataTable<T extends { id: string }>({
   isLoading = false,
   searchPlaceholder = "Buscar...",
   addButtonLabel = "Agregar",
+  onPageSizeChange,
+  rowsPerPageOptions,
 }: DataTableProps<T>) {
   const [searchValue, setSearchValue] = useState('');
   const [sortKey, setSortKey] = useState<string | null>(null);
@@ -207,30 +211,15 @@ export default function DataTable<T extends { id: string }>({
 
       {/* Pagination */}
       {totalPages > 1 && (
-        <div className="px-4 py-3 border-t border-white/10 flex items-center justify-between">
-          <span className="text-sm text-white/40">
-            Mostrando {((currentPage - 1) * itemsPerPage) + 1} - {Math.min(currentPage * itemsPerPage, totalItems)} de {totalItems}
-          </span>
-          <div className="flex items-center gap-2">
-            <button
-              onClick={() => onPageChange(currentPage - 1)}
-              disabled={currentPage === 1}
-              className="p-1 hover:bg-white/10 rounded disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
-            >
-              <ChevronLeft className="w-5 h-5 text-white/60" />
-            </button>
-            <span className="text-sm text-white/60">
-              {currentPage} / {totalPages}
-            </span>
-            <button
-              onClick={() => onPageChange(currentPage + 1)}
-              disabled={currentPage === totalPages}
-              className="p-1 hover:bg-white/10 rounded disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
-            >
-              <ChevronRight className="w-5 h-5 text-white/60" />
-            </button>
-          </div>
-        </div>
+        <TablePagination
+          count={totalItems}
+          page={currentPage}
+          pageSize={itemsPerPage}
+          onPageChange={onPageChange}
+          onPageSizeChange={onPageSizeChange}
+          rowsPerPageOptions={rowsPerPageOptions}
+          className="text-white/60"
+        />
       )}
     </div>
   );

@@ -2,10 +2,12 @@
 
 import { useState, useEffect } from 'react';
 import { Users } from 'lucide-react';
+import { toast } from 'sonner';
 import DataTable from '@/components/admin/DataTable';
 import Modal from '@/components/admin/Modal';
 import DeleteConfirmModal from '@/components/admin/DeleteConfirmModal';
 import { InputField, TextareaField, CheckboxField, FormActions } from '@/components/admin/FormField';
+import { validateForm, hasErrors, ValidationErrors, patterns } from '@/lib/form-validation';
 import { 
   getPersons, 
   createPerson, 
@@ -36,6 +38,7 @@ export default function PeopleAdmin() {
   const [editingPerson, setEditingPerson] = useState<Person | null>(null);
   const [deletingPerson, setDeletingPerson] = useState<Person | null>(null);
   const [formData, setFormData] = useState(initialFormData);
+  const [formErrors, setFormErrors] = useState<ValidationErrors>({});
   const [isSaving, setIsSaving] = useState(false);
 
   const itemsPerPage = 10;
@@ -64,11 +67,13 @@ export default function PeopleAdmin() {
   function handleAdd() {
     setEditingPerson(null);
     setFormData(initialFormData);
+    setFormErrors({});
     setIsModalOpen(true);
   }
 
   function handleEdit(person: Person) {
     setEditingPerson(person);
+    setFormErrors({});
     setFormData({
       name: person.name,
       bio: person.bio || '',
@@ -87,18 +92,48 @@ export default function PeopleAdmin() {
   }
 
   async function handleSave() {
+    // Validate form
+    const errors = validateForm(
+      formData,
+      {
+        name: { required: true, minLength: 2 },
+        email: { pattern: patterns.email, message: 'Email invalido' },
+      },
+      {
+        name: 'Nombre',
+        email: 'Email',
+      }
+    );
+
+    // Email is optional, so only validate if provided
+    if (formData.email && !patterns.email.test(formData.email)) {
+      errors.email = 'Email invalido';
+    } else {
+      delete errors.email;
+    }
+
+    if (hasErrors(errors)) {
+      setFormErrors(errors);
+      toast.error('Por favor, corrige los errores del formulario');
+      return;
+    }
+
+    setFormErrors({});
     setIsSaving(true);
     try {
       if (editingPerson) {
         await updatePerson(editingPerson.id, formData);
+        toast.success('Persona actualizada correctamente');
       } else {
         await createPerson(formData);
+        toast.success('Persona creada correctamente');
       }
       
       setIsModalOpen(false);
       loadPeople();
     } catch (error) {
       console.error('Error saving person:', error);
+      toast.error('Error al guardar la persona');
     } finally {
       setIsSaving(false);
     }
@@ -113,8 +148,10 @@ export default function PeopleAdmin() {
       setIsDeleteModalOpen(false);
       setDeletingPerson(null);
       loadPeople();
+      toast.success('Persona eliminada correctamente');
     } catch (error) {
       console.error('Error deleting person:', error);
+      toast.error('Error al eliminar la persona');
     } finally {
       setIsSaving(false);
     }
@@ -215,6 +252,7 @@ export default function PeopleAdmin() {
             value={formData.name}
             onChange={(e) => setFormData({ ...formData, name: e.target.value })}
             required
+            error={formErrors.name}
           />
 
           <InputField
@@ -223,6 +261,7 @@ export default function PeopleAdmin() {
             type="email"
             value={formData.email}
             onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+            error={formErrors.email}
           />
 
           <TextareaField

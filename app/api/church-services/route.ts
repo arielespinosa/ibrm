@@ -6,6 +6,7 @@ import {
   paginatedResponse,
   parseQueryParams,
 } from '@/lib/api-response'
+import type { ibrm_churchservice } from '@prisma/client'
 
 // GET /api/church-services
 export async function GET(request: NextRequest) {
@@ -32,7 +33,7 @@ export async function GET(request: NextRequest) {
       prisma.ibrm_churchservice.count({ where }),
     ])
 
-    const serializedServices = services.map(service => ({
+    const serializedServices = services.map((service: ibrm_churchservice) => ({
       ...service,
       id: service.id.toString(),
     }))

@@ -2,10 +2,12 @@
 
 import { useState, useEffect } from 'react';
 import { Calendar, Clock, MapPin } from 'lucide-react';
+import { toast } from 'sonner';
 import DataTable from '@/components/admin/DataTable';
 import Modal from '@/components/admin/Modal';
 import DeleteConfirmModal from '@/components/admin/DeleteConfirmModal';
 import { InputField, TextareaField, SelectField, FormActions } from '@/components/admin/FormField';
+import { validateForm, hasErrors, ValidationErrors } from '@/lib/form-validation';
 import { 
   getChurchServices, 
   createChurchService, 
@@ -42,6 +44,7 @@ export default function EventsAdmin() {
   const [editingService, setEditingService] = useState<ChurchService | null>(null);
   const [deletingService, setDeletingService] = useState<ChurchService | null>(null);
   const [formData, setFormData] = useState(initialFormData);
+  const [formErrors, setFormErrors] = useState<ValidationErrors>({});
   const [isSaving, setIsSaving] = useState(false);
 
   const itemsPerPage = 10;
@@ -70,11 +73,13 @@ export default function EventsAdmin() {
   function handleAdd() {
     setEditingService(null);
     setFormData(initialFormData);
+    setFormErrors({});
     setIsModalOpen(true);
   }
 
   function handleEdit(service: ChurchService) {
     setEditingService(service);
+    setFormErrors({});
     setFormData({
       title: service.title,
       day: service.day || '',
@@ -89,18 +94,43 @@ export default function EventsAdmin() {
   }
 
   async function handleSave() {
+    // Validate form
+    const errors = validateForm(
+      formData,
+      {
+        title: { required: true, minLength: 3 },
+        day: { required: true },
+        time: { required: true },
+      },
+      {
+        title: 'Titulo',
+        day: 'Dia',
+        time: 'Hora',
+      }
+    );
+
+    if (hasErrors(errors)) {
+      setFormErrors(errors);
+      toast.error('Por favor, corrige los errores del formulario');
+      return;
+    }
+
+    setFormErrors({});
     setIsSaving(true);
     try {
       if (editingService) {
         await updateChurchService(editingService.id, formData);
+        toast.success('Servicio actualizado correctamente');
       } else {
         await createChurchService(formData);
+        toast.success('Servicio creado correctamente');
       }
       
       setIsModalOpen(false);
       loadServices();
     } catch (error) {
       console.error('Error saving service:', error);
+      toast.error('Error al guardar el servicio');
     } finally {
       setIsSaving(false);
     }
@@ -115,8 +145,10 @@ export default function EventsAdmin() {
       setIsDeleteModalOpen(false);
       setDeletingService(null);
       loadServices();
+      toast.success('Servicio eliminado correctamente');
     } catch (error) {
       console.error('Error deleting service:', error);
+      toast.error('Error al eliminar el servicio');
     } finally {
       setIsSaving(false);
     }
@@ -232,6 +264,7 @@ export default function EventsAdmin() {
             onChange={(e) => setFormData({ ...formData, title: e.target.value })}
             required
             placeholder="Ej: Culto dominical"
+            error={formErrors.title}
           />
 
           <SelectField
@@ -241,6 +274,7 @@ export default function EventsAdmin() {
             onChange={(e) => setFormData({ ...formData, day: e.target.value })}
             options={daysOfWeek}
             required
+            error={formErrors.day}
           />
 
           <InputField
@@ -250,6 +284,7 @@ export default function EventsAdmin() {
             value={formData.time}
             onChange={(e) => setFormData({ ...formData, time: e.target.value })}
             required
+            error={formErrors.time}
           />
 
           <FormActions

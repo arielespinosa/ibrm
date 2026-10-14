@@ -2,10 +2,12 @@
 
 import { useState, useEffect } from 'react';
 import { BookOpen } from 'lucide-react';
+import { toast } from 'sonner';
 import DataTable from '@/components/admin/DataTable';
 import Modal from '@/components/admin/Modal';
 import DeleteConfirmModal from '@/components/admin/DeleteConfirmModal';
 import { InputField, TextareaField, SelectField, FormActions } from '@/components/admin/FormField';
+import { validateForm, hasErrors, ValidationErrors } from '@/lib/form-validation';
 import { 
   getStudies, 
   createStudy, 
@@ -43,6 +45,7 @@ export default function StudiesAdmin() {
   const [editingStudy, setEditingStudy] = useState<Study | null>(null);
   const [deletingStudy, setDeletingStudy] = useState<Study | null>(null);
   const [formData, setFormData] = useState(initialFormData);
+  const [formErrors, setFormErrors] = useState<ValidationErrors>({});
   const [isSaving, setIsSaving] = useState(false);
 
   const itemsPerPage = 10;
@@ -93,11 +96,13 @@ export default function StudiesAdmin() {
   function handleAdd() {
     setEditingStudy(null);
     setFormData(initialFormData);
+    setFormErrors({});
     setIsModalOpen(true);
   }
 
   function handleEdit(study: Study) {
     setEditingStudy(study);
+    setFormErrors({});
     setFormData({
       title: study.title,
       description: study.description || '',
@@ -117,6 +122,26 @@ export default function StudiesAdmin() {
   }
 
   async function handleSave() {
+    // Validate form
+    const errors = validateForm(
+      formData,
+      {
+        title: { required: true, minLength: 3 },
+        author_id: { required: true },
+      },
+      {
+        title: 'Titulo',
+        author_id: 'Autor',
+      }
+    );
+
+    if (hasErrors(errors)) {
+      setFormErrors(errors);
+      toast.error('Por favor, corrige los errores del formulario');
+      return;
+    }
+
+    setFormErrors({});
     setIsSaving(true);
     try {
       const data = {
@@ -127,14 +152,17 @@ export default function StudiesAdmin() {
 
       if (editingStudy) {
         await updateStudy(editingStudy.id, data);
+        toast.success('Estudio actualizado correctamente');
       } else {
         await createStudy(data);
+        toast.success('Estudio creado correctamente');
       }
       
       setIsModalOpen(false);
       loadStudies();
     } catch (error) {
       console.error('Error saving study:', error);
+      toast.error('Error al guardar el estudio');
     } finally {
       setIsSaving(false);
     }
@@ -149,8 +177,10 @@ export default function StudiesAdmin() {
       setIsDeleteModalOpen(false);
       setDeletingStudy(null);
       loadStudies();
+      toast.success('Estudio eliminado correctamente');
     } catch (error) {
       console.error('Error deleting study:', error);
+      toast.error('Error al eliminar el estudio');
     } finally {
       setIsSaving(false);
     }
@@ -235,6 +265,7 @@ export default function StudiesAdmin() {
             value={formData.title}
             onChange={(e) => setFormData({ ...formData, title: e.target.value })}
             required
+            error={formErrors.title}
           />
 
           <TextareaField
@@ -261,6 +292,7 @@ export default function StudiesAdmin() {
               onChange={(e) => setFormData({ ...formData, author_id: e.target.value })}
               options={authors.map(a => ({ value: a.id, label: a.name }))}
               required
+              error={formErrors.author_id}
             />
             <SelectField
               label="Serie"

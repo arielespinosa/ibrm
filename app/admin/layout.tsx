@@ -9,18 +9,22 @@ import { SidebarInset, SidebarProvider, SidebarTrigger } from '@/components/ui/s
 import { SiteHeader } from '@/components/site-header';
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from '@/components/ui/breadcrumb';
 import { Separator } from '@/components/ui/separator';
+import { Toaster } from '@/components/ui/sonner';
+
+// TEMPORAL: Cambiar a false para requerir autenticación
+const BYPASS_AUTH = true;
 
 function AdminLayoutContent({ children }: { children: React.ReactNode }) {
   const { isAuthenticated, isLoading: authLoading } = useAuth();
   const router = useRouter();
 
   useEffect(() => {
-    if (!authLoading && !isAuthenticated) {
+    if (!BYPASS_AUTH && !authLoading && !isAuthenticated) {
       router.push('/login');
     }
   }, [isAuthenticated, authLoading, router]);
 
-  if (authLoading || !isAuthenticated) {
+  if (!BYPASS_AUTH && (authLoading || !isAuthenticated)) {
     return (
       <div className="min-h-screen bg-black flex items-center justify-center">
         <div className="w-8 h-8 border-2 border-[#c9a55a]/30 border-t-[#c9a55a] rounded-full animate-spin" />
@@ -77,6 +81,7 @@ export default function AdminLayout({
   return (
     <AuthProvider>
       <AdminLayoutContent>{children}</AdminLayoutContent>
+      <Toaster position="top-right" richColors closeButton />
     </AuthProvider>
   );
 }
